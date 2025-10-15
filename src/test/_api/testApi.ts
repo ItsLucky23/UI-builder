@@ -33,7 +33,6 @@ const auth: AuthProps = {
 
 const main = async ({ data, functions, user }: ApiParams) => {
   console.log(data)
-  console.log(functions)
   console.log(user)
   console.log('you just called the randomApi.ts')
   return { status: 'success', result: { name: 'John' } }

@@ -30,7 +30,7 @@ export const serveAvatar = async ({
     const readStream = fs.createReadStream(filePath);
     readStream.pipe(res);
   } catch (err) {
-    console.log('File not found:', err, 'red');
+    // console.log('File not found:', err, 'red');
     res.writeHead(404, { "Content-Type": "text/plain" });
     res.end("File not found");
   };
