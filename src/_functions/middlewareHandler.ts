@@ -17,31 +17,7 @@ export default function middlewareHandler({ location, searchParams, session }: {
       }
       return { redirect: '/login' };
 
-    case '/admin':
-      if (session?.email && session?.provider && session?.admin === true) {
-        return { success: true }; 
-      } else if (!session?.email || !session?.provider) {
-        return { redirect: '/login' };
-      } else if (!session?.admin) { 
-        notify.error({ key: 'middleware.notAdmin' });
-      }
-      return
-
-    case '/games/boerZoektVrouw':
-      if (session?.email && session?.provider) {
-        return { success: true };
-      } else {
-        return { redirect: '/login' };
-      }
-
     case '/home':
-      if (session?.email && session?.provider) {
-        return { success: true };
-      } else {
-        return { redirect: '/login' };
-      }
-
-    case '/games':
       if (session?.email && session?.provider) {
         return { success: true };
       } else {

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import Navbar from "src/_components/Navbar";
 import Middleware from 'src/_components/Middleware';
 import initializeRouter from './Router';
 import { useLocation } from 'react-router-dom';
@@ -10,32 +9,17 @@ import { useSession } from '../_providers/SessionProvider';
 import { useMenuHandler } from './MenuHandler';
 import { ConfirmMenu } from './ConfirmMenu';
 import ThemeToggler from './ThemeToggler';
-import { dev } from '../../config';
 import { useSocketStatus } from 'src/_providers/socketStatusProvider';
 import { apiRequest } from 'src/_sockets/apiRequest';
 import config from "config";
+import { GridProvider } from 'src/home/_providers/GridContextProvider';
 
 const Templates = {
-  dashboard: DashboardTemplate,
   home: HomeTemplate,
   plain: PlainTemplate,
+  sandbox: SandboxTemplate,
 }
-export  type Template = 'dashboard' | 'plain' | 'home';
-
-function DashboardTemplate({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="w-full h-full flex flex-row bg-white">
-      <div className="w-full h-full flex flex-col md:flex-row">
-        <Navbar/>
-        <div className="md:flex-grow h-full text-black bg-blue-50">
-          <Middleware>
-            {children}
-          </Middleware>
-        </div>
-      </div>
-    </div>
-  )
-}
+export  type Template = 'plain' | 'home' | 'sandbox';
 
 function HomeTemplate({ children }: { children: React.ReactNode }) {
 
@@ -114,6 +98,23 @@ function PlainTemplate({ children }: { children: React.ReactNode }) {
   )
 }
 
+function SandboxTemplate({ children }: { children: React.ReactNode }) {
+  const { updateTheme } = ThemeToggler();
+
+  useEffect(() => {
+    updateTheme(config.defaultTheme);
+    document.documentElement.classList.toggle("dark", config.defaultTheme === "dark");
+  }, [location]);
+
+  return (
+    <GridProvider>
+      <div className="w-full h-full">
+        {children}
+      </div>
+    </GridProvider>
+  )
+}
+
 export default function TemplateProvider({
   children,
   initialTemplate,
@@ -137,7 +138,7 @@ export default function TemplateProvider({
     }
   }, [session, location]);
 
-  if (dev) {
+  if (config.dev) {
     return (
       <div className='w-full h-full relative'>
         <div className='absolute top-2 right-2 z-50 bg-red-500 text-white px-2 py-1 rounded-md text-xs font-bold'>
