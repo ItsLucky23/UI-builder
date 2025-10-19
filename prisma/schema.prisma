@@ -3,17 +3,17 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model user {
-  id        String    @id @default(uuid())
+  id        String   @id @map("_id") @default(uuid())
   email     String
   name      String
   password  String?
   admin     Boolean @default(false)
-  avatar    String @db.VarChar(512) @default("")
+  avatar    String @default("")
   language  String @default("en")
   theme     THEME @default(dark)
   provider  PROVIDERS

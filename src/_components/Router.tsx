@@ -13,12 +13,12 @@ const getParams = (locationSearch: string) => {
   return queryObject;
 }
 
-export default function initializeRouter() {
+export default function useRouter() {
   const navigateHandler = useNavigate();
   const location = useLocation();
   const { session } = useSession();
 
-  const navigate = async (path: string) => {
+  return async (path: string) => {
     // const session = await apiRequest({ name: 'session' }) as SessionLayout;
     const queryObject = getParams(location.search);
     const result = await middlewareHandler({ location: path, searchParams: queryObject, session }) as { success: boolean, redirect: string } | undefined;
@@ -31,6 +31,4 @@ export default function initializeRouter() {
       return
     }
   }
-
-  return navigate
 }

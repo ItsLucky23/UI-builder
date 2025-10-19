@@ -2,8 +2,12 @@ import { createContext, useContext, useState, ReactNode, RefObject, SetStateActi
 
 type GridContextType = {
   containerRef: RefObject<HTMLDivElement | null>;
-  dragging: RefObject<boolean>;
+  draggingRef: RefObject<boolean>;
   lastPos: RefObject<{ x: number; y: number }>;
+  posMouseDown: RefObject<{ x: number; y: number }>;
+
+  dragging: boolean;
+  setDragging: Dispatch<SetStateAction<boolean>>;
 
   zoom: number;
   setZoom: Dispatch<SetStateAction<number>>;
@@ -17,16 +21,22 @@ const GridContext = createContext<GridContextType | undefined>(undefined);
 export const GridProvider = ({ children }: { children: ReactNode }) => {
   const [zoom, setZoom] = useState(1);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [dragging, setDragging] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const dragging = useRef(false);
+  const draggingRef = useRef(false);
   const lastPos = useRef({ x: 0, y: 0 });
+  const posMouseDown = useRef({ x: 0, y: 0 });
   
   return (
     <GridContext.Provider value={{ 
       containerRef, 
-      dragging,
+      draggingRef,
       lastPos,
+      posMouseDown,
+
+      dragging,
+      setDragging,
 
       zoom, 
       setZoom, 

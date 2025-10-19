@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import notify from "src/_functions/notify";
 import ThemeToggler from "src/_components/ThemeToggler";
-import { backendUrl } from "../../config";
+import { backendUrl } from "config";
 import { useUpdateLanguage } from "src/_components/TranslationProvider";
 import Avatar from "src/_components/Avatar";
 import { useTranslator } from "src/_functions/translator";
@@ -13,7 +13,7 @@ const incrementAvatarVersion = (url: string) => {
   return match ? parseInt(match[1]) + 1 : 1;
 }
 
-export const template = 'home';
+export const template = 'main';
 export default function Home() {
 
   const { session } = useSession();
@@ -21,6 +21,7 @@ export default function Home() {
   const setLanguage = useUpdateLanguage();
   const translate = useTranslator();
 
+  const [loaded, setLoaded] = useState(false);
   const [newLanguage, setNewLanguage] = useState<'nl' | 'en' | 'de' | 'fr'>(session?.language as 'nl' | 'en' |'de' | 'fr' || '');
   const [newAvatar, setNewAvatar] = useState<string>(session?.avatar || '');
   const [newName, setNewName] = useState<string>(session?.name || '');
@@ -42,10 +43,16 @@ export default function Home() {
     : `${backendUrl}/uploads/${session.avatar}`
   console.log(displayUrl)
 
+  const normalizeAvatar = (url: string) => url.split('?')[0];
+
   const saveUser = useCallback(async () => {
+    if (!loaded) {
+      return setLoaded(true);
+    }
+
     if (
       newLanguage == session.language
-      && newAvatar == session.avatar
+      && normalizeAvatar(newAvatar) === normalizeAvatar(session.avatar)
       && newName == session.name
       && newTheme == session.theme
     ) {

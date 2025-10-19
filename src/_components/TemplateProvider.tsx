@@ -1,35 +1,34 @@
 import { useEffect, useState } from 'react';
 import Middleware from 'src/_components/Middleware';
-import initializeRouter from './Router';
+import useRouter from './Router';
 import { useLocation } from 'react-router-dom';
 import Avatar from './Avatar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGear, faHome } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faGear, faHome } from '@fortawesome/free-solid-svg-icons';
 import { useSession } from '../_providers/SessionProvider';
-import { useMenuHandler } from './MenuHandler';
-import { ConfirmMenu } from './ConfirmMenu';
 import ThemeToggler from './ThemeToggler';
 import { useSocketStatus } from 'src/_providers/socketStatusProvider';
 import { apiRequest } from 'src/_sockets/apiRequest';
 import config from "config";
-import { GridProvider } from 'src/home/_providers/GridContextProvider';
+import { GridProvider } from 'src/sandbox/_providers/GridContextProvider';
+import Tooltip from './Tooltip';
+import { MenuStatesProvider } from 'src/sandbox/_providers/MenuStatesProvider';
 
 const Templates = {
-  home: HomeTemplate,
+  main: MainTemplate,
   plain: PlainTemplate,
   sandbox: SandboxTemplate,
 }
-export  type Template = 'plain' | 'home' | 'sandbox';
+export  type Template = 'plain' | 'main' | 'sandbox';
 
-function HomeTemplate({ children }: { children: React.ReactNode }) {
+function MainTemplate({ children }: { children: React.ReactNode }) {
 
-  const router = initializeRouter();
+  const router = useRouter();
   const location = useLocation();
   const { session } = useSession();
-  const ref = useMenuHandler();
 
   return (
-    <div className="w-full h-full overflow-hidden flex flex-col text-title text-sm md:text-lg">
+    <div className="w-full h-full overflow-hidden flex flex-col text-title">
 
       <div className='w-full flex items-center p-2 bg-container gap-4'>
         <div className='h-full flex-1 flex gap-2 items-center'>
@@ -41,29 +40,41 @@ function HomeTemplate({ children }: { children: React.ReactNode }) {
           <h1 className='font-semibold text-base line-clamp-1'>{session?.name}</h1>
         </div>
 
-        <button 
-          className='p-2 bg-container2 border border-container2-border rounded-md cursor-pointer'
-          onClick={() => {
-            // console.log('clicked');
-            if (location.pathname.startsWith('/games')) {
-              ref.open(
-                <ConfirmMenu
-                  title="Spel verlaten?"
-                  content="Weet je zeker dat je het spel wilt verlaten?"
-                  resolve={(status: boolean) => {
-                    if (!status) { return; }
-                    ref.close();
-                    router(location.pathname == '/settings' ? '/home' : '/settings')
-                  }}
-                />
-              )
-            } else {
-              router(location.pathname == '/settings' ? '/home' : '/settings')
-            }
-          }}
+        {
+          session?.location?.previousLocation && session?.location?.previousLocation !== session?.location?.pathName && (
+            <Tooltip
+              content="Go back to previous page"
+              delay={300}
+              offsetY={"5px"}
+              offsetX={"5px"}
+            >
+              <button 
+                className='p-2 bg-container2 border border-container2-border rounded-md cursor-pointer text-sm'
+                onClick={() => {
+                  router(session.location?.previousLocation || config.loginRedirectUrl)
+                }}
+              >
+                <FontAwesomeIcon icon={faArrowLeft} size='lg' />
+              </button>
+            </Tooltip>
+          )
+        }
+
+        <Tooltip
+          content={location.pathname == '/home' ? "Go to settings" : "Go to home page"}
+          delay={300}
+          offsetY={"5px"}
+          offsetX={"5px"}
         >
-          <FontAwesomeIcon icon={location.pathname == '/settings' ? faHome : faGear} size='lg' />
-        </button>
+          <button 
+            className='p-2 bg-container2 border border-container2-border rounded-md cursor-pointer text-sm'
+            onClick={() => {
+              router(location.pathname == '/home' ? '/settings' : '/home')
+            }}
+          >
+            <FontAwesomeIcon icon={location.pathname == '/home' ? faGear : faHome} size='lg' />
+          </button>
+        </Tooltip>
 
         <button 
           className='bg-container2 border border-container2-border rounded-md py-2 px-6 cursor-pointer font-semibold'
@@ -108,9 +119,11 @@ function SandboxTemplate({ children }: { children: React.ReactNode }) {
 
   return (
     <GridProvider>
-      <div className="w-full h-full">
-        {children}
-      </div>
+      <MenuStatesProvider>
+        <MainTemplate>
+          {children}
+        </MainTemplate>
+      </MenuStatesProvider>
     </GridProvider>
   )
 }
@@ -138,7 +151,7 @@ export default function TemplateProvider({
     }
   }, [session, location]);
 
-  if (config.dev) {
+  if (config.dev && config.socketActivityBroadcaster) {
     return (
       <div className='w-full h-full relative'>
         <div className='absolute top-2 right-2 z-50 bg-red-500 text-white px-2 py-1 rounded-md text-xs font-bold'>

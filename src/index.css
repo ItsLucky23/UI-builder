@@ -39,6 +39,10 @@
   --color-loadingscreen-container-border: #93C5FD;   /* blue-300 border */
   --color-loadingscreen-container-text: #1E3A8A;     /* blue-900, strong text */
   
+  --background-grid: 
+    linear-gradient(90deg, #eee 1px, transparent 1px),
+    linear-gradient(#eee 1px, transparent 1px);
+  --background-grid-color: #ffffff; /* fallback base background */
 }
 
 .dark {
@@ -80,6 +84,10 @@
 --color-loadingscreen-container-border: #4B5563;   /* gray-600 border */
 --color-loadingscreen-container-text: #F1F5F9;     /* slate-100, readable text */
 
+  --background-grid: 
+    linear-gradient(90deg, #333 1px, transparent 1px),
+    linear-gradient(#333 1px, transparent 1px);
+  --background-grid-color: #111; /* base background for dark mode */
 }
 
 :root {
@@ -106,5 +114,11 @@ html, body {
 @layer utilities {
   .h-safe {
     height: calc(var(--vh, 1vh) * 100);
+  }
+  
+  .bg-grid {
+    background: var(--background-grid);
+    background-color: var(--background-grid-color);
+    background-size: 20px 20px; /* adjust grid spacing */
   }
 }

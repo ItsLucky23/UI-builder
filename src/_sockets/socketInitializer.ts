@@ -186,7 +186,7 @@ export const joinRoom = async (group: string) => {
   })
 }
 
-export const updateLocationRequest = async ({ location }: {location: {pathName: string, searchParams: Record<string, string>}}) => {
+export const updateLocationRequest = async ({ location }: {location: { pathName: string, searchParams: Record<string, string>, previousLocation: string | null }}) => {
   if (!location.pathName || !location.searchParams) {
     if (dev) {
       console.error("Invalid location");

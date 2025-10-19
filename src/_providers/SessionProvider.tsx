@@ -1,4 +1,4 @@
-import { dev, SessionLayout } from '../../config';
+import { dev, SessionLayout } from 'config';
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { apiRequest } from 'src/_sockets/apiRequest';
 import { socketInstance, useSocket } from 'src/_sockets/socketInitializer';
