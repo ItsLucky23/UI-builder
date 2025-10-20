@@ -41,7 +41,7 @@ export default function useOnMouseMove() {
 
       lastPositionWindowDivider.current = e.clientX;
 
-      console.log(newPosition)
+      // console.log(newPosition)
       rightPanel.style.width = `${100 - newPosition}%`;
       leftPanel.style.width = `${newPosition}%`;
     }

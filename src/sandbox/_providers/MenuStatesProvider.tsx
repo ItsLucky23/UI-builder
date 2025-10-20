@@ -21,7 +21,6 @@ type MenuStatesContextType = {
   windowDividerPosition: number | null;
   setWindowDividerPosition: Dispatch<SetStateAction<number | null>>;
 
-  positionWindowDivider: RefObject<number>;
   lastPositionWindowDivider: RefObject<number>;
   // mousePositionWindowDivider: { x: number; y: number } | null;
   // setMousePositionWindowDivider: Dispatch<SetStateAction<{ x: number; y: number } | null>>;
@@ -42,7 +41,6 @@ export const MenuStatesProvider = ({ children }: { children: ReactNode }) => {
   const windowDividerDragging: RefObject<boolean> = useRef(false);
   const [windowDivider, setWindowDivider] = useState<boolean>(false);
   const [windowDividerPosition, setWindowDividerPosition] = useState<number | null>(null);
-  const positionWindowDivider = useRef<number>(0);
   const lastPositionWindowDivider = useRef<number>(0);
   // const [mousePositionWindowDivider, setMousePositionWindowDivider] = useState<{ x: number; y: number } | null>(null);
   // const [lastMousePositionWindowDivider, setLastMousePositionWindowDivider] = useState<{ x: number; y: number } | null>(null); //? used when divider hits the min/max positions we store last position so when going back with mouse we start moving again when at the position again
@@ -69,7 +67,6 @@ export const MenuStatesProvider = ({ children }: { children: ReactNode }) => {
       windowDivider,
       setWindowDivider,
 
-      positionWindowDivider,
       lastPositionWindowDivider,
       // mousePositionWindowDivider,
       // setMousePositionWindowDivider,
