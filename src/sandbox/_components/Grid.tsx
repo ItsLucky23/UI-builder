@@ -21,7 +21,7 @@ export default function Grid() {
   
   const [showZoom, setShowZoom] = useState(false);
   const { lastMenuState, setEditMenuState, setWindowDividerPosition } = useMenuStates();
-
+  
   useEffect(() => {
     setShowZoom(true);
   }, [zoom]);
