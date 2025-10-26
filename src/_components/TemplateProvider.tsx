@@ -13,6 +13,8 @@ import config from "config";
 import { GridProvider } from 'src/sandbox/_providers/GridContextProvider';
 import Tooltip from './Tooltip';
 import { MenuStatesProvider } from 'src/sandbox/_providers/MenuStatesProvider';
+import { CodeProvider } from 'src/sandbox/_providers/CodeContextProvider';
+import { BlueprintsProvider } from 'src/sandbox/_providers/BlueprintsContextProvider';
 
 const Templates = {
   main: MainTemplate,
@@ -119,11 +121,15 @@ function SandboxTemplate({ children }: { children: React.ReactNode }) {
 
   return (
     <GridProvider>
-      <MenuStatesProvider>
-        <MainTemplate>
-          {children}
-        </MainTemplate>
-      </MenuStatesProvider>
+      <BlueprintsProvider>
+        <MenuStatesProvider>
+          <CodeProvider>
+            <MainTemplate>
+              {children}
+            </MainTemplate>
+          </CodeProvider>
+        </MenuStatesProvider>
+      </BlueprintsProvider>
     </GridProvider>
   )
 }

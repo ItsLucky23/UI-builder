@@ -36,7 +36,7 @@ export const MenuStatesProvider = ({ children }: { children: ReactNode }) => {
   const [mousePositionCreateComponentMenu, setMousePositionCreateComponentMenu] = useState<{ x: number; y: number } | null>(null);
 
   const [editMenuState, setEditMenuState] = useState<"CODE" | "BUILDER" | "CLOSED">("CLOSED");
-  const [lastMenuState, setLastMenuState] = useState<"CODE" | "BUILDER">("BUILDER");
+  const [lastMenuState, setLastMenuState] = useState<"CODE" | "BUILDER">("CODE");
 
   const windowDividerDragging: RefObject<boolean> = useRef(false);
   const [windowDivider, setWindowDivider] = useState<boolean>(false);

@@ -4,16 +4,96 @@ import useOnMouseDown from "../_events/onMouseDown";
 import { useGrid } from "../_providers/GridContextProvider";
 import useOnMouseUp from "../_events/onMouseUp";
 import useOnMouseMove from "../_events/onMouseMove";
-import { GridElement } from "../props/gridProps";
+import { GridElement } from "../types/gridProps";
 import CreateComponentMenu from "./CreateComponentMenu";
 import { useMenuStates } from "../_providers/MenuStatesProvider";
+import { useCode } from "../_providers/CodeContextProvider";
+import { blueprints, screen } from "../types/blueprints";
+import { useBlueprints } from "../_providers/BlueprintsContextProvider";
+import DrawingLayer from "./DrawingLayer";
+
+const dummyData = {
+  screens: [
+    { 
+      id: "view1", 
+      name: "View 1" ,
+      position: { x: 100, y: 100 },
+      code: `
+import React from "react";
+export default function View1() {
+  return <div>View 1</div>;
+}
+      `
+    },
+    { 
+      id: "view2", 
+      name: "View 2" ,
+      position: { x: 1300, y: 1300 },
+      code: `
+import React from "react";
+export default function View2() {
+  return <div>View 2</div>;
+  return <div>View 2</div>;
+  return <div>View 2</div>;
+  return <div>View 2</div>;
+}
+      `
+    },
+  ],
+  components: [
+    {
+      id: "comp1",
+      name: "Component 1",
+      code: `
+import React from "react";
+export default function Component1() {
+  return <div>Component 1</div>;
+  return <div>Component 1</div>;
+  return <div>Component 1</div>;
+  return <div>Component 1</div>;
+  return <div>Component 1</div>;
+  return <div>Component 1</div>;
+  return <div>Component 1</div>;
+  return <div>Component 1</div>;
+}
+      `
+    },
+    {
+      id: "comp2",
+      name: "Component 2",
+      code: `
+import React from "react";
+export default function Component2() {
+  return <div>Component 2</div>;
+  return <div>Component 2</div>;
+  return <div>Component 2</div>;
+  return <div>Component 2</div>;
+  return <div>Component 2</div>;
+  return <div>Component 2</div>;
+  return <div>Component 2</div>;
+  return <div>Component 2</div>;
+  return <div>Component 2</div>;
+  return <div>Component 2</div>;
+  return <div>Component 2</div>;
+  return <div>Component 2</div>;
+  return <div>Component 2</div>;
+}
+      `
+    },
+  ],
+  notes: [],
+  drawings: [],
+}
 
 export default function Grid() {
-  const [elements, setElements] = useState<GridElement[]>([
-    { id: "1", x: 0, y: 0, width: 100, height: 100, color: "blue" },
-    { id: "2", x: 200, y: 200, width: 80, height: 50, color: "green" },
-  ]);
   const { containerRef, dragging, zoom, offset } = useGrid();
+  const { setCodeWindows, activeCodeWindow, setActiveCodeWindow } = useCode();
+  const { blueprints, setBlueprints } = useBlueprints();
+
+  useEffect(() => {
+    setBlueprints(dummyData as blueprints);
+  }, [])
+
   useOnMouseWheel();
   useOnMouseDown();
   useOnMouseUp();
@@ -33,18 +113,17 @@ export default function Grid() {
   }, [showZoom, zoom]);
 
   return (
+    //* THIS DIVE IS THE GRID BACKGROUND
     <div
       style={{
         width: "100%",
-        height: "100vh",
         overflow: "hidden",
         position: "relative",
-        // background: "linear-gradient(90deg, #eee 1px, transparent 1px), linear-gradient(#eee 1px, transparent 1px)",
         backgroundSize: `${50 * zoom}px ${50 * zoom}px`,
-        backgroundPosition: `${offset.x}px ${offset.y}px`, // <--- here
+        backgroundPosition: `${offset.x}px ${offset.y}px`,
         cursor: dragging ? "grabbing" : "",
       }}
-      className="bg-grid"
+      className="bg-grid h-full"
       ref={containerRef}
     >
 
@@ -55,7 +134,9 @@ export default function Grid() {
 
       <CreateComponentMenu />
 
+      {/* //* THIS DIV MAKES IT SO THE PANNING AND ZOOMING AFFECTS THE CONTENT */}
       <div
+        className="h-full w-full bg-green-500"
         style={{
           transform: `translate(${offset.x}px, ${offset.y}px) scale(${zoom})`,
           transformOrigin: "0 0",
@@ -64,29 +145,62 @@ export default function Grid() {
           left: 0,
         }}
       >
-        {elements.map(el => (
+        {blueprints.components.map(component => {
+          // instance is type component
+          return null; // render nothing
+        })}
+
+        {blueprints.notes.map(note => {
+          // instance is type note
+          return null; // render nothing
+        })}
+
+        {blueprints.drawings.map(drawing => {
+          // instance is type drawing
+          return null; // render nothing
+        })}
+
+        {blueprints.screens.map(screenInstance => (
           <div
-            key={el.id}
             style={{
-              position: "absolute",
-              left: el.x,
-              top: el.y,
-              width: el.width,
-              height: el.height,
-              backgroundColor: el.color || "red",
+              position: 'absolute',
+              left: screenInstance.position.x,
+              top: screenInstance.position.y,
             }}
-            className="COMPONENT"
-            onClick={() => {
+            className={`
+              VIEW w-[1024px] bg-gray-700 p-2 h-full
+              ${screenInstance.id == activeCodeWindow ? "border-4 border-title" : "border-2 border-gray-600 hover:border-gray-500 cursor-pointer"}
+            `}
+            key={screenInstance.id}
+            onClick={(e) => {
               setEditMenuState(lastMenuState || "CODE");
               setWindowDividerPosition(prev => prev || 50);
+              setCodeWindows(prev => {
+                const exists = prev.find(cw => cw.id === screenInstance.id);
+                if (exists) {
+                  return prev;
+                }
+                return [
+                  ...prev,
+                  {
+                    id: screenInstance.id,
+                    name: `Component ${screenInstance.id}`,
+                    code: screenInstance.code
+                  }
+                ]
+              })
+              setActiveCodeWindow(screenInstance.id);
             }}
           >
-            <div className="bg-orange-500">
-              <h2>{el.id}</h2>
-            </div>
+            {screenInstance.id}
           </div>
         ))}
       </div>
+
+      <DrawingLayer
+        view={{ position: { x: 0, y: 0 } }}
+      />
+
     </div>
   );
 };

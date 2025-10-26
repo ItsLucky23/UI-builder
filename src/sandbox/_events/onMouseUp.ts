@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 import { useGrid } from "../_providers/GridContextProvider";
 import { useMenuStates } from "../_providers/MenuStatesProvider";
+import { useCode } from "../_providers/CodeContextProvider";
 
 export default function useOnMouseUp() {
 
   const { containerRef, zoom, setDragging, draggingRef, posMouseDown } = useGrid();
   const { lastPositionWindowDivider, windowDividerDragging, setWindowDivider, setEditMenuState, setWindowDividerPosition, setLastMenuState, setCreateComponentMenuOpen, setMousePositionCreateComponentMenu } = useMenuStates();
-
+  const { setActiveCodeWindow } = useCode();
 
   useEffect(() => {
     const container = containerRef.current;
@@ -24,7 +25,7 @@ export default function useOnMouseUp() {
       const elem = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement;
       if (elem && elem.closest('#createComponentMenu')) { return; }
 
-      if (elem && elem.closest('.COMPONENT')) { return; }
+      if (elem && elem.closest('.VIEW')) { return; }
 
       const horizontalDifference = Math.abs(lastX - e.clientX);
       const verticalDifference = Math.abs(lastY - e.clientY);
@@ -35,6 +36,7 @@ export default function useOnMouseUp() {
             if (prev !== "CLOSED") {
               setLastMenuState(prev);
             }
+            setActiveCodeWindow(null);
             return "CLOSED";
           }); 
         }

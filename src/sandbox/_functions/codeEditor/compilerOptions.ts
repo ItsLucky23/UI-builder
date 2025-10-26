@@ -29,18 +29,6 @@ export default function setCompilerOptions({
     monaco.editor.setModelLanguage(model, "typescript");
   }
 
-  const userComponents = [
-    { name: "Dropdown", code: "export function Dropdown() { return <div>...</div> }" },
-    { name: "MyButton", code: "export function MyButton() { return <button>Click</button> }" }
-  ];
-
-  const componentIndex = `
-    declare module "components" {
-      import React from "react";
-      ${userComponents.map(c => `export { ${c.name} } from "components/${c.name}";`).join("\n")}
-    }
-  `;
-
   // Inject all React-related types
   ts.typescriptDefaults.addExtraLib(
     reactIndex,
@@ -58,6 +46,21 @@ export default function setCompilerOptions({
     reactJsxRuntime,
     "file:///node_modules/@types/react/jsx-runtime.d.ts"
   );
+
+
+
+
+  const userComponents = [
+    { name: "Dropdown", code: "export function Dropdown() { return <div>...</div> }" },
+    { name: "MyButton", code: "export function MyButton() { return <button>Click</button> }" }
+  ];
+
+  const componentIndex = `
+    declare module "components" {
+      import React from "react";
+      ${userComponents.map(c => `export { ${c.name} } from "components/${c.name}";`).join("\n")}
+    }
+  `;
 
   ts.typescriptDefaults.addExtraLib(
     componentIndex,

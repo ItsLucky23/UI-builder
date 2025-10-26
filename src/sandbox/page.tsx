@@ -33,7 +33,7 @@ export default function Home() {
             <h1>Grid</h1>
           </div>
 
-          <div className="flex flex-1">
+          <div className="flex h-[calc(100%-40px)]">
             <Grid />
           </div>
 
@@ -109,7 +109,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex-1 flex bg-background p-2">
+          <div className="flex-1 flex bg-background p-2 overflow-hidden">
             {/* BUILDER MENU CONTENT HERE PLEASE */}
             {editMenuState === "CODE" ? (
               <CodeEditor />
