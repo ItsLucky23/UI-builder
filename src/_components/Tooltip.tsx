@@ -10,6 +10,7 @@ interface TooltipProps {
   horizontal?: "left" | "right"; // left, right
   offsetX?: number | string; // horizontal offset
   offsetY?: number | string; // vertical offset
+  className?: string;
 }
 
 export default function Tooltip({
@@ -18,6 +19,7 @@ export default function Tooltip({
   delay = 0,
   offsetX = 0,
   offsetY = 0,
+  className = ""
 }: TooltipProps) {
   const [visible, setVisible] = useState(false);
   let timeout: NodeJS.Timeout;
@@ -72,16 +74,12 @@ export default function Tooltip({
             style={{
               position: "absolute",
               zIndex: 999,
-              pointerEvents: "none",
-              whiteSpace: "nowrap",
-              background: "black",
-              color: "white",
-              padding: "5px 10px",
-              borderRadius: "4px",
               ...style,
             }}
           >
-            {content}
+            <div className={className}>
+              {content}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

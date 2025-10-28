@@ -4,7 +4,7 @@ import { useMenuStates } from "../_providers/MenuStatesProvider";
 
 export default function useOnMouseDown() {
 
-  const { containerRef, zoom, setDragging, draggingRef, lastPos, posMouseDown } = useGrid();
+  const { containerRef, zoom, setDragging, draggingRef, lastPos, posMouseDown, drawingEnabled } = useGrid();
   const { lastPositionWindowDivider, windowDividerDragging, setWindowDivider, setCreateComponentMenuOpen } = useMenuStates();
 
   useEffect(() => {
@@ -13,6 +13,11 @@ export default function useOnMouseDown() {
 
     const handleMouseDown = (e: MouseEvent) => {
       e.preventDefault();
+
+      if (
+        drawingEnabled 
+        && e.buttons == 1 //? left button 
+      ) { return; }
 
       const elem = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement;
       if (elem && elem.closest('#createComponentMenu')) { return; }
@@ -32,7 +37,7 @@ export default function useOnMouseDown() {
 
     container.addEventListener("mousedown", handleMouseDown, { passive: false });
     return () => container.removeEventListener("mousedown", handleMouseDown);
-  }, [zoom]);
+  }, [zoom, drawingEnabled]);
 
   useEffect(() => {
     const windowDivider = document.getElementById("windowDivider");

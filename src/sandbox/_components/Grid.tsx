@@ -11,6 +11,9 @@ import { useCode } from "../_providers/CodeContextProvider";
 import { blueprints, screen } from "../types/blueprints";
 import { useBlueprints } from "../_providers/BlueprintsContextProvider";
 import DrawingLayer from "./DrawingLayer";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDrawPolygon, faPen } from "@fortawesome/free-solid-svg-icons";
+import BottomLeftMenu from "./BottemLeftMenu";
 
 const dummyData = {
   screens: [
@@ -128,9 +131,11 @@ export default function Grid() {
     >
 
       {/* percentage */}
-      <div className={`absolute top-2 ${showZoom ? 'opacity-100' : 'opacity-0'} z-50 transition-all duration-200 left-2 bg-background text-title text-sm px-4 py-1 rounded`}>
+      <div className={`absolute top-2 border border-container-border ${showZoom ? 'opacity-100' : 'opacity-0'} z-50 transition-all duration-200 left-2 bg-background text-title text-sm px-4 py-1 rounded`}>
         {(zoom*100).toString().endsWith(".5") ? (zoom*100).toFixed(1) : (zoom*100).toFixed(0)}%
       </div>
+
+      <BottomLeftMenu />
 
       <CreateComponentMenu />
 
@@ -172,7 +177,7 @@ export default function Grid() {
               ${screenInstance.id == activeCodeWindow ? "border-4 border-title" : "border-2 border-gray-600 hover:border-gray-500 cursor-pointer"}
             `}
             key={screenInstance.id}
-            onClick={(e) => {
+            onClick={() => {
               setEditMenuState(lastMenuState || "CODE");
               setWindowDividerPosition(prev => prev || 50);
               setCodeWindows(prev => {

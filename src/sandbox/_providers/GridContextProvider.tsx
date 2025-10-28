@@ -9,6 +9,12 @@ type GridContextType = {
   dragging: boolean;
   setDragging: Dispatch<SetStateAction<boolean>>;
 
+  drawingEnabled: boolean;
+  setDrawingEnabled: Dispatch<SetStateAction<boolean>>;
+
+  showDrawings: boolean;
+  setShowDrawings: Dispatch<SetStateAction<boolean>>;
+
   zoom: number;
   setZoom: Dispatch<SetStateAction<number>>;
 
@@ -22,6 +28,8 @@ export const GridProvider = ({ children }: { children: ReactNode }) => {
   const [zoom, setZoom] = useState(1);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
+  const [drawingEnabled, setDrawingEnabled] = useState(false);
+  const [showDrawings, setShowDrawings] = useState(true);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const draggingRef = useRef(false);
@@ -37,6 +45,12 @@ export const GridProvider = ({ children }: { children: ReactNode }) => {
 
       dragging,
       setDragging,
+
+      drawingEnabled,
+      setDrawingEnabled,
+
+      showDrawings,
+      setShowDrawings,
 
       zoom, 
       setZoom, 

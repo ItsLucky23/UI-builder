@@ -4,26 +4,30 @@ import { useMenuStates } from "../_providers/MenuStatesProvider";
 
 export default function useOnMouseMove() {
 
-  const { containerRef, draggingRef, lastPos, zoom, setOffset } = useGrid();
+  const { containerRef, draggingRef, lastPos, zoom, setOffset, drawingEnabled } = useGrid();
   const { lastPositionWindowDivider, windowDividerDragging, setWindowDivider } = useMenuStates();
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
+    if (!container) { return; }
+
+    // if (drawingEnabled) { 
+    //   return; 
+    // }
 
     const handleMouseMove = (e: MouseEvent) => {
-    if (!draggingRef.current) return;
-
-    const dx = e.clientX - lastPos.current.x;
-    const dy = e.clientY - lastPos.current.y;
-    lastPos.current = { x: e.clientX, y: e.clientY };
-    setOffset(prev => ({ x: prev.x + dx, y: prev.y + dy }));
+      if (!draggingRef.current) return;
+      
+      const dx = e.clientX - lastPos.current.x;
+      const dy = e.clientY - lastPos.current.y;
+      lastPos.current = { x: e.clientX, y: e.clientY };
+      setOffset(prev => ({ x: prev.x + dx, y: prev.y + dy }));
     };
 
     container.addEventListener("mousemove", handleMouseMove, { passive: false });
 
     return () => container.removeEventListener("mousemove", handleMouseMove);
-  }, [zoom]);
+  }, [zoom, drawingEnabled]);
 
   useEffect(() => {
     const rightPanel = document.getElementById("rightPanel");

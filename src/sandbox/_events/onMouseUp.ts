@@ -26,6 +26,7 @@ export default function useOnMouseUp() {
       if (elem && elem.closest('#createComponentMenu')) { return; }
 
       if (elem && elem.closest('.VIEW')) { return; }
+      if (elem && elem.closest('.MENU')) { return; }
 
       const horizontalDifference = Math.abs(lastX - e.clientX);
       const verticalDifference = Math.abs(lastY - e.clientY);
@@ -50,12 +51,16 @@ export default function useOnMouseUp() {
       }
     };
 
+    const handleContextMenu = (e: MouseEvent) => e.preventDefault(); // ← blocks right-click menu
+
     container.addEventListener("mouseleave", (e) => { onMouseUp(e, true) }, { passive: false });
     container.addEventListener("mouseup", (e) => { onMouseUp(e, false) }, { passive: false });
+    container.addEventListener("contextmenu", handleContextMenu); // ← key part
 
     return () => {
       container.removeEventListener("mouseleave", (e) => { onMouseUp(e, true) });
       container.removeEventListener("mouseup", (e) => { onMouseUp(e, false) });
+      container.removeEventListener("contextmenu", handleContextMenu);
     };
   }, [zoom]);
 
@@ -69,6 +74,7 @@ export default function useOnMouseUp() {
 
       setWindowDividerPosition(lastPositionWindowDivider.current = 50);
     }
+
 
     window.addEventListener("mouseup", (e) => { onMouseUp(e, false) }, { passive: false });
     window.addEventListener("mouseleave", (e) => { onMouseUp(e, true) }, { passive: false });
