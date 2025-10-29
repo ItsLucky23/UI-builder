@@ -30,9 +30,6 @@ export default function CodeEditor() {
       code: bp.code,
       setCode: (newBp: string) => {
         setBlueprints(prev => ({
-          // ...prev,
-          // screens: prev.screens.map(s => s.id === newBp.id ? newBp : s),
-          // components: prev.components.map(c => c.id === newBp.id ? newBp : c)
           ...prev,
           screens: prev.screens.map(s => s.id === activeCodeWindow ? { ...s, code: newBp} as screen : s),
           components: prev.components.map(c => c.id === activeCodeWindow ? { ...c, code: newBp} as component : c)
@@ -73,22 +70,6 @@ export default function CodeEditor() {
 
   return (
     <div className="flex flex-col w-full h-full">
-      <div className="w-full py-2 flex">
-        {codeWindows.map((cw, index) => (
-          <div 
-            key={index} 
-            className={`
-              px-6 py-1 border border-gray-600 bg-container
-              ${cw.id == activeCodeWindow ? "border-b-0 bg-background font-medium" : "cursor-pointer hover:bg-muted"}
-            `}
-          >
-            {cw.name}
-          </div>
-        ))}
-        {/* <div className="px-6 py-1 border border-gray-600 bg-container">item1.tsx</div>
-        <div className="px-6 py-1 border border-gray-600">item2item2.tsx</div>
-        <div className="px-6 py-1 border border-gray-600">item312.tsx</div> */}
-      </div>
       <Editor
         height="100%"
         width="100%"

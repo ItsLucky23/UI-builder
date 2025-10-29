@@ -46,13 +46,13 @@
 }
 
 .dark {
-  --color-background: #111827;          /* gray-900 */
+  --color-background: #10131B;          /* gray-900 */
 
-  --color-container: #1F2937; /* gray-800 */
+  --color-container: #171B26; /* gray-800 */
   --color-container-border: #374151; /* gray-700 */
   --color-container-hover: #3F4B63; /* slightly lighter dark hover */
 
-  --color-container2: #374151; /* gray-700 */
+  --color-container2: #202636; /* gray-700 */
   --color-container2-border: #4B5563; /* gray-600 */
   --color-container2-hover: #565E72;
 
@@ -64,8 +64,6 @@
   --color-container4-border: #374151; /* gray-700 */
   --color-container4-hover: #CBD5E1;
 
-  --color-loadingScreen: #192432;
-  
   --color-title: #FFFFFF;               /* white */
   --color-commen: #E5E7EB;              /* gray-200 */
   --color-muted: #9CA3AF;               /* gray-400 */
@@ -77,17 +75,10 @@
   --color-wrong: #EF4444; /* red-500 */
   --color-wrong-hover: #DC2626; /* red-600 */
 
-  --color-loadingscreen: #111827;             /* gray-900, a bit darker */
-
---color-loadingscreen-container: #1E293B;   /* slate-800, container base */
---color-loadingscreen-container-selected: #374151; /* gray-700, selected */
---color-loadingscreen-container-border: #4B5563;   /* gray-600 border */
---color-loadingscreen-container-text: #F1F5F9;     /* slate-100, readable text */
-
   --background-grid: 
-    linear-gradient(90deg, #333 1px, transparent 1px),
-    linear-gradient(#333 1px, transparent 1px);
-  --background-grid-color: #111; /* base background for dark mode */
+    linear-gradient(90deg, #555 1px, transparent 1px),
+    linear-gradient(#555 1px, transparent 1px);
+  --background-grid-color: #191d24cc; /* base background for dark mode */
 }
 
 :root {

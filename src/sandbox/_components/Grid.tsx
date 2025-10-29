@@ -14,6 +14,7 @@ import DrawingLayer from "./DrawingLayer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDrawPolygon, faPen } from "@fortawesome/free-solid-svg-icons";
 import BottomLeftMenu from "./BottemLeftMenu";
+import DrawingMenu from "./DrawingMenu";
 
 const dummyData = {
   screens: [
@@ -115,6 +116,45 @@ export default function Grid() {
     return () => clearTimeout(timeout);
   }, [showZoom, zoom]);
 
+  function getGridStyle(zoom: number, offset: { x: number; y: number }) {
+    console.log(zoom, offset)
+    let spacing = 50;
+    let opacity = 0.15;
+    let isLineGrid = true;
+
+
+    if (zoom > 1) {
+      spacing = 50;
+      opacity = 0.2;
+      isLineGrid = true;
+    } else {
+      spacing = 100;
+      opacity = 0.2;
+      isLineGrid = false;
+    }
+
+    if (isLineGrid) {
+      return {
+        backgroundImage: `
+          linear-gradient(rgba(255,255,255,${opacity}) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,${opacity}) 1px, transparent 1px)
+        `,
+        backgroundSize: `${spacing * zoom}px ${spacing * zoom}px`,
+        backgroundPosition: `${offset.x}px ${offset.y}px`,
+      };
+    } else {
+      return {
+        backgroundImage: `
+          radial-gradient(circle, rgba(255,255,255,${opacity}) 1px, transparent 1px)
+        `,
+        backgroundSize: `${spacing * zoom}px ${spacing * zoom}px`,
+        backgroundPosition: `${offset.x}px ${offset.y}px`,
+      };
+    }
+  }
+
+  const gridStyle = getGridStyle(zoom, offset);
+
   return (
     //* THIS DIVE IS THE GRID BACKGROUND
     <div
@@ -122,8 +162,10 @@ export default function Grid() {
         width: "100%",
         overflow: "hidden",
         position: "relative",
-        backgroundSize: `${50 * zoom}px ${50 * zoom}px`,
-        backgroundPosition: `${offset.x}px ${offset.y}px`,
+              ...gridStyle,
+
+        // backgroundSize: `${50 * zoom}px ${50 * zoom}px`,
+        // backgroundPosition: `${offset.x}px ${offset.y}px`,
         cursor: dragging ? "grabbing" : "",
       }}
       className="bg-grid h-full"
@@ -139,9 +181,11 @@ export default function Grid() {
 
       <CreateComponentMenu />
 
+      <DrawingMenu />
+
       {/* //* THIS DIV MAKES IT SO THE PANNING AND ZOOMING AFFECTS THE CONTENT */}
       <div
-        className="h-full w-full bg-green-500"
+        className="h-full w-full"
         style={{
           transform: `translate(${offset.x}px, ${offset.y}px) scale(${zoom})`,
           transformOrigin: "0 0",
@@ -174,7 +218,7 @@ export default function Grid() {
             }}
             className={`
               VIEW w-[1024px] bg-gray-700 p-2 h-full
-              ${screenInstance.id == activeCodeWindow ? "border-4 border-title" : "border-2 border-gray-600 hover:border-gray-500 cursor-pointer"}
+              ${screenInstance.id == activeCodeWindow ? "border-4 border-title" : "border-2 border-gray-600 hover:border-gray-300 cursor-pointer"}
             `}
             key={screenInstance.id}
             onClick={() => {

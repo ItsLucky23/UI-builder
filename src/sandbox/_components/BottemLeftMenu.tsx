@@ -10,7 +10,7 @@ export default function BottomLeftMenu() {
   return (
     <div className={`
       MENU
-      absolute bottom-2 left-2 z-50 bg-container border border-container-border  text-title text-sm flex items-center gap-2 p-1 rounded
+      absolute bottom-4 left-4 z-50 text-title text-sm flex items-center gap-2
     `}>
 
       {/* draw icon */}
@@ -40,12 +40,12 @@ export default function BottomLeftMenu() {
         content={showDrawings ? "Hide drawings" : "Show drawings"}
         offsetY={"-200% - 12px"}
         offsetX={"50%"}
-        className={`bg-container2 p-2 text-nowrap border border-container-border rounded`}
+        className={`bg-bg-1 p-2 text-nowrap border border-container-border rounded`}
       >
         <div 
           className={`
             MENU
-            p-2 rounded-full bg-container2 outline
+            p-2 rounded-full bg-bg-3 outline
             ${showDrawings ? "outline-white" : "outline-none"}
           `}
           onClick={() => setShowDrawings(!showDrawings)}

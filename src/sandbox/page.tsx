@@ -4,11 +4,18 @@ import { useMenuStates } from "./_providers/MenuStatesProvider";
 import { faClose, faCode, faGridHorizontal, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import CodeEditor from "./_components/CodeEditor";
 import BuilderMenu from "./_components/BuilderMenu";
+import { useCode } from "./_providers/CodeContextProvider";
 
 export const template = 'sandbox'; 
 export default function Home() {
   
   const { windowDividerDragging, editMenuState, windowDividerPosition, setEditMenuState, setLastMenuState } = useMenuStates();
+  const {
+    codeWindows,
+    setCodeWindows,
+    activeCodeWindow,
+    setActiveCodeWindow
+  } = useCode();
 
   return (
     <div className="h-full w-full">
@@ -18,7 +25,7 @@ export default function Home() {
         <div 
           id="leftPanel"
           className={`
-            h-full w-full bg-container
+            h-full w-full bg-background 
             ${windowDividerDragging.current ? "" : "transition-all duration-300"}
           `}
           style={{
@@ -26,7 +33,7 @@ export default function Home() {
           }}
         >
           
-          <div className="bg-background py-2 px-4 flex gap-2 items-center">
+          <div className="bg-container2 py-2 px-4 flex gap-2 items-center">
             <FontAwesomeIcon
               icon={faGridHorizontal}
             ></FontAwesomeIcon>
@@ -40,14 +47,14 @@ export default function Home() {
         </div>
 
         <div 
-          className={`bg-container h-full w-2 ${editMenuState == "CLOSED" ? "hidden" : ""} cursor-col-resize`}
+          className={`bg-container2 h-full w-2 ${editMenuState == "CLOSED" ? "hidden" : ""} cursor-col-resize`}
           id="windowDivider"
         ></div>
 
         <div 
           id="rightPanel"
           className={`
-            flex flex-col h-full bg-container overflow-hidden ${editMenuState == "CLOSED" ? "" : ""}
+            flex flex-col h-full bg-container2 overflow-hidden ${editMenuState == "CLOSED" ? "" : ""}
             ${windowDividerDragging.current ? "" : "transition-all duration-300"}
           `}
           style={{
@@ -56,7 +63,7 @@ export default function Home() {
         >
           <div className="flex">
             <div 
-              className={`group bg-background py-2 px-4 flex gap-2 items-center border-b-2 transition-border duration-200
+              className={`group py-2 px-4 flex gap-2 items-center border-b-2 transition-border duration-200
                 ${editMenuState === "CODE" ? "border-title" : "hover:border-muted border-transparent cursor-pointer"}
               `}
               onClick={() => { setEditMenuState("CODE") }}
@@ -82,7 +89,7 @@ export default function Home() {
               ></FontAwesomeIcon>
             </div>
             <div 
-              className={`group bg-background py-2 px-4 flex gap-2 items-center border-b-2 transition-border duration-200
+              className={`group py-2 px-4 flex gap-2 items-center border-b-2 transition-border duration-200
                 ${editMenuState === "BUILDER" ? "border-title" : "hover:border-muted border-transparent cursor-pointer"}
               `}
               onClick={() => { setEditMenuState("BUILDER") }}
@@ -109,13 +116,28 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex-1 flex bg-background p-2 overflow-hidden">
+          <div className="flex-1 flex flex-col overflow-hidden">
             {/* BUILDER MENU CONTENT HERE PLEASE */}
-            {editMenuState === "CODE" ? (
-              <CodeEditor />
-            ) : (
-              <BuilderMenu />
-            )}
+            <div className="w-full py-2 flex">
+              {codeWindows.map((cw, index) => (
+                <div 
+                  key={index} 
+                  className={`
+                    px-6 py-1
+                    ${cw.id == activeCodeWindow ? "bg-container/60" : "cursor-pointer bg-container"}
+                  `}
+                >
+                  {cw.name}
+                </div>
+              ))}
+            </div>
+            <div className="h-full w-full">
+              {editMenuState === "CODE" ? (
+                <CodeEditor />
+              ) : (
+                <BuilderMenu />
+              )}
+            </div>
           </div>
         </div>
 

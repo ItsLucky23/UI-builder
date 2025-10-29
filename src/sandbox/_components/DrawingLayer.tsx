@@ -43,9 +43,10 @@ export default function DrawingLayer({
 
   const handlePointerMove = useCallback((e: React.PointerEvent<SVGSVGElement>) => {
     if (e.buttons !== 1 || !drawingEnabled) { return }
-    console.log('move')
+
     const { x, y } = clientToWorld(e.clientX, e.clientY)
     setCurrentPoints(prev => {
+      console.log(prev)
       const last = prev[prev.length - 1]
       if (!last || last.x !== x || last.y !== y) {
         return [...prev, { x, y, pressure: e.pressure ?? 1 }]
@@ -72,14 +73,14 @@ export default function DrawingLayer({
     setCurrentPoints([])
   }, [currentPoints, drawingEnabled, offset, zoom])
 
-
   const renderPath = (points: Point[]) => {
     // perfect-freehand expects points in the same coordinate space you'll render them in.
     // We're rendering inside the transformed (world) SVG, so points are world coords.
     // If you want the stroke visual thickness to stay constant on screen,
     // divide size by zoom. If you want stroke size to scale with zoom, remove / zoom.
     const stroke = getStroke(points, {
-      size: 12 / zoom, // keep screen-consistent thickness
+      // size: 12 / zoom, // keep screen-consistent thickness
+      size: Math.min(20, (12 / zoom)), // scale thickness with zoom but clamp
       thinning: 0,
       smoothing: 1,
       streamline: 1,
@@ -103,7 +104,7 @@ export default function DrawingLayer({
           transformOrigin: '0 0',
           pointerEvents: 'none', // rendering layer shouldn't capture events
         }}
-        className="h-full w-full"
+        className={`h-full w-full`}
       >
         <svg
           ref={worldSvgRef}
@@ -129,9 +130,10 @@ export default function DrawingLayer({
           top: 0,
           left: 0,
           overflow: 'visible',
-          pointerEvents: 'auto',
-          touchAction: 'none', // improves pointer/stylus responsiveness
+          // pointerEvents: 'auto',
+          // touchAction: 'none', // improves pointer/stylus responsiveness
         }}
+        className={`${drawingEnabled ? '' : 'pointer-events-none'}`}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}

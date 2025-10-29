@@ -1,6 +1,6 @@
 export default function BuilderMenu() {
   return (
-    <div>
+    <div className="bg-container w-full h-full">
       Builder Menu
     </div>
   )
