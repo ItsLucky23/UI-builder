@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useGrid } from "../_providers/GridContextProvider";
+import { useGrid } from "../../_providers/GridContextProvider";
 import { fa0, fa5, faArchway, faAward, faDownLong, faEyeSlash, faGrinTongue, faLeaf, faMobileVibrate, faPen } from "@fortawesome/free-solid-svg-icons";
 import Tooltip from "src/_components/Tooltip";
 

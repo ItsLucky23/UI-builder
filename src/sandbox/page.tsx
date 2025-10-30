@@ -2,20 +2,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Grid from "./_components/Grid";
 import { useMenuStates } from "./_providers/MenuStatesProvider";
 import { faClose, faCode, faGridHorizontal, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
-import CodeEditor from "./_components/CodeEditor";
-import BuilderMenu from "./_components/BuilderMenu";
-import { useCode } from "./_providers/CodeContextProvider";
+import Editor from "./_components/editor/Editor";
 
 export const template = 'sandbox'; 
 export default function Home() {
   
   const { windowDividerDragging, editMenuState, windowDividerPosition, setEditMenuState, setLastMenuState } = useMenuStates();
-  const {
-    codeWindows,
-    setCodeWindows,
-    activeCodeWindow,
-    setActiveCodeWindow
-  } = useCode();
+
 
   return (
     <div className="h-full w-full">
@@ -116,51 +109,9 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex-1 flex flex-col overflow-hidden">
-            {/* BUILDER MENU CONTENT HERE PLEASE */}
-            <div className="w-full py-2 flex">
-              {codeWindows.map((cw, index) => (
-                <div 
-                  key={index} 
-                  className={`
-                    px-4 py-1 flex gap-4 items-center
-                    ${cw.id == activeCodeWindow ? "bg-container" : "cursor-pointer bg-container/60"}
-                  `}
-                  onClick={() => setActiveCodeWindow(cw.id)}
-                >
-                  <img src={"/google.png"} alt={cw.name} className="w-4 h-4" />
-                  <h1>{cw.name}</h1>
-                  <div className="text-muted">
-                    {cw.id == activeCodeWindow && (
-                      <FontAwesomeIcon
-                        icon={faClose}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setActiveCodeWindow(
-                            codeWindows[index - 1] ? codeWindows[index - 1].id :
-                            codeWindows[index + 1] ? codeWindows[index + 1].id :
-                            ""
-                          );
-                          setCodeWindows(prev => prev.filter(w => w.id !== cw.id))
-                        }}
-                      />
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="h-full w-full">
-              {editMenuState === "CODE" ? (
-                <CodeEditor />
-              ) : (
-                <BuilderMenu />
-              )}
-            </div>
-          </div>
+          <Editor />
         </div>
-
       </div>
-
     </div>
   );
 };

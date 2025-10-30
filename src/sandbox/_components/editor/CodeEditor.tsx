@@ -4,13 +4,14 @@ import * as monaco from "monaco-editor";
 
 // pull in raw type strings
 
-import setCompilerOptions from "../_functions/codeEditor/compilerOptions";
-import loadAutoCompletions from "../_functions/codeEditor/autoCompletions";
-import generateThemes from "../_functions/codeEditor/themes";
-import traverseClickedComponent from "../_functions/codeEditor/traverseClickedComponent";
-import { useCode } from "../_providers/CodeContextProvider";
-import { useBlueprints } from "../_providers/BlueprintsContextProvider";
-import { component, screen } from "../types/blueprints";
+import setCompilerOptions from "../../_functions/codeEditor/compilerOptions";
+import loadAutoCompletions from "../../_functions/codeEditor/autoCompletions";
+import generateThemes from "../../_functions/codeEditor/themes";
+import traverseClickedComponent from "../../_functions/codeEditor/traverseClickedComponent";
+import { useCode } from "../../_providers/CodeContextProvider";
+import { useBlueprints } from "../../_providers/BlueprintsContextProvider";
+import { component, screen } from "../../types/blueprints";
+import { useMenuStates } from "../../_providers/MenuStatesProvider";
 
 export default function CodeEditor() {
   // const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
@@ -23,11 +24,17 @@ export default function CodeEditor() {
   } = useCode();
   const [editor, setEditor] = useState<monaco.editor.IStandaloneCodeEditor | null>(null);
   const { blueprints, setBlueprints } = useBlueprints();
-  const { code, setCode } = useMemo(() => {
-    const bp = (blueprints.screens.find(s => s.id === activeCodeWindow) ||
-               blueprints.components.find(c => c.id === activeCodeWindow)) as screen | component;
+  const { setEditMenuState } = useMenuStates();
 
-               console.log(bp)
+  const { code, setCode } = useMemo(() => {
+    const bp = (blueprints.screens.find(s => s.id === activeCodeWindow) || blueprints.components.find(c => c.id === activeCodeWindow)) as screen | component;
+    if (!bp) {
+      return {
+        code: "",
+        setCode: (newBp: string) => {}
+      };
+    }
+
     return { 
       code: bp.code,
       setCode: (newBp: string) => {

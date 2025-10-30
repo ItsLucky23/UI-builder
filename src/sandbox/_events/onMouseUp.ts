@@ -33,11 +33,11 @@ export default function useOnMouseUp() {
       if (horizontalDifference < 2 && verticalDifference < 2) {
 
         if (!leaveEvent) { 
+          setActiveCodeWindow(null);
           setEditMenuState(prev => {
             if (prev !== "CLOSED") {
               setLastMenuState(prev);
             }
-            setActiveCodeWindow(null);
             return "CLOSED";
           }); 
         }

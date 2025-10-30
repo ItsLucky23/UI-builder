@@ -1,7 +1,7 @@
 import React, { useRef, useState, useCallback } from 'react'
 import { getStroke } from 'perfect-freehand'
-import { getSvgPathFromStroke } from '../_functions/drawing/getSvgPathFromStroke'
-import { useGrid } from '../_providers/GridContextProvider'
+import { getSvgPathFromStroke } from '../../_functions/drawing/getSvgPathFromStroke'
+import { useGrid } from '../../_providers/GridContextProvider'
 
 type Point = { x: number; y: number; pressure: number }
 

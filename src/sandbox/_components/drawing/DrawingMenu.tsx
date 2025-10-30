@@ -1,4 +1,4 @@
-import { useGrid } from "../_providers/GridContextProvider"
+import { useGrid } from "../../_providers/GridContextProvider"
 
 export default function DrawingMenu({
 

@@ -1,20 +1,21 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import useOnMouseWheel from "../_events/onMouseWheel";
 import useOnMouseDown from "../_events/onMouseDown";
 import { useGrid } from "../_providers/GridContextProvider";
 import useOnMouseUp from "../_events/onMouseUp";
 import useOnMouseMove from "../_events/onMouseMove";
 import { GridElement } from "../types/gridProps";
-import CreateComponentMenu from "./CreateComponentMenu";
+import CreateComponentMenu from "./menus/CreateComponentMenu";
 import { useMenuStates } from "../_providers/MenuStatesProvider";
 import { useCode } from "../_providers/CodeContextProvider";
 import { blueprints, screen } from "../types/blueprints";
 import { useBlueprints } from "../_providers/BlueprintsContextProvider";
-import DrawingLayer from "./DrawingLayer";
+import DrawingLayer from "./drawing/DrawingLayer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDrawPolygon, faPen } from "@fortawesome/free-solid-svg-icons";
-import BottomLeftMenu from "./BottemLeftMenu";
-import DrawingMenu from "./DrawingMenu";
+import BottomLeftMenu from "./menus/BottemLeftMenu";
+import DrawingMenu from "./drawing/DrawingMenu";
+import { getGridStyle } from "../_functions/gridStyle";
 
 const dummyData = {
   screens: [
@@ -22,12 +23,28 @@ const dummyData = {
       id: "view1", 
       name: "View 1" ,
       position: { x: 100, y: 100 },
-      code: `
-import React from "react";
+      code: 
+`import React, { useState, useEffect } from "react";
 export default function View1() {
-  return <div>View 1</div>;
-}
-      `
+
+  const [name, setName] = useState("Mike")
+
+  useEffect(() => {
+    console.log(name)
+  }, [name])
+
+  return (
+    <div className={"bg-blue-500"}>
+      <div>hey {name}!!</div>
+      <button 
+        className="px-6 py-2"
+        onClick={() => {setName(prev => prev == 'Mike' ? 'Jimbo' : 'Mike')}}
+      >
+        Click me
+      </button>
+    </div>
+  );
+}`
     },
     { 
       id: "view2", 
@@ -116,44 +133,9 @@ export default function Grid() {
     return () => clearTimeout(timeout);
   }, [showZoom, zoom]);
 
-  function getGridStyle(zoom: number, offset: { x: number; y: number }) {
-    console.log(zoom, offset)
-    let spacing = 50;
-    let opacity = 0.15;
-    let isLineGrid = true;
-
-
-    if (zoom > 1) {
-      spacing = 50;
-      opacity = 0.2;
-      isLineGrid = true;
-    } else {
-      spacing = 100;
-      opacity = 0.2;
-      isLineGrid = false;
-    }
-
-    if (isLineGrid) {
-      return {
-        backgroundImage: `
-          linear-gradient(rgba(255,255,255,${opacity}) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255,255,255,${opacity}) 1px, transparent 1px)
-        `,
-        backgroundSize: `${spacing * zoom}px ${spacing * zoom}px`,
-        backgroundPosition: `${offset.x}px ${offset.y}px`,
-      };
-    } else {
-      return {
-        backgroundImage: `
-          radial-gradient(circle, rgba(255,255,255,${opacity}) 1px, transparent 1px)
-        `,
-        backgroundSize: `${spacing * zoom}px ${spacing * zoom}px`,
-        backgroundPosition: `${offset.x}px ${offset.y}px`,
-      };
-    }
-  }
-
-  const gridStyle = getGridStyle(zoom, offset);
+  const gridStyle = useMemo(() => {
+    return getGridStyle(zoom, offset);
+  }, [zoom, offset]);
 
   return (
     //* THIS DIVE IS THE GRID BACKGROUND
