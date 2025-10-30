@@ -26,6 +26,8 @@ export default function CodeEditor() {
   const { code, setCode } = useMemo(() => {
     const bp = (blueprints.screens.find(s => s.id === activeCodeWindow) ||
                blueprints.components.find(c => c.id === activeCodeWindow)) as screen | component;
+
+               console.log(bp)
     return { 
       code: bp.code,
       setCode: (newBp: string) => {

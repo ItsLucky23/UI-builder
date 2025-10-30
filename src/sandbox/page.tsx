@@ -123,11 +123,29 @@ export default function Home() {
                 <div 
                   key={index} 
                   className={`
-                    px-6 py-1
-                    ${cw.id == activeCodeWindow ? "bg-container/60" : "cursor-pointer bg-container"}
+                    px-4 py-1 flex gap-4 items-center
+                    ${cw.id == activeCodeWindow ? "bg-container" : "cursor-pointer bg-container/60"}
                   `}
+                  onClick={() => setActiveCodeWindow(cw.id)}
                 >
-                  {cw.name}
+                  <img src={"/google.png"} alt={cw.name} className="w-4 h-4" />
+                  <h1>{cw.name}</h1>
+                  <div className="text-muted">
+                    {cw.id == activeCodeWindow && (
+                      <FontAwesomeIcon
+                        icon={faClose}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setActiveCodeWindow(
+                            codeWindows[index - 1] ? codeWindows[index - 1].id :
+                            codeWindows[index + 1] ? codeWindows[index + 1].id :
+                            ""
+                          );
+                          setCodeWindows(prev => prev.filter(w => w.id !== cw.id))
+                        }}
+                      />
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
