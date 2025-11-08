@@ -68,8 +68,8 @@ export default function loadAutoCompletions({
 
   // Clean up on dispose
   return () => {
-    console.log("Disposing auto completions...");
-    console.log(autoCompletions);
+    // console.log("Disposing auto completions...");
+    // console.log(autoCompletions);
     autoCompletions.forEach((disposable) => disposable.dispose());
   };
 }

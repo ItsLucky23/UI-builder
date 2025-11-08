@@ -13,11 +13,12 @@ export default defineConfig({
   build: {
     rollupOptions: {
       external: (id) => { // this is just for the server side to tell these files will be available at runtime, to ignore files in build process go to tsconfig.app.json
+        
         // Match if path includes /api/
-        if (/\/api\//.test(id)) return true;
+        if (/\/api\//.test(id)) { return true; }
   
         // Ignore files in a sync folder ending with _server.ts
-        if (/\/sync\/.*\/.*_server\.ts$/.test(id) || /\/sync\/.*_server\.ts$/.test(id)) return true;
+        if (/\/sync\/.*\/.*_server\.ts$/.test(id) || /\/sync\/.*_server\.ts$/.test(id)) { return true; }
 
         return false;
       },
@@ -37,5 +38,5 @@ export default defineConfig({
         "**/src/**/**/*{api,sync}/**"
       ]
     },
-  }
+  },
 })

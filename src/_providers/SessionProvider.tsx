@@ -1,7 +1,7 @@
 import { dev, SessionLayout } from 'config';
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { apiRequest } from 'src/_sockets/apiRequest';
-import { socketInstance, useSocket } from 'src/_sockets/socketInitializer';
+import { socket, useSocket } from 'src/_sockets/socketInitializer';
 
 type UserContextType = {
   session: SessionLayout | null;
@@ -32,7 +32,7 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
   }, [])
 
   useEffect(() => {
-    if (!socketInstance) return;
+    if (!socket) return;
 
     const handler = (data: string) => {
       if (dev) { console.log('updateSession', JSON.parse(data)); }
@@ -44,14 +44,14 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
       }));
     }
 
-    socketInstance.on('updateSession', handler)
+    socket.on('updateSession', handler)
 
     return () => {
-      if (!socketInstance) return;
-      socketInstance.off('updateSession', handler);
+      if (!socket) return;
+      socket.off('updateSession', handler);
     }
     
-  // }, [socketInstance])
+  // }, [socket])
   }, [])
 
   return (

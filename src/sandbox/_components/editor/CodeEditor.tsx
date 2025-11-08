@@ -1,9 +1,6 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Editor, { useMonaco } from "@monaco-editor/react";
 import * as monaco from "monaco-editor";
-
-// pull in raw type strings
-
 import setCompilerOptions from "../../_functions/codeEditor/compilerOptions";
 import loadAutoCompletions from "../../_functions/codeEditor/autoCompletions";
 import generateThemes from "../../_functions/codeEditor/themes";
@@ -11,27 +8,49 @@ import traverseClickedComponent from "../../_functions/codeEditor/traverseClicke
 import { useCode } from "../../_providers/CodeContextProvider";
 import { useBlueprints } from "../../_providers/BlueprintsContextProvider";
 import { component, screen } from "../../types/blueprints";
-import { useMenuStates } from "../../_providers/MenuStatesProvider";
+import { configureMonacoTailwindcss, tailwindcssData } from 'monaco-tailwindcss'
+
+(window as any).MonacoEnvironment = {
+  getWorker(_: any, label: any) {
+    console.log(label)
+    switch (label) {
+      case 'tailwindcss':
+        const resp = new Worker(
+          new URL('monaco-tailwindcss/tailwindcss.worker', import.meta.url),
+          { type: 'module' }
+        )
+        console.log(resp)
+        return resp;
+      case 'javascript':
+      case 'typescript':
+        return new Worker(
+          new URL('monaco-editor/esm/vs/language/typescript/ts.worker', import.meta.url),
+          { type: 'module' }
+        );
+      default:
+        return new Worker(
+          new URL('monaco-editor/esm/vs/editor/editor.worker', import.meta.url),
+          { type: 'module' }
+        );
+    }
+  }
+};
 
 export default function CodeEditor() {
-  // const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-  const monaco = useMonaco();
+  const monacoInstance = useMonaco();
   const {
-    codeWindows,
-    setCodeWindows,
     activeCodeWindow,
-    setActiveCodeWindow
   } = useCode();
   const [editor, setEditor] = useState<monaco.editor.IStandaloneCodeEditor | null>(null);
   const { blueprints, setBlueprints } = useBlueprints();
-  const { setEditMenuState } = useMenuStates();
+
 
   const { code, setCode } = useMemo(() => {
     const bp = (blueprints.screens.find(s => s.id === activeCodeWindow) || blueprints.components.find(c => c.id === activeCodeWindow)) as screen | component;
     if (!bp) {
       return {
         code: "",
-        setCode: (newBp: string) => {}
+        setCode: () => {}
       };
     }
 
@@ -52,20 +71,40 @@ export default function CodeEditor() {
     { name: "MyButton", code: "export function MyButton() { return <button>Click</button> }" }
   ];
 
-  useEffect(() => {
-    console.log(monaco);
-    if (!monaco) { return; }
+  monaco.languages.css.cssDefaults.setOptions({
+    data: {
+      dataProviders: {
+        tailwindcssData
+      }
+    }
+  })
 
-    generateThemes({ monaco });
-    setCompilerOptions({ monaco });
-    const disposeAutoCompletions = loadAutoCompletions({ monaco });
-    monaco.editor.setTheme("trae-dark");
+  useEffect(() => {
+    if (!monacoInstance) { return; }
+
+    generateThemes({ monaco: monacoInstance });
+    setCompilerOptions({ monaco: monacoInstance });
+    const disposeAutoCompletions = loadAutoCompletions({ monaco: monacoInstance })
+
+    monacoInstance.editor.setTheme("trae-dark");
+
+    configureMonacoTailwindcss(monacoInstance, {
+      tailwindConfig: {},
+      languageSelector: [
+        "html",
+        "css",
+        "javascript",
+        "typescript",
+        "javascriptreact",
+        "typescriptreact"
+      ]
+    });
 
     return () => {
       disposeAutoCompletions();
     };
 
-  }, [monaco]);
+  }, [monacoInstance]);
 
   useEffect(() => {
     if (!editor) { return; }
@@ -82,15 +121,13 @@ export default function CodeEditor() {
       <Editor
         height="100%"
         width="100%"
-        defaultLanguage="typescript"
+        defaultLanguage="typescriptreact"
         path="file:///App.tsx"
         value={code}
         theme="vs-dark"
         onMount={(editor) => { 
           setEditor(editor);
-          console.log('ksksks ', editor)
           if (!monaco) { return; }
-  
           monaco.editor.setTheme("trae-dark");
         }}
         onChange={(val) => val && setCode(val)}

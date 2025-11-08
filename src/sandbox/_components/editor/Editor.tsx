@@ -18,9 +18,9 @@ export default function Editor() {
   } = useCode();
 
   useEffect(() => {
-    console.log(editMenuState)
-    console.log(codeWindows)
-    console.log(activeCodeWindow)
+    // console.log(editMenuState)
+    // console.log(codeWindows)
+    // console.log(activeCodeWindow)
     if (codeWindows.length === 0) {
       setEditMenuState("CLOSED");
     }
@@ -35,8 +35,8 @@ export default function Editor() {
           <div 
             key={index} 
             className={`
-              px-3 py-1 flex gap-3 items-center
-              ${cw.id == activeCodeWindow ? "bg-container" : "cursor-pointer bg-container/60"}
+              px-3 py-1 flex gap-3 items-center border-b-2
+              ${cw.id == activeCodeWindow ? "bg-container border-blue-300" : "cursor-pointer bg-container/60 border-transparent"}
             `}
             onClick={() => setActiveCodeWindow(cw.id)}
           >

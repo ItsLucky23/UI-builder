@@ -5,7 +5,6 @@ import { useSocketStatus } from "../_providers/socketStatusProvider";
 import { RefObject, useEffect, useRef } from "react";
 import { initSyncRequest, useSyncEventTrigger } from "./syncRequest";
 
-export let socketInstance: Socket | null = null;
 export let socket: Socket | null = null;
 
 let responseIndex = 0;
@@ -41,10 +40,7 @@ export function useSocket(session: SessionLayout | null) {
       }
     }
 
-    socketInstance = io(backendUrl, socketOptions);
-
-    socket = socketInstance;
-
+    socket = io(backendUrl, socketOptions);
 
     const handleVisibility = async () => {
       if (!config.socketActivityBroadcaster) { return; }
@@ -106,7 +102,7 @@ export function useSocket(session: SessionLayout | null) {
       }
     });
 
-    socketInstance.on("sync", ({ cb, clientData, serverData, message, status }) => {
+    socket.on("sync", ({ cb, clientData, serverData, message, status }) => {
       const path = window.location.pathname;
       if (dev) console.log("Server Sync Response:", { cb, clientData, serverData, status, message });
 
@@ -123,9 +119,9 @@ export function useSocket(session: SessionLayout | null) {
 
 
     return () => {
-      if (socketInstance) {
-        socketInstance.disconnect();
-        socketInstance = null;
+      if (socket) {
+        socket.disconnect();
+        socket = null;
         socket = null;
         setSocketStatus(prev => ({
         ...prev,
@@ -142,7 +138,7 @@ export function useSocket(session: SessionLayout | null) {
 
   }, []);
 
-  return socketInstance;
+  return socket;
 }
 
 
