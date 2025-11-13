@@ -27,25 +27,26 @@ export default function setCompilerOptions({
   const model = monaco.editor.getModels()[0];
   if (model) {
     monaco.editor.setModelLanguage(model, "typescript");
+    // monaco.editor.setModelLanguage(model, "typescript");
   }
 
   // Inject all React-related types
-  ts.typescriptDefaults.addExtraLib(
-    reactIndex,
-    "file:///node_modules/@types/react/index.d.ts"
-  );
-  ts.typescriptDefaults.addExtraLib(
-    reactGlobal,
-    "file:///node_modules/@types/react/global.d.ts"
-  );
-  ts.typescriptDefaults.addExtraLib(
-    reactDom,
-    "file:///node_modules/@types/react-dom/index.d.ts"
-  );
-  ts.typescriptDefaults.addExtraLib(
-    reactJsxRuntime,
-    "file:///node_modules/@types/react/jsx-runtime.d.ts"
-  );
+  // ts.typescriptDefaults.addExtraLib(
+  //   reactIndex,
+  //   "file:///node_modules/@types/react/index.d.ts"
+  // );
+  // ts.typescriptDefaults.addExtraLib(
+  //   reactGlobal,
+  //   "file:///node_modules/@types/react/global.d.ts"
+  // );
+  // ts.typescriptDefaults.addExtraLib(
+  //   reactDom,
+  //   "file:///node_modules/@types/react-dom/index.d.ts"
+  // );
+  // ts.typescriptDefaults.addExtraLib(
+  //   reactJsxRuntime,
+  //   "file:///node_modules/@types/react/jsx-runtime.d.ts"
+  // );
 
 
 
