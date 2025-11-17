@@ -1,3 +1,4 @@
+import { useDrawing } from "src/sandbox/_providers/DrawingContextProvider";
 import { useGrid } from "../../_providers/GridContextProvider"
 
 export default function DrawingMenu({
@@ -6,7 +7,7 @@ export default function DrawingMenu({
 
 }) {
 
-  const { drawingEnabled } = useGrid();
+  const { drawingEnabled } = useDrawing();
 
   if (!drawingEnabled) { return null }
 

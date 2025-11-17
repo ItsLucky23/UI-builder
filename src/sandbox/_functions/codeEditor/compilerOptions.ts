@@ -2,19 +2,16 @@ import reactIndex from "../../../types/react/index.d.ts?raw";
 import reactGlobal from "../../../types/react/global.d.ts?raw";
 import reactDom from "../../../types/react-dom.d.ts?raw";
 import reactJsxRuntime from "../../../types/react-jsx-runtime.d.ts?raw";
+// import reactHooksGlobals from "../../../types/react-hooks.d.ts?raw";
 
-export default function setCompilerOptions({
-  monaco
-}: {
-  monaco: typeof import("e:/code/UI-builder/node_modules/monaco-editor/esm/vs/editor/editor.api")
-}) {
+export default function setCompilerOptions(monaco: typeof import("monaco-editor")) {
   const ts = monaco.languages.typescript;
 
   ts.typescriptDefaults.setCompilerOptions({
     target: ts.ScriptTarget.ESNext,
     module: ts.ModuleKind.ESNext,
     moduleResolution: ts.ModuleResolutionKind.NodeJs,
-    jsx: ts.JsxEmit.ReactJSX, // <-- important
+    jsx: ts.JsxEmit.ReactJSX,
     jsxFactory: "React.createElement",
     jsxFragmentFactory: "React.Fragment",
     allowJs: true,
@@ -27,28 +24,29 @@ export default function setCompilerOptions({
   const model = monaco.editor.getModels()[0];
   if (model) {
     monaco.editor.setModelLanguage(model, "typescript");
-    // monaco.editor.setModelLanguage(model, "typescript");
   }
 
   // Inject all React-related types
+  ts.typescriptDefaults.addExtraLib(
+    reactIndex,
+    "file:///node_modules/@types/react/index.d.ts"
+  );
+  ts.typescriptDefaults.addExtraLib(
+    reactGlobal,
+    "file:///node_modules/@types/react/global.d.ts"
+  );
+  ts.typescriptDefaults.addExtraLib(
+    reactDom,
+    "file:///node_modules/@types/react-dom/index.d.ts"
+  );
+  ts.typescriptDefaults.addExtraLib(
+    reactJsxRuntime,
+    "file:///node_modules/@types/react/jsx-runtime.d.ts"
+  );
   // ts.typescriptDefaults.addExtraLib(
-  //   reactIndex,
-  //   "file:///node_modules/@types/react/index.d.ts"
+  //   reactHooksGlobals,
+  //   "file:///react-hooks-globals.d.ts"
   // );
-  // ts.typescriptDefaults.addExtraLib(
-  //   reactGlobal,
-  //   "file:///node_modules/@types/react/global.d.ts"
-  // );
-  // ts.typescriptDefaults.addExtraLib(
-  //   reactDom,
-  //   "file:///node_modules/@types/react-dom/index.d.ts"
-  // );
-  // ts.typescriptDefaults.addExtraLib(
-  //   reactJsxRuntime,
-  //   "file:///node_modules/@types/react/jsx-runtime.d.ts"
-  // );
-
-
 
 
   const userComponents = [

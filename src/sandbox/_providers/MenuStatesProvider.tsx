@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, ReactNode, RefObject, SetStateAction, Dispatch, useRef } from 'react';
+import { useCode } from './CodeContextProvider';
 
 type MenuStatesContextType = {
   createComponentMenuOpen: boolean;

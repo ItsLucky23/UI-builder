@@ -15,6 +15,7 @@ import Tooltip from './Tooltip';
 import { MenuStatesProvider } from 'src/sandbox/_providers/MenuStatesProvider';
 import { CodeProvider } from 'src/sandbox/_providers/CodeContextProvider';
 import { BlueprintsProvider } from 'src/sandbox/_providers/BlueprintsContextProvider';
+import { DrawingProvider } from 'src/sandbox/_providers/DrawingContextProvider';
 
 const Templates = {
   main: MainTemplate,
@@ -124,9 +125,11 @@ function SandboxTemplate({ children }: { children: React.ReactNode }) {
       <BlueprintsProvider>
         <MenuStatesProvider>
           <CodeProvider>
-            <MainTemplate>
-              {children}
-            </MainTemplate>
+            <DrawingProvider>
+              <MainTemplate>
+                {children}
+              </MainTemplate>
+            </DrawingProvider>
           </CodeProvider>
         </MenuStatesProvider>
       </BlueprintsProvider>

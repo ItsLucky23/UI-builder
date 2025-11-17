@@ -4,9 +4,9 @@ import { useCode } from "src/sandbox/_providers/CodeContextProvider";
 import BuilderMenu from "./BuilderMenu";
 import CodeEditor from "./CodeEditor";
 import { useMenuStates } from "src/sandbox/_providers/MenuStatesProvider";
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 
-export default function Editor() {
+const Editor = () => {
 
   const { editMenuState, setEditMenuState } = useMenuStates();
 
@@ -18,9 +18,6 @@ export default function Editor() {
   } = useCode();
 
   useEffect(() => {
-    // console.log(editMenuState)
-    // console.log(codeWindows)
-    // console.log(activeCodeWindow)
     if (codeWindows.length === 0) {
       setEditMenuState("CLOSED");
     }
@@ -72,3 +69,5 @@ export default function Editor() {
     </div>
   )
 }
+
+export default memo(Editor);

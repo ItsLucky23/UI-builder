@@ -228,9 +228,7 @@ export default function Grid() {
         ))}
       </div>
 
-      <DrawingLayer
-        view={{ position: { x: 0, y: 0 } }}
-      />
+      <DrawingLayer />
 
     </div>
   );

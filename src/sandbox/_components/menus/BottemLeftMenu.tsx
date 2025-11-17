@@ -1,11 +1,25 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useGrid } from "../../_providers/GridContextProvider";
-import { fa0, fa5, faArchway, faAward, faDownLong, faEyeSlash, faGrinTongue, faLeaf, faMobileVibrate, faPen } from "@fortawesome/free-solid-svg-icons";
 import Tooltip from "src/_components/Tooltip";
+import { faEyeSlash, faPen } from "@fortawesome/free-solid-svg-icons";
+import { useDrawing } from "src/sandbox/_providers/DrawingContextProvider";
+// import { useCode } from "src/sandbox/_providers/CodeContextProvider";
 
 export default function BottomLeftMenu() {
   
-  const { drawingEnabled, setDrawingEnabled, showDrawings, setShowDrawings } = useGrid();
+  const { 
+    drawingEnabled, 
+    setDrawingEnabled, 
+
+    showDrawings, 
+    setShowDrawings,
+
+  } = useDrawing();
+
+  // const {
+  //   codeWindowSize,
+  //   setCodeWindowSize
+  // } = useCode();
 
   return (
     <div className={`
@@ -56,6 +70,37 @@ export default function BottomLeftMenu() {
           />
         </div>
       </Tooltip>
+
+      {/* //? disabled for now cause editor rerenders every time we time so the zoomsize gets reset, also it dont work with the scroll option */}
+      {/* <Tooltip
+        content={"Change zoom level"}
+        offsetY={"-200% - 12px"}
+        offsetX={"20px"}
+        className={`bg-container2 p-2 text-nowrap border border-container-border rounded`}
+      >
+        <div className={`
+          MENU
+          p-2 rounded-full bg-container2 flex gap-1 items-center
+        `}>
+          <div 
+            className="hover:bg-background h-6 w-6 rounded-full flex items-center justify-center"
+            onClick={() => { setCodeWindowSize(prev => prev - 2) }}
+          >
+            <FontAwesomeIcon
+              icon={faMinus}
+            />
+          </div>
+          <div>{Math.round(codeWindowSize/16 * 100)}%</div>
+          <div 
+            className="hover:bg-background h-6 w-6 rounded-full flex items-center justify-center"
+            onClick={() => { setCodeWindowSize(prev => prev + 2) }}
+          >
+            <FontAwesomeIcon
+              icon={faPlus}
+            />
+          </div>
+        </div>  
+      </Tooltip> */}
 
     </div>
   )

@@ -2,22 +2,31 @@ import React, { useRef, useState, useCallback } from 'react'
 import { getStroke } from 'perfect-freehand'
 import { getSvgPathFromStroke } from '../../_functions/drawing/getSvgPathFromStroke'
 import { useGrid } from '../../_providers/GridContextProvider'
+import { DrawingPoint, useDrawing } from 'src/sandbox/_providers/DrawingContextProvider'
 
-type Point = { x: number; y: number; pressure: number }
+export default function DrawingLayer() {
 
-type StrokeData = {
-  id: string
-  points: Point[] // points are stored in WORLD coordinates
-}
+  const {
+    strokes,
+    setStrokes,
 
-export default function DrawingLayer({
-  view,
-}: {
-  view: { position: { x: number; y: number } }
-}) {
-  const [strokes, setStrokes] = useState<StrokeData[]>([])
-  const [currentPoints, setCurrentPoints] = useState<Point[]>([])
-  const { zoom, offset, drawingEnabled } = useGrid()
+    currentPoints,
+    setCurrentPoints,
+
+    drawingEnabled,
+    showDrawings,
+
+    brushSize,
+    erasing,
+    brushColor
+
+  } = useDrawing();
+
+  const { 
+    zoom, 
+    offset, 
+  } = useGrid()
+
   const overlayRef = useRef<SVGSVGElement | null>(null)
   const worldSvgRef = useRef<SVGSVGElement | null>(null)
 
@@ -26,7 +35,6 @@ export default function DrawingLayer({
     const rect = overlayRef.current!.getBoundingClientRect()
     const screenX = clientX - rect.left
     const screenY = clientY - rect.top
-    // offset is applied as translate(px) before scaling, so subtract it then divide by zoom
     return {
       x: (screenX - offset.x) / zoom,
       y: (screenY - offset.y) / zoom,
@@ -73,13 +81,12 @@ export default function DrawingLayer({
     setCurrentPoints([])
   }, [currentPoints, drawingEnabled, offset, zoom])
 
-  const renderPath = (points: Point[]) => {
+  const renderPath = (points: DrawingPoint[]) => {
     // perfect-freehand expects points in the same coordinate space you'll render them in.
     // We're rendering inside the transformed (world) SVG, so points are world coords.
     // If you want the stroke visual thickness to stay constant on screen,
     // divide size by zoom. If you want stroke size to scale with zoom, remove / zoom.
     const stroke = getStroke(points, {
-      // size: 12 / zoom, // keep screen-consistent thickness
       size: Math.min(20, (12 / zoom)), // scale thickness with zoom but clamp
       thinning: 0,
       smoothing: 1,
@@ -87,7 +94,8 @@ export default function DrawingLayer({
       easing: t => t,
     })
     const pathData = getSvgPathFromStroke(stroke)
-    return <path d={pathData} fill="black" stroke="none" />
+    console.log(brushColor)
+    return <path d={pathData} fill={brushColor} stroke="none" />
   }
 
   return (
@@ -106,18 +114,20 @@ export default function DrawingLayer({
         }}
         className={`h-full w-full`}
       >
-        <svg
-          ref={worldSvgRef}
-          width="100%"
-          height="100%"
-          style={{ overflow: 'visible', pointerEvents: 'none' }}
-        >
-          {strokes.map(s => (
-            <g key={s.id}>{renderPath(s.points)}</g>
-          ))}
-          {/* Render live stroke inside world SVG so it aligns with final strokes */}
-          {currentPoints.length > 1 && <g>{renderPath(currentPoints)}</g>}
-        </svg>
+        {showDrawings && (
+          <svg
+            ref={worldSvgRef}
+            width="100%"
+            height="100%"
+            style={{ overflow: 'visible', pointerEvents: 'none' }}
+          >
+            {strokes.map(s => (
+              <g key={s.id}>{renderPath(s.points)}</g>
+            ))}
+            {/* Render live stroke inside world SVG so it aligns with final strokes */}
+            {currentPoints.length > 1 && <g>{renderPath(currentPoints)}</g>}
+          </svg>
+        )}
       </div>
 
       {/* Overlay SVG (untransformed) — captures pointer input */}

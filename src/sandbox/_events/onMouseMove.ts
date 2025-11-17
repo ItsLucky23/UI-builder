@@ -1,11 +1,13 @@
 import { useEffect } from "react";
 import { useGrid } from "../_providers/GridContextProvider";
 import { useMenuStates } from "../_providers/MenuStatesProvider";
+import { useDrawing } from "../_providers/DrawingContextProvider";
 
 export default function useOnMouseMove() {
 
-  const { containerRef, draggingRef, lastPos, zoom, setOffset, drawingEnabled } = useGrid();
+  const { containerRef, draggingRef, lastPos, zoom, setOffset } = useGrid();
   const { lastPositionWindowDivider, windowDividerDragging, setWindowDivider } = useMenuStates();
+  const { drawingEnabled } = useDrawing();
 
   useEffect(() => {
     const container = containerRef.current;

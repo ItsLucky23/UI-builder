@@ -1,10 +1,6 @@
 import * as monaco from 'monaco-editor';
 
-export default function generateThemes({
-  monaco
-}: {
-  monaco: typeof import("e:/code/UI-builder/node_modules/monaco-editor/esm/vs/editor/editor.api")
-}) {
+export default function generateThemes(monaco: typeof import("monaco-editor")) {
   traeDarkTheme(monaco);
 }
 
@@ -42,9 +38,9 @@ const colorParser = (tokens: any[]) => {
 };
 
 
-import traeDarkColor from "./themes/trae_dark_color.json"
-import traeDarkPlus from "./themes/trae_dark_plus.json"
-import traeDarkVs from "./themes/trae_dark_vs.json"
+import traeDarkColor from "./trae_dark_color.json"
+import traeDarkPlus from "./trae_dark_plus.json"
+import traeDarkVs from "./trae_dark_vs.json"
 
 export const traeDarkTheme = (monaco: typeof import("monaco-editor")) => {
   // Combine tokenColors from both VSCode files
