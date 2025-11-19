@@ -153,17 +153,19 @@ export default function Grid() {
       className="bg-grid h-full"
       ref={containerRef}
     >
-
+ 
       {/* percentage */}
       <div className={`absolute top-2 border border-container-border ${showZoom ? 'opacity-100' : 'opacity-0'} z-50 transition-all duration-200 left-2 bg-background text-title text-sm px-4 py-1 rounded`}>
         {(zoom*100).toString().endsWith(".5") ? (zoom*100).toFixed(1) : (zoom*100).toFixed(0)}%
       </div>
 
-      <BottomLeftMenu />
+      <div className=" pointer-events-auto!">
+        <BottomLeftMenu />
 
-      <CreateComponentMenu />
+        <CreateComponentMenu />
 
-      <DrawingMenu />
+        <DrawingMenu />
+      </div>
 
       {/* //* THIS DIV MAKES IT SO THE PANNING AND ZOOMING AFFECTS THE CONTENT */}
       <div

@@ -46,8 +46,8 @@ export default function DrawingLayer() {
 
     try { e.currentTarget.setPointerCapture(e.pointerId) } catch {}
     const { x, y } = clientToWorld(e.clientX, e.clientY)
-    setCurrentPoints([{ x, y, pressure: e.pressure ?? 1 }])
-  }, [drawingEnabled, offset, zoom])
+    setCurrentPoints([{ x, y, color: brushColor, size: brushSize }])
+  }, [drawingEnabled, offset, zoom, brushColor, brushSize])
 
   const handlePointerMove = useCallback((e: React.PointerEvent<SVGSVGElement>) => {
     if (e.buttons !== 1 || !drawingEnabled) { return }
@@ -57,11 +57,11 @@ export default function DrawingLayer() {
       console.log(prev)
       const last = prev[prev.length - 1]
       if (!last || last.x !== x || last.y !== y) {
-        return [...prev, { x, y, pressure: e.pressure ?? 1 }]
+        return [...prev, { x, y, color: brushColor, size: brushSize }]
       }
       return prev
     })
-  }, [drawingEnabled, offset, zoom])
+  }, [drawingEnabled, offset, zoom, brushColor, brushSize])
 
   const handlePointerUp = useCallback((e: React.PointerEvent<SVGSVGElement>) => {
     if (!drawingEnabled) { return }
@@ -79,23 +79,23 @@ export default function DrawingLayer() {
     }
 
     setCurrentPoints([])
-  }, [currentPoints, drawingEnabled, offset, zoom])
+  }, [currentPoints, drawingEnabled, offset, zoom, brushColor, brushSize])
 
   const renderPath = (points: DrawingPoint[]) => {
     // perfect-freehand expects points in the same coordinate space you'll render them in.
     // We're rendering inside the transformed (world) SVG, so points are world coords.
     // If you want the stroke visual thickness to stay constant on screen,
     // divide size by zoom. If you want stroke size to scale with zoom, remove / zoom.
+    console.log(Math.min(20, (12 / zoom)) * (points[0].size/10))
     const stroke = getStroke(points, {
-      size: Math.min(20, (12 / zoom)), // scale thickness with zoom but clamp
+      size: Math.min(20, (12 / zoom)) * (points[0].size/10), // scale thickness with zoom but clamp
       thinning: 0,
       smoothing: 1,
       streamline: 1,
       easing: t => t,
     })
     const pathData = getSvgPathFromStroke(stroke)
-    console.log(brushColor)
-    return <path d={pathData} fill={brushColor} stroke="none" />
+    return <path d={pathData} fill={points[0].color} stroke="none" />
   }
 
   return (

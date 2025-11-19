@@ -1,7 +1,13 @@
 import { createContext, useContext, useState, ReactNode, SetStateAction, Dispatch, useEffect } from 'react';
 import * as monaco from 'monaco-editor';
 
-export type DrawingPoint = { x: number; y: number; pressure: number }
+export type DrawingPoint = { 
+  x: number; 
+  y: number;
+  color: string; 
+  size: number;
+  // pressure: number 
+}
 
 type StrokeData = {
   id: string

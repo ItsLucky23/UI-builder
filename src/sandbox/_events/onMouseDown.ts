@@ -14,7 +14,7 @@ export default function useOnMouseDown() {
     if (!container) return;
 
     const handleMouseDown = (e: MouseEvent) => {
-      e.preventDefault();
+      // e.preventDefault();
 
       if (
         drawingEnabled 
