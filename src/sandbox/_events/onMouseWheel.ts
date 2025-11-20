@@ -63,6 +63,12 @@ export default function useOnMouseWheel() {
           }
         } else {
 
+          const speed = 1;
+
+          return setOffset(prev => ({
+            x: prev.x - e.deltaX / zoom * speed,
+            y: prev.y - e.deltaY / zoom * speed,
+          }));
         }
       }
 
