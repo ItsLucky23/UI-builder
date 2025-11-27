@@ -260,7 +260,7 @@ export default function Home() {
         </div>
 
         <button 
-          className="w-full bg-blue-500 text-white py-2 rounded-lg"
+          className="w-full bg-primary text-white py-2 rounded-lg"
           onClick={saveUser}
         >
           {/* Save data */}

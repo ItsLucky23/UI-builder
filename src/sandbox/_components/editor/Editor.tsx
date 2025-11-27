@@ -3,12 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useCode } from "src/sandbox/_providers/CodeContextProvider";
 import BuilderMenu from "./BuilderMenu";
 import CodeEditor from "./CodeEditor";
-import { useMenuStates } from "src/sandbox/_providers/MenuStatesProvider";
 import { memo, useEffect } from "react";
+import { BuilderMenuMode, useBuilderPanel } from "src/sandbox/_providers/BuilderPanelContextProvider";
 
 const Editor = () => {
 
-  const { editMenuState, setEditMenuState } = useMenuStates();
+  const { builderMenuMode, setBuilderMenuMode } = useBuilderPanel();
 
   const {
     codeWindows,
@@ -19,10 +19,10 @@ const Editor = () => {
 
   useEffect(() => {
     if (codeWindows.length === 0) {
-      setEditMenuState("CLOSED");
+      setBuilderMenuMode(BuilderMenuMode.CLOSED);
     }
 
-  }, [editMenuState, codeWindows, activeCodeWindow]);
+  }, [builderMenuMode, codeWindows, activeCodeWindow]);
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
@@ -33,7 +33,7 @@ const Editor = () => {
             key={index} 
             className={`
               px-3 py-1 flex gap-3 items-center border-b-2
-              ${cw.id == activeCodeWindow ? "bg-container border-blue-300" : "cursor-pointer bg-container/60 border-transparent"}
+              ${cw.id == activeCodeWindow ? "bg-container border-primary" : "cursor-pointer bg-container/60 border-transparent"}
             `}
             onClick={() => setActiveCodeWindow(cw.id)}
           >
@@ -60,9 +60,9 @@ const Editor = () => {
         ))}
       </div>
       <div className="h-full w-full">
-        {editMenuState === "CODE" ? (
+        {builderMenuMode === BuilderMenuMode.CODE ? (
           <CodeEditor />
-        ) : editMenuState === "BUILDER" ? (
+        ) : builderMenuMode === BuilderMenuMode.BUILDER ? (
           <BuilderMenu />
         ) : null}
       </div>

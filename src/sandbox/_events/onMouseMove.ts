@@ -1,21 +1,30 @@
 import { useEffect } from "react";
 import { useGrid } from "../_providers/GridContextProvider";
-import { useMenuStates } from "../_providers/MenuStatesProvider";
 import { useDrawing } from "../_providers/DrawingContextProvider";
+import { useBuilderPanel } from "../_providers/BuilderPanelContextProvider";
 
 export default function useOnMouseMove() {
 
-  const { containerRef, draggingRef, lastPos, zoom, setOffset } = useGrid();
-  const { lastPositionWindowDivider, windowDividerDragging, setWindowDivider } = useMenuStates();
-  const { drawingEnabled } = useDrawing();
+  const { 
+    containerRef, 
+    draggingRef, 
+    lastPos, 
+    zoom, 
+    setOffset 
+  } = useGrid();
+
+  const { 
+    lastPositionWindowDivider, 
+    windowDividerDragging 
+  } = useBuilderPanel();
+
+  const { 
+    drawingEnabled 
+  } = useDrawing();
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) { return; }
-
-    // if (drawingEnabled) { 
-    //   return; 
-    // }
 
     const handleMouseMove = (e: MouseEvent) => {
       if (!draggingRef.current) return;
@@ -47,7 +56,6 @@ export default function useOnMouseMove() {
 
       lastPositionWindowDivider.current = e.clientX;
 
-      // console.log(newPosition)
       rightPanel.style.width = `${100 - newPosition}%`;
       leftPanel.style.width = `${newPosition}%`;
     }

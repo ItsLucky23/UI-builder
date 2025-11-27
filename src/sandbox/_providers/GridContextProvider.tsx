@@ -27,10 +27,10 @@ export const GridProvider = ({ children }: { children: ReactNode }) => {
   const draggingRef = useRef(false);
   const lastPos = useRef({ x: 0, y: 0 });
   const posMouseDown = useRef({ x: 0, y: 0 });
-  
+
   return (
-    <GridContext.Provider value={{ 
-      containerRef, 
+    <GridContext.Provider value={{
+      containerRef,
       draggingRef,
       lastPos,
       posMouseDown,
@@ -38,10 +38,10 @@ export const GridProvider = ({ children }: { children: ReactNode }) => {
       dragging,
       setDragging,
 
-      zoom, 
-      setZoom, 
-      
-      offset, 
+      zoom,
+      setZoom,
+
+      offset,
       setOffset,
     }}>
       {children}

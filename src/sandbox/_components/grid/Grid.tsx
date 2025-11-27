@@ -1,30 +1,24 @@
 import { useEffect, useMemo, useState } from "react";
-import useOnMouseWheel from "../_events/onMouseWheel";
-import useOnMouseDown from "../_events/onMouseDown";
-import { useGrid } from "../_providers/GridContextProvider";
-import useOnMouseUp from "../_events/onMouseUp";
-import useOnMouseMove from "../_events/onMouseMove";
-import { GridElement } from "../types/gridProps";
-import CreateComponentMenu from "./menus/CreateComponentMenu";
-import { useMenuStates } from "../_providers/MenuStatesProvider";
-import { useCode } from "../_providers/CodeContextProvider";
-import { blueprints, screen } from "../types/blueprints";
-import { useBlueprints } from "../_providers/BlueprintsContextProvider";
-import DrawingLayer from "./drawing/DrawingLayer";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDrawPolygon, faPen } from "@fortawesome/free-solid-svg-icons";
-import BottomLeftMenu from "./menus/BottemLeftMenu";
-import DrawingMenu from "./drawing/DrawingMenu";
-import { getGridStyle } from "../_functions/gridStyle";
+import { useGrid } from "../../_providers/GridContextProvider";
+import CreateComponentMenu from "../menus/CreateComponentMenu";
+import { useCode } from "../../_providers/CodeContextProvider";
+import { blueprints } from "../../types/blueprints";
+import { useBlueprints } from "../../_providers/BlueprintsContextProvider";
+import DrawingLayer from "../drawing/DrawingLayer";
+import BottomLeftMenu from "../menus/BottomLeftMenu";
+import DrawingMenu from "../drawing/DrawingMenu";
+import { getGridStyle } from "../../_functions/gridStyle";
+import { ScreenRenderer } from "./ScreenRenderer";
+import { useBuilderPanel } from "src/sandbox/_providers/BuilderPanelContextProvider";
 
 const dummyData = {
   screens: [
-    { 
-      id: "view1", 
-      name: "View 1" ,
+    {
+      id: "view1",
+      name: "View 1",
       position: { x: 100, y: 100 },
-      code: 
-`import React, { useState, useEffect } from "react";
+      code:
+        `import React, { useState, useEffect } from "react";
 export default function View1() {
 
   const [name, setName] = useState("Mike")
@@ -46,9 +40,9 @@ export default function View1() {
   );
 }`
     },
-    { 
-      id: "view2", 
-      name: "View 2" ,
+    {
+      id: "view2",
+      name: "View 2",
       position: { x: 1300, y: 1300 },
       code: `
 import React from "react";
@@ -107,22 +101,32 @@ export default function Component2() {
 }
 
 export default function Grid() {
-  const { containerRef, dragging, zoom, offset } = useGrid();
-  const { setCodeWindows, activeCodeWindow, setActiveCodeWindow } = useCode();
-  const { blueprints, setBlueprints } = useBlueprints();
+  const { 
+    containerRef, 
+    dragging, 
+    zoom, 
+    offset
+  } = useGrid();
+
+  const { 
+    setCodeWindows, 
+    activeCodeWindow, 
+    setActiveCodeWindow 
+  } = useCode();
+
+  const { 
+    blueprints, 
+    setBlueprints,
+    highlightInstances 
+  } = useBlueprints();
 
   useEffect(() => {
     setBlueprints(dummyData as blueprints);
   }, [])
 
-  useOnMouseWheel();
-  useOnMouseDown();
-  useOnMouseUp();
-  useOnMouseMove();
-  
   const [showZoom, setShowZoom] = useState(false);
-  const { lastMenuState, setEditMenuState, setWindowDividerPosition } = useMenuStates();
-  
+  const { prevBuilderMenuMode, setBuilderMenuMode, setWindowDividerPosition } = useBuilderPanel();
+
   useEffect(() => {
     setShowZoom(true);
   }, [zoom]);
@@ -144,7 +148,7 @@ export default function Grid() {
         width: "100%",
         overflow: "hidden",
         position: "relative",
-              ...gridStyle,
+        ...gridStyle,
 
         // backgroundSize: `${50 * zoom}px ${50 * zoom}px`,
         // backgroundPosition: `${offset.x}px ${offset.y}px`,
@@ -153,10 +157,10 @@ export default function Grid() {
       className="bg-grid h-full"
       ref={containerRef}
     >
- 
+
       {/* percentage */}
       <div className={`absolute top-2 border border-container-border ${showZoom ? 'opacity-100' : 'opacity-0'} z-50 transition-all duration-200 left-2 bg-background text-title text-sm px-4 py-1 rounded`}>
-        {(zoom*100).toString().endsWith(".5") ? (zoom*100).toFixed(1) : (zoom*100).toFixed(0)}%
+        {(zoom * 100).toString().endsWith(".5") ? (zoom * 100).toFixed(1) : (zoom * 100).toFixed(0)}%
       </div>
 
       <div className=" pointer-events-auto!">
@@ -178,60 +182,65 @@ export default function Grid() {
           left: 0,
         }}
       >
-        {blueprints.components.map(component => {
+        {blueprints.components.map(() => {
           // instance is type component
           return null; // render nothing
         })}
 
-        {blueprints.notes.map(note => {
+        {blueprints.notes.map(() => {
           // instance is type note
           return null; // render nothing
         })}
 
-        {blueprints.drawings.map(drawing => {
+        {blueprints.drawings.map(() => {
           // instance is type drawing
           return null; // render nothing
         })}
 
-        {blueprints.screens.map(screenInstance => (
-          <div
-            style={{
-              position: 'absolute',
-              left: screenInstance.position.x,
-              top: screenInstance.position.y,
-            }}
-            className={`
-              VIEW w-[1024px] bg-gray-700 p-2 h-full
-              ${screenInstance.id == activeCodeWindow ? "border-4 border-title" : "border-2 border-gray-600 hover:border-gray-300 cursor-pointer"}
-            `}
-            key={screenInstance.id}
-            onClick={() => {
-              setEditMenuState(lastMenuState || "CODE");
-              setWindowDividerPosition(prev => prev || 50);
-              setCodeWindows(prev => {
-                const exists = prev.find(cw => cw.id === screenInstance.id);
-                if (exists) {
-                  return prev;
-                }
-                return [
-                  ...prev,
-                  {
-                    id: screenInstance.id,
-                    name: `Component ${screenInstance.id}`,
-                    code: screenInstance.code
+        {blueprints.screens.map(screenInstance => {
+          return (
+            <ScreenRenderer
+              key={screenInstance.id}
+              id={screenInstance.id}
+              name={screenInstance.name}
+              code={screenInstance.code}
+              style={{
+                position: 'absolute',
+                left: screenInstance.position.x,
+                top: screenInstance.position.y,
+              }}
+              className={`
+                VIEW w-[1024px] h-full overflow-hidden
+                ${highlightInstances ? "outline-4 rounded-md" : "pointer-events-auto"}
+                ${highlightInstances && screenInstance.id != activeCodeWindow ? "outline-container2-border hover:outline-container3-border cursor-pointer" : ""}
+                ${highlightInstances && screenInstance.id == activeCodeWindow ? "outline-title" : ""}
+              `}
+              onClick={() => {
+                setBuilderMenuMode(prevBuilderMenuMode);
+                setWindowDividerPosition(prev => prev || 50);
+                setCodeWindows(prev => {
+                  const exists = prev.find(cw => cw.id === screenInstance.id);
+                  if (exists) {
+                    return prev;
                   }
-                ]
-              })
-              setActiveCodeWindow(screenInstance.id);
-            }}
-          >
-            {screenInstance.id}
-          </div>
-        ))}
+                  return [
+                    ...prev,
+                    {
+                      id: screenInstance.id,
+                      name: `Component ${screenInstance.id}`,
+                      code: screenInstance.code
+                    }
+                  ]
+                })
+                setActiveCodeWindow(screenInstance.id);
+              }}
+            />
+          )
+        })}
       </div>
 
       <DrawingLayer />
 
     </div>
-  );
-};
+  )
+}

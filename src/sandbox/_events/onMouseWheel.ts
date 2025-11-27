@@ -21,7 +21,6 @@ export default function useOnMouseWheel() {
 
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
-      console.log(e.ctrlKey)
 
       const usingMouseWheel = Math.abs(e.deltaY) > 50;
 

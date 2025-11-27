@@ -1,14 +1,47 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Grid from "./_components/Grid";
-import { useMenuStates } from "./_providers/MenuStatesProvider";
+import Grid from "./_components/grid/Grid";
 import { faClose, faCode, faGridHorizontal, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import Editor from "./_components/editor/Editor";
+import useOnMouseWheel from "./_events/onMouseWheel";
+import useOnMouseDown from "./_events/onMouseDown";
+import useOnMouseUp from "./_events/onMouseUp";
+import useOnMouseMove from "./_events/onMouseMove";
+import { useCode } from "./_providers/CodeContextProvider";
+import { useGrid } from "./_providers/GridContextProvider";
+import { useBlueprints } from "./_providers/BlueprintsContextProvider";
+import { BuilderMenuMode, useBuilderPanel } from "./_providers/BuilderPanelContextProvider";
 
 export const template = 'sandbox'; 
 export default function Home() {
   
-  const { windowDividerDragging, editMenuState, windowDividerPosition, setEditMenuState, setLastMenuState } = useMenuStates();
+  const { 
+    windowDividerDragging, 
+    builderMenuMode, 
+    windowDividerPosition, 
+    setBuilderMenuMode, 
+  } = useBuilderPanel();
 
+  const {
+    setActiveCodeWindow,
+  } = useCode();
+
+  // const {
+  //   blueprints
+  // } = useBlueprints();
+
+  // const {
+  //   zoom,
+  //   offset
+  // } = useGrid();
+
+  // console.log(blueprints)
+  // console.log(zoom);
+  // console.log(offset);
+
+  useOnMouseWheel();
+  useOnMouseDown();
+  useOnMouseUp();
+  useOnMouseMove();
 
   return (
     <div className="h-full w-full">
@@ -22,7 +55,7 @@ export default function Home() {
             ${windowDividerDragging.current ? "" : "transition-all duration-300"}
           `}
           style={{
-            width: editMenuState != "CLOSED" ? `${windowDividerPosition || 50}%` : '100%',
+            width: builderMenuMode != "CLOSED" ? `${windowDividerPosition || 50}%` : '100%',
           }}
         >
           
@@ -40,26 +73,26 @@ export default function Home() {
         </div>
 
         <div 
-          className={`bg-container2 h-full w-2 ${editMenuState == "CLOSED" ? "hidden" : ""} cursor-col-resize`}
+          className={`bg-container2 h-full w-2 ${builderMenuMode == BuilderMenuMode.CLOSED ? "hidden" : ""} cursor-col-resize`}
           id="windowDivider"
         ></div>
 
         <div 
           id="rightPanel"
           className={`
-            flex flex-col h-full bg-container2 overflow-hidden ${editMenuState == "CLOSED" ? "" : ""}
+            flex flex-col h-full bg-container2 overflow-hidden ${builderMenuMode == BuilderMenuMode.CLOSED ? "" : ""}
             ${windowDividerDragging.current ? "" : "transition-all duration-300"}
           `}
           style={{
-            width: editMenuState != "CLOSED" ? `${100 - (windowDividerPosition || 50)}%` : '0%',
+            width: builderMenuMode != BuilderMenuMode.CLOSED ? `${100 - (windowDividerPosition || 50)}%` : '0%',
           }}
         >
           <div className="flex">
             <div 
               className={`group py-2 px-4 flex gap-2 items-center border-b-2 transition-border duration-200
-                ${editMenuState === "CODE" ? "border-title" : "hover:border-muted border-transparent cursor-pointer"}
+                ${builderMenuMode === BuilderMenuMode.CODE ? "border-title" : "hover:border-muted border-transparent cursor-pointer"}
               `}
-              onClick={() => { setEditMenuState("CODE") }}
+              onClick={() => { setBuilderMenuMode(BuilderMenuMode.CODE) }}
             >
               <div 
                 className="flex gap-2 items-center"
@@ -70,22 +103,20 @@ export default function Home() {
                 <h1>Code</h1>
               </div>
               <FontAwesomeIcon
-                className={`text-muted cursor-pointer hover:text-title ${editMenuState == "CODE" ? "" : "opacity-0"} group-hover:opacity-100`}
+                className={`text-muted cursor-pointer hover:text-title ${builderMenuMode == BuilderMenuMode.CODE ? "" : "opacity-0"} group-hover:opacity-100`}
                 onClick={(e) => { 
                   e.stopPropagation();
-                  setEditMenuState(prev => {
-                    if (prev !== "CLOSED") { setLastMenuState(prev); }
-                    return "CLOSED"
-                  })
+                  setBuilderMenuMode(BuilderMenuMode.CLOSED);
+                  setActiveCodeWindow(null);
                 }}
                 icon={faClose}
               ></FontAwesomeIcon>
             </div>
             <div 
               className={`group py-2 px-4 flex gap-2 items-center border-b-2 transition-border duration-200
-                ${editMenuState === "BUILDER" ? "border-title" : "hover:border-muted border-transparent cursor-pointer"}
+                ${builderMenuMode === BuilderMenuMode.BUILDER ? "border-title" : "hover:border-muted border-transparent cursor-pointer"}
               `}
-              onClick={() => { setEditMenuState("BUILDER") }}
+              onClick={() => { setBuilderMenuMode(BuilderMenuMode.BUILDER) }}
             >
               <div 
                 className="flex gap-2 items-center"
@@ -96,13 +127,11 @@ export default function Home() {
                 <h1>Builder</h1>
               </div>
               <FontAwesomeIcon
-                className={`text-muted cursor-pointer hover:text-title ${editMenuState == "BUILDER" ? "" : "opacity-0"} group-hover:opacity-100`}
+                className={`text-muted cursor-pointer hover:text-title ${builderMenuMode == BuilderMenuMode.BUILDER ? "" : "opacity-0"} group-hover:opacity-100`}
                 onClick={(e) => { 
                   e.stopPropagation();
-                  setEditMenuState(prev => {
-                    if (prev !== "CLOSED") { setLastMenuState(prev); }
-                    return "CLOSED"
-                  })
+                  setBuilderMenuMode(BuilderMenuMode.CLOSED);
+                  setActiveCodeWindow(null);
                 }}
                 icon={faClose}
               ></FontAwesomeIcon>

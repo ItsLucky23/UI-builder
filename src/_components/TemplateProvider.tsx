@@ -12,10 +12,11 @@ import { apiRequest } from 'src/_sockets/apiRequest';
 import config from "config";
 import { GridProvider } from 'src/sandbox/_providers/GridContextProvider';
 import Tooltip from './Tooltip';
-import { MenuStatesProvider } from 'src/sandbox/_providers/MenuStatesProvider';
 import { CodeProvider } from 'src/sandbox/_providers/CodeContextProvider';
 import { BlueprintsProvider } from 'src/sandbox/_providers/BlueprintsContextProvider';
 import { DrawingProvider } from 'src/sandbox/_providers/DrawingContextProvider';
+import { MenusProvider } from 'src/sandbox/_providers/MenusContextProvider';
+import { BuilderPanelProvider } from 'src/sandbox/_providers/BuilderPanelContextProvider';
 
 const Templates = {
   main: MainTemplate,
@@ -123,15 +124,17 @@ function SandboxTemplate({ children }: { children: React.ReactNode }) {
   return (
     <GridProvider>
       <BlueprintsProvider>
-        <MenuStatesProvider>
-          <CodeProvider>
-            <DrawingProvider>
-              <MainTemplate>
-                {children}
-              </MainTemplate>
-            </DrawingProvider>
-          </CodeProvider>
-        </MenuStatesProvider>
+        <BuilderPanelProvider>
+          <MenusProvider>
+            <CodeProvider>
+              <DrawingProvider>
+                <MainTemplate>
+                  {children}
+                </MainTemplate>
+              </DrawingProvider>
+            </CodeProvider>
+          </MenusProvider>
+        </BuilderPanelProvider>
       </BlueprintsProvider>
     </GridProvider>
   )

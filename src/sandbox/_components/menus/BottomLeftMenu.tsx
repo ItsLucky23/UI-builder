@@ -1,25 +1,22 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useGrid } from "../../_providers/GridContextProvider";
 import Tooltip from "src/_components/Tooltip";
-import { faEyeSlash, faPen } from "@fortawesome/free-solid-svg-icons";
+import { faEyeSlash, faPen, faBorderAll, faEye, faBorderNone } from "@fortawesome/free-solid-svg-icons";
 import { useDrawing } from "src/sandbox/_providers/DrawingContextProvider";
-// import { useCode } from "src/sandbox/_providers/CodeContextProvider";
+import { useBlueprints } from "src/sandbox/_providers/BlueprintsContextProvider";
 
 export default function BottomLeftMenu() {
-  
-  const { 
-    drawingEnabled, 
-    setDrawingEnabled, 
 
-    showDrawings, 
+  const {
+    drawingEnabled,
+    setDrawingEnabled,
+    showDrawings,
     setShowDrawings,
-
   } = useDrawing();
 
-  // const {
-  //   codeWindowSize,
-  //   setCodeWindowSize
-  // } = useCode();
+  const { 
+    highlightInstances, 
+    setHighlightInstances 
+  } = useBlueprints();
 
   return (
     <div className={`
@@ -34,11 +31,11 @@ export default function BottomLeftMenu() {
         offsetX={"50%"}
         className="bg-container2 p-2 text-nowrap border border-container-border rounded"
       >
-        <div 
+        <div
           className={`
             MENU
             p-2 rounded-full bg-container2 outline
-            ${drawingEnabled ? "outline-white" : "outline-none"}
+            ${drawingEnabled ? "outline-primary" : "outline-none"}
           `}
           onClick={() => setDrawingEnabled(!drawingEnabled)}
         >
@@ -56,17 +53,61 @@ export default function BottomLeftMenu() {
         offsetX={"50%"}
         className={`bg-bg-1 p-2 text-nowrap border border-container-border rounded`}
       >
-        <div 
+        <div
           className={`
             MENU
-            p-2 rounded-full bg-bg-3 outline
-            ${showDrawings ? "outline-white" : "outline-none"}
+            p-2 rounded-full bg-container2 outline
+            ${showDrawings ? "outline-primary" : "outline-none"}
           `}
           onClick={() => setShowDrawings(!showDrawings)}
         >
           <FontAwesomeIcon
             className="pointer-events-none"
-            icon={faEyeSlash}
+            icon={showDrawings ? faEye : faEyeSlash}
+          />
+        </div>
+      </Tooltip>
+
+      {/* Toggle Outlines */}
+      <Tooltip
+        content={highlightInstances ? "Hide outlines" : "Show outlines"}
+        offsetY={"-200% - 12px"}
+        offsetX={"50%"}
+        className={`bg-bg-1 p-2 text-nowrap border border-container-border rounded`}
+      >
+        <div
+          className={`
+            MENU
+            p-2 rounded-full bg-container2 outline
+            ${highlightInstances ? "outline-primary" : "outline-none"}
+          `}
+          onClick={() => setHighlightInstances(prev => !prev)}
+        >
+          <FontAwesomeIcon
+            className="pointer-events-none"
+            icon={highlightInstances ? faBorderAll : faBorderNone}
+          />
+        </div>
+      </Tooltip>
+
+      {/* Toggle Selector mode */}
+      <Tooltip
+        content={highlightInstances ? "Hide outlines" : "Show outlines"}
+        offsetY={"-200% - 12px"}
+        offsetX={"50%"}
+        className={`bg-bg-1 p-2 text-nowrap border border-container-border rounded`}
+      >
+        <div
+          className={`
+            MENU
+            p-2 rounded-full bg-container2 outline
+            ${highlightInstances ? "outline-primary" : "outline-none"}
+          `}
+          onClick={() => setHighlightInstances(prev => !prev)}
+        >
+          <FontAwesomeIcon
+            className="pointer-events-none"
+            icon={faBorderAll}
           />
         </div>
       </Tooltip>

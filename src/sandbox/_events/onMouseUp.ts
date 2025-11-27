@@ -1,13 +1,38 @@
 import { useEffect } from "react";
 import { useGrid } from "../_providers/GridContextProvider";
-import { useMenuStates } from "../_providers/MenuStatesProvider";
 import { useCode } from "../_providers/CodeContextProvider";
+import { CreateComponentMenuVisibleState } from "../types/createComponentMenuTypes";
+import { BuilderMenuMode, useBuilderPanel } from "../_providers/BuilderPanelContextProvider";
+import { useMenus } from "../_providers/MenusContextProvider";
 
 export default function useOnMouseUp() {
 
-  const { containerRef, zoom, setDragging, draggingRef, posMouseDown } = useGrid();
-  const { lastPositionWindowDivider, windowDividerDragging, setWindowDivider, setEditMenuState, setWindowDividerPosition, setLastMenuState, setCreateComponentMenuOpen, setMousePositionCreateComponentMenu } = useMenuStates();
-  const { setActiveCodeWindow } = useCode();
+  const { 
+    containerRef, 
+    zoom, 
+    setDragging, 
+    draggingRef, 
+    posMouseDown 
+  } = useGrid();
+
+  const { 
+    lastPositionWindowDivider, 
+    windowDividerDragging, 
+    setWindowDivider, 
+    setWindowDividerPosition, 
+    setBuilderMenuMode,
+    setPrevBuilderMenuMode
+  } = useBuilderPanel();
+
+  const {
+    setCreateComponentMenuPosition,
+    setCreateComponentMenuOpen
+  } = useMenus();
+
+  const { 
+    activeCodeWindow, 
+    setActiveCodeWindow 
+  } = useCode();
 
   useEffect(() => {
     const container = containerRef.current;
@@ -17,7 +42,7 @@ export default function useOnMouseUp() {
       e.preventDefault();
       draggingRef.current = false;
       setDragging(false);
-      
+
       const lastX = posMouseDown.current.x;
       const lastY = posMouseDown.current.y;
       if (!lastX || !lastY) { return };
@@ -32,41 +57,53 @@ export default function useOnMouseUp() {
       const verticalDifference = Math.abs(lastY - e.clientY);
       if (horizontalDifference < 2 && verticalDifference < 2) {
 
-        if (!leaveEvent) { 
+        if (!leaveEvent) {
           setActiveCodeWindow(null);
-          setEditMenuState(prev => {
-            if (prev !== "CLOSED") {
-              setLastMenuState(prev);
+          setBuilderMenuMode(prev => {
+            if (prev !== BuilderMenuMode.CLOSED) {
+              setPrevBuilderMenuMode(prev);
             }
-            return "CLOSED";
-          }); 
+            return BuilderMenuMode.CLOSED;
+          });
         }
 
+        if (activeCodeWindow) { return; }
         //? we add a timeout so the animation also works when clicking really fast, might remove it later
         setTimeout(() => {
-          console.log('Mouse up detected');
-          setCreateComponentMenuOpen(true);
-          setMousePositionCreateComponentMenu({ x: e.clientX, y: e.clientY });
+          setCreateComponentMenuOpen(prev => {
+            console.log(prev)
+            if (prev === CreateComponentMenuVisibleState.FORCECLOSE) {
+              return CreateComponentMenuVisibleState.CLOSED;
+            }
+            return CreateComponentMenuVisibleState.OPEN;
+            // if (prev === CreateComponentMenuVisibleState.CLOSED) {
+            //   return CreateComponentMenuVisibleState.OPEN;
+            // }
+            // return CreateComponentMenuVisibleState.CLOSED;
+          });
+          setCreateComponentMenuPosition({ x: e.clientX, y: e.clientY });
         }, 100);
       }
     };
 
-    const handleContextMenu = (e: MouseEvent) => e.preventDefault(); // ← blocks right-click menu
+    const handleMouseUp = (e: MouseEvent) => onMouseUp(e, false);
+    const handleMouseLeave = (e: MouseEvent) => onMouseUp(e, true);
+    const handleContextMenu = (e: MouseEvent) => e.preventDefault();
 
-    container.addEventListener("mouseleave", (e) => { onMouseUp(e, true) }, { passive: false });
-    container.addEventListener("mouseup", (e) => { onMouseUp(e, false) }, { passive: false });
-    container.addEventListener("contextmenu", handleContextMenu); // ← key part
+    container.addEventListener("mouseleave", handleMouseLeave, { passive: false });
+    container.addEventListener("mouseup", handleMouseUp, { passive: false });
+    container.addEventListener("contextmenu", handleContextMenu);
 
     return () => {
-      container.removeEventListener("mouseleave", (e) => { onMouseUp(e, true) });
-      container.removeEventListener("mouseup", (e) => { onMouseUp(e, false) });
+      container.removeEventListener("mouseleave", handleMouseLeave);
+      container.removeEventListener("mouseup", handleMouseUp);
       container.removeEventListener("contextmenu", handleContextMenu);
     };
-  }, [zoom]);
+  }, [zoom, activeCodeWindow]);
 
   useEffect(() => {
 
-    const onMouseUp = (e: MouseEvent, leaveEvent: boolean) => {
+    const onMouseUp = (e: MouseEvent) => {
       e.preventDefault();
 
       setWindowDivider(false);
@@ -75,12 +112,14 @@ export default function useOnMouseUp() {
       setWindowDividerPosition(lastPositionWindowDivider.current = 50);
     }
 
+    const handleMouseUp = (e: MouseEvent) => onMouseUp(e);
+    const handleMouseLeave = (e: MouseEvent) => onMouseUp(e);
 
-    window.addEventListener("mouseup", (e) => { onMouseUp(e, false) }, { passive: false });
-    window.addEventListener("mouseleave", (e) => { onMouseUp(e, true) }, { passive: false });
+    window.addEventListener("mouseup", handleMouseUp, { passive: false });
+    window.addEventListener("mouseleave", handleMouseLeave, { passive: false });
     return () => {
-      window.removeEventListener("mouseup", (e) => { onMouseUp(e, false) });
-      window.removeEventListener("mouseleave", (e) => { onMouseUp(e, true) });
+      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, [])
 }

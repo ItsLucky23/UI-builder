@@ -1,13 +1,34 @@
 import { useEffect } from "react";
 import { useGrid } from "../_providers/GridContextProvider";
-import { useMenuStates } from "../_providers/MenuStatesProvider";
 import { useDrawing } from "../_providers/DrawingContextProvider";
+import { CreateComponentMenuVisibleState } from "../types/createComponentMenuTypes";
+import { useBuilderPanel } from "../_providers/BuilderPanelContextProvider";
+import { useMenus } from "../_providers/MenusContextProvider";
 
 export default function useOnMouseDown() {
 
-  const { containerRef, zoom, setDragging, draggingRef, lastPos, posMouseDown } = useGrid();
-  const { lastPositionWindowDivider, windowDividerDragging, setWindowDivider, setCreateComponentMenuOpen } = useMenuStates();
-  const { drawingEnabled } = useDrawing();
+  const { 
+    containerRef, 
+    zoom, 
+    setDragging, 
+    draggingRef, 
+    lastPos, 
+    posMouseDown 
+  } = useGrid();
+
+  const { 
+    lastPositionWindowDivider, 
+    windowDividerDragging, 
+    setWindowDivider 
+  } = useBuilderPanel();
+  
+  const { 
+    drawingEnabled 
+  } = useDrawing();
+
+  const {
+    setCreateComponentMenuOpen
+  } = useMenus();
 
   useEffect(() => {
     const container = containerRef.current;
@@ -16,9 +37,14 @@ export default function useOnMouseDown() {
     const handleMouseDown = (e: MouseEvent) => {
       // e.preventDefault();
 
+      // if (e.buttons == 1) { return; } //? left button
+      // if (e.buttons == 2) { return; } //? right button
       if (
         drawingEnabled 
-        && e.buttons == 1 //? left button 
+        && (
+          e.buttons == 1 //? left button 
+          || e.buttons == 2 //? right button
+        )
       ) { return; }
 
       const elem = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement;
@@ -34,7 +60,13 @@ export default function useOnMouseDown() {
       lastPos.current = { x: e.clientX, y: e.clientY };
       posMouseDown.current = { x: e.clientX, y: e.clientY };
 
-      setCreateComponentMenuOpen(false);
+      setCreateComponentMenuOpen(prev => {
+        console.log(prev)
+        if (prev === CreateComponentMenuVisibleState.OPEN) {
+          return CreateComponentMenuVisibleState.FORCECLOSE;
+        }
+        return CreateComponentMenuVisibleState.CLOSED;
+      });
     };
 
     container.addEventListener("mousedown", handleMouseDown, { passive: false });

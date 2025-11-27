@@ -1,15 +1,14 @@
-import { createContext, useContext, useState, ReactNode, SetStateAction, Dispatch, useEffect } from 'react';
-import * as monaco from 'monaco-editor';
+import { createContext, useContext, useState, ReactNode, SetStateAction, Dispatch } from 'react';
 
-export type DrawingPoint = { 
-  x: number; 
+export type DrawingPoint = {
+  x: number;
   y: number;
-  color: string; 
+  color: string;
   size: number;
   // pressure: number 
 }
 
-type StrokeData = {
+export type StrokeData = {
   id: string
   points: DrawingPoint[] // points are stored in WORLD coordinates
 }
@@ -35,6 +34,11 @@ type DrawingContextType = {
 
   erasing: boolean;
   setErasing: Dispatch<SetStateAction<boolean>>;
+
+  strokeHistory: StrokeData[][]
+  setStrokeHistory: Dispatch<SetStateAction<StrokeData[][]>>
+  historyIndex: number
+  setHistoryIndex: Dispatch<SetStateAction<number>>
 };
 
 const DrawingContext = createContext<DrawingContextType | undefined>(undefined);
@@ -45,17 +49,20 @@ export const DrawingProvider = ({ children }: { children: ReactNode }) => {
   const [drawingEnabled, setDrawingEnabled] = useState(false);
   const [showDrawings, setShowDrawings] = useState(true);
 
+  const [strokeHistory, setStrokeHistory] = useState<StrokeData[][]>([[]])
+  const [historyIndex, setHistoryIndex] = useState<number>(0);
+
   //? tools in the drawing menu when drawing is enabled
   const [brushSize, setBrushSize] = useState<number>(1)
   const [brushColor, setBrushColor] = useState<string>('#FFFFFF')
   const [erasing, setErasing] = useState<boolean>(false);
 
   return (
-    <DrawingContext.Provider value={{ 
-      strokes, 
+    <DrawingContext.Provider value={{
+      strokes,
       setStrokes,
 
-      currentPoints, 
+      currentPoints,
       setCurrentPoints,
 
       brushSize,
@@ -72,6 +79,11 @@ export const DrawingProvider = ({ children }: { children: ReactNode }) => {
 
       erasing,
       setErasing,
+
+      strokeHistory,
+      setStrokeHistory,
+      historyIndex,
+      setHistoryIndex
     }}>
       {children}
     </DrawingContext.Provider>

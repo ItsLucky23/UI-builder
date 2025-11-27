@@ -22,23 +22,22 @@
   --color-loadingScreen: #FAF9FF;
 
   --color-title: #000000; /* black */
-  --color-commen: #1E293B; /* slate-800 */
+  --color-common: #1E293B; /* slate-800 */
   --color-muted: #64748B; /* slate-500 */
 
   /* Correct / wrong */
-  --color-correct: #22C55E; /* green-500 */
-  --color-correct-hover: #16A34A; /* green-600 */
+  --color-correct: oklch(72.3% 0.219 149.579); /* green-500 */
+  --color-correct-hover: oklch(62.7% 0.194 149.214); /* green-600 */
 
-  --color-wrong: #EF4444; /* red-500 */
-  --color-wrong-hover: #DC2626; /* red-600 */
+  --color-warning: oklch(79.5% 0.184 86.047); /* yellow-400 */
+  --color-warning-hover: oklch(68.1% 0.162 75.834); /* yellow-500 */
 
-  --color-loadingscreen: #BFDBFE;             /* blue-200, a bit darker */
+  --color-wrong: oklch(63.7% 0.237 25.331); /* red-500 */
+  --color-wrong-hover: oklch(57.7% 0.245 27.325); /* red-600 */
 
-  --color-loadingscreen-container: #EFF6FF;   /* blue-50, subtle container */
-  --color-loadingscreen-container-selected: #DBEAFE; /* blue-100, stands out */
-  --color-loadingscreen-container-border: #93C5FD;   /* blue-300 border */
-  --color-loadingscreen-container-text: #1E3A8A;     /* blue-900, strong text */
-  
+  --color-primary: oklch(62.3% 0.214 259.815); /* blue-500 */
+  --color-primary-hover: oklch(54.6% 0.245 262.881); /* blue-600 */
+
   --background-grid: 
     linear-gradient(90deg, #eee 1px, transparent 1px),
     linear-gradient(#eee 1px, transparent 1px);
@@ -65,15 +64,20 @@
   --color-container4-hover: #CBD5E1;
 
   --color-title: #FFFFFF;               /* white */
-  --color-commen: #E5E7EB;              /* gray-200 */
-  --color-muted: #9CA3AF;               /* gray-400 */
+  --color-common: oklch(92.8% 0.006 264.531);              /* gray-200 */
+  --color-muted: oklch(70.7% 0.022 261.325);               /* gray-400 */
 
-  /* Correct / wrong */
-  --color-correct: #22C55E; /* green-500, same in dark */
-  --color-correct-hover: #16A34A; /* green-600 */
+  --color-correct: oklch(72.3% 0.219 149.579); /* green-500 */
+  --color-correct-hover: oklch(62.7% 0.194 149.214); /* green-600 */
 
-  --color-wrong: #EF4444; /* red-500 */
-  --color-wrong-hover: #DC2626; /* red-600 */
+  --color-warning: oklch(79.5% 0.184 86.047); /* yellow-400 */
+  --color-warning-hover: oklch(68.1% 0.162 75.834); /* yellow-500 */
+
+  --color-wrong: oklch(63.7% 0.237 25.331); /* red-500 */
+  --color-wrong-hover: oklch(57.7% 0.245 27.325); /* red-600 */
+
+  --color-primary: oklch(62.3% 0.214 259.815); /* blue-500 */
+  --color-primary-hover: oklch(54.6% 0.245 262.881); /* blue-600 */
 
   --background-grid: 
     linear-gradient(90deg, #555 1px, transparent 1px),

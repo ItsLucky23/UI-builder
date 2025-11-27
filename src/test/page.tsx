@@ -54,7 +54,7 @@ export default function Home() {
         Click me for a notification!!
       </button>
       <button 
-        className="min-w-40 px-6 rounded-md cursor-pointer h-10 bg-blue-500 text-white"
+        className="min-w-40 px-6 rounded-md cursor-pointer h-10 bg-primary text-white"
         onClick={() => {
           ref.open(
             <div className="p-4 gap-4 flex flex-col">
