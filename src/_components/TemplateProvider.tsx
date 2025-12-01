@@ -69,6 +69,7 @@ function MainTemplate({ children }: { children: React.ReactNode }) {
           delay={300}
           offsetY={"5px"}
           offsetX={"5px"}
+          className={`bg-container2 p-2 text-nowrap border border-container-border rounded`}
         >
           <button 
             className='p-2 bg-container2 border border-container2-border rounded-md cursor-pointer text-sm'

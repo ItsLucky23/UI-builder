@@ -62,6 +62,11 @@ export default function useOnMouseDown() {
 
       setCreateComponentMenuOpen(prev => {
         console.log(prev)
+
+        if (e.buttons == 4) {
+          return CreateComponentMenuVisibleState.FORCECLOSE;
+        }
+
         if (prev === CreateComponentMenuVisibleState.OPEN) {
           return CreateComponentMenuVisibleState.FORCECLOSE;
         }

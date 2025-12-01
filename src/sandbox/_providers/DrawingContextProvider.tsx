@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode, SetStateAction, Dispatch } from 'react';
+import { createContext, useContext, useState, ReactNode, SetStateAction, Dispatch, useEffect } from 'react';
 
 export type DrawingPoint = {
   x: number;
@@ -53,9 +53,17 @@ export const DrawingProvider = ({ children }: { children: ReactNode }) => {
   const [historyIndex, setHistoryIndex] = useState<number>(0);
 
   //? tools in the drawing menu when drawing is enabled
-  const [brushSize, setBrushSize] = useState<number>(1)
+  const [brushSize, setBrushSize] = useState<number>(10)
   const [brushColor, setBrushColor] = useState<string>('#FFFFFF')
   const [erasing, setErasing] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (erasing) {
+      setBrushSize(Math.min(250, brushSize*5))
+    } else {
+      setBrushSize(Math.max(10, brushSize/5))
+    }
+  }, [erasing])
 
   return (
     <DrawingContext.Provider value={{

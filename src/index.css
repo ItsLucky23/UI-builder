@@ -57,7 +57,7 @@
 
   --color-container3: #4B5563; /* gray-600 */
   --color-container3-border: #6B7280; /* gray-500 */
-  --color-container3-hover: #272F41;
+  --color-container3-hover: #727985;
 
   --color-container4: #1F2937; /* gray-800 */
   --color-container4-border: #374151; /* gray-700 */
@@ -77,7 +77,7 @@
   --color-wrong-hover: oklch(57.7% 0.245 27.325); /* red-600 */
 
   --color-primary: oklch(62.3% 0.214 259.815); /* blue-500 */
-  --color-primary-hover: oklch(54.6% 0.245 262.881); /* blue-600 */
+  --color-primary-hover: oklch(67.3% 0.234 260.815);
 
   --background-grid: 
     linear-gradient(90deg, #555 1px, transparent 1px),

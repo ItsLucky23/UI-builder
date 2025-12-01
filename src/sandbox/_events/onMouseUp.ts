@@ -68,21 +68,14 @@ export default function useOnMouseUp() {
         }
 
         if (activeCodeWindow) { return; }
-        //? we add a timeout so the animation also works when clicking really fast, might remove it later
-        setTimeout(() => {
-          setCreateComponentMenuOpen(prev => {
-            console.log(prev)
-            if (prev === CreateComponentMenuVisibleState.FORCECLOSE) {
-              return CreateComponentMenuVisibleState.CLOSED;
-            }
-            return CreateComponentMenuVisibleState.OPEN;
-            // if (prev === CreateComponentMenuVisibleState.CLOSED) {
-            //   return CreateComponentMenuVisibleState.OPEN;
-            // }
-            // return CreateComponentMenuVisibleState.CLOSED;
-          });
-          setCreateComponentMenuPosition({ x: e.clientX, y: e.clientY });
-        }, 100);
+
+        setCreateComponentMenuOpen(prev => {
+          if (prev === CreateComponentMenuVisibleState.FORCECLOSE) {
+            return CreateComponentMenuVisibleState.CLOSED;
+          }
+          return CreateComponentMenuVisibleState.OPEN;
+        });
+        setCreateComponentMenuPosition({ x: e.clientX, y: e.clientY });
       }
     };
 

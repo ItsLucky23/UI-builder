@@ -6,10 +6,11 @@ import { blueprints } from "../../types/blueprints";
 import { useBlueprints } from "../../_providers/BlueprintsContextProvider";
 import DrawingLayer from "../drawing/DrawingLayer";
 import BottomLeftMenu from "../menus/BottomLeftMenu";
-import DrawingMenu from "../drawing/DrawingMenu";
+import DrawingSideMenu from "../drawing/DrawingSideMenu";
 import { getGridStyle } from "../../_functions/gridStyle";
 import { ScreenRenderer } from "./ScreenRenderer";
 import { useBuilderPanel } from "src/sandbox/_providers/BuilderPanelContextProvider";
+import DrawingTopMenu from "../drawing/DrawingTopMenu";
 
 const dummyData = {
   screens: [
@@ -168,7 +169,9 @@ export default function Grid() {
 
         <CreateComponentMenu />
 
-        <DrawingMenu />
+        <DrawingSideMenu />
+        
+        <DrawingTopMenu />
       </div>
 
       {/* //* THIS DIV MAKES IT SO THE PANNING AND ZOOMING AFFECTS THE CONTENT */}

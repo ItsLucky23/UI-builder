@@ -51,7 +51,7 @@ export default function BottomLeftMenu() {
         content={showDrawings ? "Hide drawings" : "Show drawings"}
         offsetY={"-200% - 12px"}
         offsetX={"50%"}
-        className={`bg-bg-1 p-2 text-nowrap border border-container-border rounded`}
+        className={`bg-container2 p-2 text-nowrap border border-container-border rounded`}
       >
         <div
           className={`
@@ -73,7 +73,7 @@ export default function BottomLeftMenu() {
         content={highlightInstances ? "Hide outlines" : "Show outlines"}
         offsetY={"-200% - 12px"}
         offsetX={"50%"}
-        className={`bg-bg-1 p-2 text-nowrap border border-container-border rounded`}
+        className={`bg-container2 p-2 text-nowrap border border-container-border rounded`}
       >
         <div
           className={`
@@ -95,7 +95,7 @@ export default function BottomLeftMenu() {
         content={highlightInstances ? "Hide outlines" : "Show outlines"}
         offsetY={"-200% - 12px"}
         offsetX={"50%"}
-        className={`bg-bg-1 p-2 text-nowrap border border-container-border rounded`}
+        className={`bg-container2 p-2 text-nowrap border border-container-border rounded`}
       >
         <div
           className={`
