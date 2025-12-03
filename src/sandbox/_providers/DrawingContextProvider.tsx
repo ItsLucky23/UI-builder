@@ -1,30 +1,9 @@
-import { createContext, useContext, useState, ReactNode, SetStateAction, Dispatch, useEffect } from 'react';
-
-export type DrawingPoint = {
-  x: number;
-  y: number;
-  color: string;
-  size: number;
-  // pressure: number 
-}
-
-export type StrokeData = {
-  id: string
-  points: DrawingPoint[] // points are stored in WORLD coordinates
-}
+import { createContext, useContext, useState, ReactNode, Dispatch, SetStateAction, useCallback } from 'react';
+import { Editor } from 'tldraw';
 
 type DrawingContextType = {
-  strokes: StrokeData[];
-  setStrokes: Dispatch<SetStateAction<StrokeData[]>>;
-
-  currentPoints: DrawingPoint[];
-  setCurrentPoints: Dispatch<SetStateAction<DrawingPoint[]>>;
-
-  brushSize: number;
-  setBrushSize: Dispatch<SetStateAction<number>>;
-
-  brushColor: string;
-  setBrushColor: Dispatch<SetStateAction<string>>;
+  editor: Editor | null;
+  setEditor: Dispatch<SetStateAction<Editor | null>>;
 
   drawingEnabled: boolean;
   setDrawingEnabled: Dispatch<SetStateAction<boolean>>;
@@ -32,66 +11,60 @@ type DrawingContextType = {
   showDrawings: boolean;
   setShowDrawings: Dispatch<SetStateAction<boolean>>;
 
-  erasing: boolean;
-  setErasing: Dispatch<SetStateAction<boolean>>;
+  partialEraser: boolean;
+  setPartialEraser: Dispatch<SetStateAction<boolean>>;
 
-  strokeHistory: StrokeData[][]
-  setStrokeHistory: Dispatch<SetStateAction<StrokeData[][]>>
-  historyIndex: number
-  setHistoryIndex: Dispatch<SetStateAction<number>>
+  // Helper methods to expose to UI
+  setTool: (tool: string) => void;
+  undo: () => void;
+  redo: () => void;
+  deleteSelected: () => void;
 };
 
 const DrawingContext = createContext<DrawingContextType | undefined>(undefined);
 
 export const DrawingProvider = ({ children }: { children: ReactNode }) => {
-  const [strokes, setStrokes] = useState<StrokeData[]>([])
-  const [currentPoints, setCurrentPoints] = useState<DrawingPoint[]>([])
+  const [editor, setEditor] = useState<Editor | null>(null);
   const [drawingEnabled, setDrawingEnabled] = useState(false);
   const [showDrawings, setShowDrawings] = useState(true);
+  const [partialEraser, setPartialEraser] = useState(false);
 
-  const [strokeHistory, setStrokeHistory] = useState<StrokeData[][]>([[]])
-  const [historyIndex, setHistoryIndex] = useState<number>(0);
+  const setTool = useCallback((tool: string) => {
+    if (!editor) return;
+    editor.setCurrentTool(tool);
+    // Disable partial eraser if switching tools (unless tool is 'select' and we want to keep it?)
+    // Usually switching tool implies exiting partial erase.
+    setPartialEraser(false);
+  }, [editor]);
 
-  //? tools in the drawing menu when drawing is enabled
-  const [brushSize, setBrushSize] = useState<number>(10)
-  const [brushColor, setBrushColor] = useState<string>('#FFFFFF')
-  const [erasing, setErasing] = useState<boolean>(false);
+  const undo = useCallback(() => {
+    editor?.undo();
+  }, [editor]);
 
-  useEffect(() => {
-    if (erasing) {
-      setBrushSize(Math.min(250, brushSize*5))
-    } else {
-      setBrushSize(Math.max(10, brushSize/5))
-    }
-  }, [erasing])
+  const redo = useCallback(() => {
+    editor?.redo();
+  }, [editor]);
+
+  const deleteSelected = useCallback(() => {
+    if (!editor) return;
+    const selectedIds = editor.getSelectedShapeIds();
+    editor.deleteShapes(selectedIds);
+  }, [editor]);
 
   return (
     <DrawingContext.Provider value={{
-      strokes,
-      setStrokes,
-
-      currentPoints,
-      setCurrentPoints,
-
-      brushSize,
-      setBrushSize,
-
-      brushColor,
-      setBrushColor,
-
+      editor,
+      setEditor,
       drawingEnabled,
       setDrawingEnabled,
-
       showDrawings,
       setShowDrawings,
-
-      erasing,
-      setErasing,
-
-      strokeHistory,
-      setStrokeHistory,
-      historyIndex,
-      setHistoryIndex
+      partialEraser,
+      setPartialEraser,
+      setTool,
+      undo,
+      redo,
+      deleteSelected,
     }}>
       {children}
     </DrawingContext.Provider>

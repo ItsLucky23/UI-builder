@@ -1,8 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useGrid } from "../_providers/GridContextProvider";
-import { toast } from "sonner";
 
-// const zoomLevels = [0.1, 0.2, 0.3, 0.4, 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4, 5];
 const zoomLevels = [
   0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45,
   0.5, 0.625, 0.75, 0.875, 1, 1.125, 1.25, 1.375,
@@ -22,6 +20,7 @@ export default function useOnMouseWheel() {
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
 
+      console.log('HIt')
       const usingMouseWheel = Math.abs(e.deltaY) > 50;
 
       let newZoom;

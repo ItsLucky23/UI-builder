@@ -1,191 +1,244 @@
-import React, { useRef, useState, useCallback, useEffect } from 'react'
+import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react'
+import { Tldraw, Editor, DefaultSizeStyle, TldrawEditor, TldrawUi, TldrawUiTooltipProps, TLUiOverrides } from 'tldraw'
+import 'tldraw/tldraw.css'
 import { useGrid } from '../../_providers/GridContextProvider'
 import { useDrawing } from 'src/sandbox/_providers/DrawingContextProvider'
-import { eraseStroke } from '../../_functions/drawing/eraseStroke'
-import { clientToWorld } from '../../_functions/drawing/clientToWorld'
-import { RenderDrawingPath } from '../../_functions/drawing/RenderDrawingPath'
+import { partialErase } from '../../_functions/drawing/partialErase'
+
+const CAMERA_OPTIONS = { wheelBehavior: 'none', panSpeed: 0, zoomSpeed: 0 } as const
 
 export default function DrawingLayer() {
+  const { setEditor, drawingEnabled, showDrawings, partialEraser } = useDrawing()
+  const { zoom, offset, setZoom, setOffset } = useGrid()
 
-  const {
-    strokes,
-    setStrokes,
+  const [mount, setMount] = useState(false)
+  const [ready, setReady] = useState(false)
+  const editorRef = useRef<Editor | null>(null)
 
-    currentPoints,
-    setCurrentPoints,
+  // Refs for stable callbacks
+  const offsetRef = useRef(offset)
+  const zoomRef = useRef(zoom)
 
-    drawingEnabled,
-    showDrawings,
-
-    brushSize,
-    erasing,
-    brushColor,
-
-    strokeHistory,
-    setStrokeHistory,
-    historyIndex,
-    setHistoryIndex
-
-  } = useDrawing();
-
-  const {
-    zoom,
-    offset,
-  } = useGrid();
-
-  // sync strokes from history when index changes
+  // Keep refs in sync
   useEffect(() => {
-    setStrokes(strokeHistory[historyIndex] || [])
-    setCurrentPoints([])
-  }, [historyIndex, strokeHistory, setStrokes, setCurrentPoints])
+    offsetRef.current = offset
+    zoomRef.current = zoom
+  }, [offset, zoom])
 
-  const overlayRef = useRef<SVGSVGElement | null>(null)
-  const worldSvgRef = useRef<SVGSVGElement | null>(null)
-  const [eraserPos, setEraserPos] = useState<{ x: number, y: number } | null>(null)
+  // Delay mount to ensure client-side rendering if needed
+  useEffect(() => {
+    setMount(true)
+  }, [])
 
-  const handlePointerDown = useCallback((e: React.PointerEvent<SVGSVGElement>) => {
-    if (!drawingEnabled) { return }
+  const handleMount = useCallback((editor: Editor) => {
+    setEditor(editor)
+    editorRef.current = editor
 
-    try { e.currentTarget.setPointerCapture(e.pointerId) } catch { }
-    const { x, y } = clientToWorld(e.clientX, e.clientY, overlayRef.current, offset, zoom)
-
-    if (erasing) {
-      if (e.buttons === 1) {
-        const newStrokes = eraseStroke(x, y, brushSize, strokes)
-        if (newStrokes) setStrokes(newStrokes)
-      }
-      return
-    }
-
-    if (e.buttons !== 1) { return }
-
-    setCurrentPoints([{ x, y, color: brushColor, size: brushSize }])
-  }, [drawingEnabled, erasing, offset, zoom, brushColor, brushSize, strokes, setStrokes, setCurrentPoints])
-
-  const handlePointerMove = useCallback((e: React.PointerEvent<SVGSVGElement>) => {
-    if (!drawingEnabled) { return }
-
-    const { x, y } = clientToWorld(e.clientX, e.clientY, overlayRef.current, offset, zoom)
-
-    if (erasing) {
-      setEraserPos({ x, y })
-      if (e.buttons === 1) {
-        const newStrokes = eraseStroke(x, y, brushSize, strokes)
-        if (newStrokes) setStrokes(newStrokes)
-      }
-      return
-    }
-
-    if (e.buttons !== 1) { return }
-
-    setCurrentPoints(prev => {
-      const last = prev[prev.length - 1]
-
-      if (last) {
-        const dist = Math.sqrt(Math.pow(last.x - x, 2) + Math.pow(last.y - y, 2))
-        if (dist < 2 / zoom) return prev
-      }
-
-      if (!last || last.x !== x || last.y !== y) {
-        return [...prev, { x, y, color: brushColor, size: brushSize }]
-      }
-      return prev
+    // Initial camera sync
+    // We divide by zoom because tldraw applies its own zoom scale to the coordinates
+    // Grid: translate(offset) scale(zoom)
+    // Tldraw: scale(zoom) translate(camera)
+    // To match: camera = -offset / zoom
+    editor.setCamera({
+      x: -offsetRef.current.x,
+      y: -offsetRef.current.y,
+      z: zoomRef.current
     })
-  }, [drawingEnabled, erasing, offset, zoom, brushColor, brushSize, strokes, setStrokes, setCurrentPoints])
 
-  const handlePointerUp = useCallback((e: React.PointerEvent<SVGSVGElement>) => {
-    if (!drawingEnabled) { return }
+    // Configure editor
+    editor.updateInstanceState({ isReadonly: false })
 
-    try { e.currentTarget.releasePointerCapture(e.pointerId) } catch { }
+    // Prevent flash
+    setTimeout(() => setReady(true), 100)
+  }, [setEditor])
 
-    if (erasing) {
-      // commit erased state to history
-      setStrokeHistory(prev => {
-        const base = prev.slice(0, historyIndex + 1)
-        return [...base, strokes]
+  // Sync camera when grid changes
+  useEffect(() => {
+    const editor = editorRef.current
+    if (!editor) return
+
+    let rafId: number
+
+    const updateCamera = () => {
+      editor.setCamera({
+        x: -offset.x / zoom,
+        y: -offset.y / zoom,
+        z: zoom
       })
-      setHistoryIndex(prev => prev + 1)
-      return
     }
 
-    if (currentPoints.length > 1) {
-      setStrokeHistory(prev => {
-        const base = prev.slice(0, historyIndex + 1)
-        const currentSnapshot = prev[historyIndex] || []
-        const newSnapshot = [...currentSnapshot, {
-          id: crypto.randomUUID(),
-          points: currentPoints,
-        }]
-        return [...base, newSnapshot]
-      });
-      setHistoryIndex(prev => prev + 1)
-      return;
+    rafId = requestAnimationFrame(updateCamera)
+
+    return () => {
+      cancelAnimationFrame(rafId)
     }
-    setCurrentPoints([])
-  }, [drawingEnabled, erasing, strokes, currentPoints, historyIndex, setStrokeHistory, setHistoryIndex, setCurrentPoints])
+  }, [offset, zoom])
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!partialEraser || !editorRef.current) return
+
+    if (e.buttons === 1) {
+      const point = editorRef.current.screenToPage({ x: e.clientX, y: e.clientY })
+
+      // Get current size style
+      const size = editorRef.current.getStyleForNextShape(DefaultSizeStyle)
+      let radius = 10
+      switch (size) {
+        case 's': radius = 5; break;
+        case 'm': radius = 10; break;
+        case 'l': radius = 20; break;
+        case 'xl': radius = 40; break;
+      }
+
+      partialErase(editorRef.current, point, radius / editorRef.current.getZoomLevel())
+    }
+  }
+
+  const handleWheel = (e: React.WheelEvent) => {
+    // Exact logic from onMouseWheel.ts
+    // We must stop propagation so the grid's listener doesn't fire too (double event)
+    // But since the grid listener is on the container, and we are ON TOP of the container,
+    // we are the primary handler.
+
+    // Note: onMouseWheel.ts uses native WheelEvent, React uses React.WheelEvent
+    // The logic is identical.
+
+    const zoomLevels = [
+      0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45,
+      0.5, 0.625, 0.75, 0.875, 1, 1.125, 1.25, 1.375,
+      1.5, 1.75, 2, 2.5, 3, 3.5, 4, 4.5, 5
+    ];
+    const minZoom = zoomLevels[0];
+    const maxZoom = zoomLevels[zoomLevels.length - 1];
+
+    const usingMouseWheel = Math.abs(e.deltaY) > 50;
+
+    let newZoom;
+    if (usingMouseWheel) {
+      const closestIndex = zoomLevels.reduce((closestIdx, level, idx) => {
+        const currentDiff = Math.abs(level - zoom);
+        const closestDiff = Math.abs(zoomLevels[closestIdx] - zoom);
+        return currentDiff < closestDiff ? idx : closestIdx;
+      }, 0);
+
+      let newIndex = closestIndex;
+      if (e.deltaY < 0) {
+        newIndex = Math.min(zoomLevels.length - 1, closestIndex + 1);
+      } else {
+        newIndex = Math.max(0, closestIndex - 1);
+      }
+      newZoom = zoomLevels[newIndex];
+
+    } else {
+      const zooming = e.ctrlKey;
+      if (zooming) {
+        const divider = zoom < 1 ? 70 : zoom < 3 ? 30 : 10;
+        const additional = Math.abs(e.deltaY) / divider;
+        if (e.deltaY < 0) {
+          newZoom = Math.min(maxZoom, zoom + additional);
+        } else {
+          newZoom = Math.max(minZoom, zoom - additional);
+        }
+      } else {
+        const speed = 1;
+        setOffset(prev => ({
+          x: prev.x - e.deltaX / zoom * speed,
+          y: prev.y - e.deltaY / zoom * speed,
+        }));
+        return;
+      }
+    }
+
+    if (!newZoom) return;
+
+    const mx = e.clientX;
+    const my = e.clientY;
+
+    setOffset(prev => ({
+      x: mx - ((mx - prev.x) / zoom) * newZoom,
+      y: my - ((my - prev.y) / zoom) * newZoom,
+    }));
+
+    setZoom(newZoom);
+  }
+
+  const tldrawComponent = useMemo(() => {
+
+    const overrides: TLUiOverrides = {
+      tools(editor, tools, helpers) {
+        return {
+          ...tools,
+          // draw: { ...tools.draw, isHidden: true},
+        }
+      },
+
+      actions(editor, actions, helpers) {
+        return {
+          ...actions,
+          // "file.new": { ...actions["file.new"], isHidden: true },
+          // "file.open": { ...actions["file.open"], isHidden: true },
+          // undo: { ...actions.undo, isHidden: true },
+          // redo: { ...actions.redo, isHidden: true },
+          // copy: { ...actions.copy, isHidden: true },
+          // paste: { ...actions.paste, isHidden: true },
+          // cut: { ...actions.cut, isHidden: true },
+          // clearSelection: { ...actions.clearSelection, isHidden: true },
+        }
+      }
+    }
+
+    // <Tldraw
+    //   hideUi={true}
+    //   onMount={handleMount}
+    //   cameraOptions={CAMERA_OPTIONS}
+    //   className='border-none'
+    // />
+    return (
+      <TldrawEditor
+        onMount={handleMount}
+      >
+        <TldrawUi 
+          // overrides={overrides}
+        />
+      </TldrawEditor>
+    )
+  }, [handleMount])
+
+  if (!mount) return null
 
   return (
-    <>
+    <div
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        pointerEvents: drawingEnabled ? 'all' : 'none',
+        zIndex: 10,
+        visibility: showDrawings ? 'visible' : 'hidden',
+        cursor: partialEraser ? 'crosshair' : 'auto',
+        opacity: ready ? 1 : 0,
+        transition: 'opacity 0.2s ease-in-out'
+      }}
+      className="tldraw-wrapper"
+      onPointerMove={handlePointerMove}
+      onWheel={handleWheel}
+    >
+      <style>{`
+        .tl-background {
+          background-color: transparent !important;
+        }
+      `}</style>
       <div
         style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
           width: '100%',
           height: '100%',
-          transform: `translate(${offset.x}px, ${offset.y}px) scale(${zoom})`,
-          transformOrigin: '0 0',
-          pointerEvents: 'none', // rendering layer shouldnt capture events
+          pointerEvents: partialEraser ? 'none' : 'all'
         }}
-        className={`h-full w-full`}
       >
-        {showDrawings && (
-          <svg
-            ref={worldSvgRef}
-            width="100%"
-            height="100%"
-            style={{ overflow: 'visible', pointerEvents: 'none' }}
-          >
-            {strokes.map(s => (
-              <g key={s.id}><RenderDrawingPath points={s.points} zoom={zoom} /></g>
-            ))}
-            {/* render live stroke inside world svg so it aligns with final strokes */}
-            {currentPoints.length > 1 && <g><RenderDrawingPath points={currentPoints} zoom={zoom} /></g>}
-
-            {/* eraser cursor */}
-            {erasing && eraserPos && (
-              <circle
-                cx={eraserPos.x}
-                cy={eraserPos.y}
-                r={brushSize / 2}
-                fill="none"
-                stroke="white"
-                strokeDasharray="4 4"
-                strokeWidth={1 / zoom}
-                vectorEffect="non-scaling-stroke"
-              />
-            )}
-          </svg>
-        )}
+        {tldrawComponent}
       </div>
-
-      <svg
-        ref={overlayRef}
-        width="100%"
-        height="100%"
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          overflow: 'visible',
-        }}
-        className={`${drawingEnabled ? (erasing ? 'cursor-none' : '') : 'pointer-events-none'}`}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerLeave={() => setEraserPos(null)}
-      >
-      </svg>
-    </>
+    </div>
   )
 }

@@ -102,23 +102,23 @@ export default function Component2() {
 }
 
 export default function Grid() {
-  const { 
-    containerRef, 
-    dragging, 
-    zoom, 
+  const {
+    containerRef,
+    dragging,
+    zoom,
     offset
   } = useGrid();
 
-  const { 
-    setCodeWindows, 
-    activeCodeWindow, 
-    setActiveCodeWindow 
+  const {
+    setCodeWindows,
+    activeCodeWindow,
+    setActiveCodeWindow
   } = useCode();
 
-  const { 
-    blueprints, 
+  const {
+    blueprints,
     setBlueprints,
-    highlightInstances 
+    highlightInstances
   } = useBlueprints();
 
   useEffect(() => {
@@ -170,7 +170,7 @@ export default function Grid() {
         <CreateComponentMenu />
 
         <DrawingSideMenu />
-        
+
         <DrawingTopMenu />
       </div>
 
@@ -240,9 +240,12 @@ export default function Grid() {
             />
           )
         })}
+
       </div>
 
       <DrawingLayer />
+
+
 
     </div>
   )

@@ -1,81 +1,110 @@
 import { useDrawing } from "src/sandbox/_providers/DrawingContextProvider";
-import { HexColorPicker } from "react-colorful";
-import { useEffect, useState, useRef } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faArrowRight, faEraser, faPencilAlt, faPalette } from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState } from "react";
+import {
+  MousePointer2,
+  Pencil,
+  Eraser,
+  Square,
+  Circle,
+  ArrowRight,
+  Type,
+  Scissors
+} from "lucide-react";
+import { GeoShapeGeoStyle } from "tldraw";
+import Tooltip from "src/_components/Tooltip";
 
 export default function DrawingTopMenu() {
-
   const {
     drawingEnabled,
-
-    brushSize,
-    setBrushSize,
-
-    brushColor,
-    setBrushColor,
-
-    erasing,
-    setErasing,
-
-    setHistoryIndex,
-    strokeHistory
+    editor,
+    setTool,
+    partialEraser,
+    setPartialEraser
   } = useDrawing();
 
-  const [openColorPicker, setOpenColorPicker] = useState(false);
-  const colorPickerRef = useRef<HTMLDivElement>(null);
+  const [activeTool, setActiveTool] = useState('draw');
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (colorPickerRef.current && !colorPickerRef.current.contains(event.target as Node)) {
-        setOpenColorPicker(false);
+    if (!editor) return;
+
+    const handleChange = () => {
+      const tool = editor.getCurrentToolId();
+      // If partial eraser is active, show it as active tool
+      if (partialEraser) {
+        setActiveTool('partial-eraser');
+      } else {
+        setActiveTool(tool);
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [])
+    const cleanup = editor.store.listen(handleChange);
+    return () => cleanup();
+  }, [editor, partialEraser]);
 
   if (!drawingEnabled) { return null }
 
-  const colors = [
-    "#ef4444", // Red
-    "#ff8904", // Orange
-    "#ffdf20", // Yellow
-    "#05df72", // Green
-    "#22d3ee", // Cyan
-    "#3b82f6", // Blue
-    "#a855f7", // Purple
-    "#ec4899", // Pink
+  const tools = [
+    { id: 'select', icon: MousePointer2, label: 'Select' },
+    { id: 'draw', icon: Pencil, label: 'Draw' },
+    { id: 'eraser', icon: Eraser, label: 'Eraser' },
+    { id: 'partial-eraser', icon: Scissors, label: 'Partial' },
+    { id: 'arrow', icon: ArrowRight, label: 'Arrow' },
+    { id: 'text', icon: Type, label: 'Text' },
   ];
+
+  const shapes = [
+    { id: 'rectangle', icon: Square, label: 'Rectangle', tool: 'geo' },
+    { id: 'ellipse', icon: Circle, label: 'Circle', tool: 'geo' },
+  ];
+
+  const handleToolClick = (id: string, geoId?: string) => {
+    if (!editor) return;
+
+    if (id === 'partial-eraser') {
+      setPartialEraser(true);
+      setActiveTool('partial-eraser');
+      editor.setCurrentTool('select');
+      return;
+    }
+
+    setPartialEraser(false);
+
+    if (id === 'rectangle' || id === 'ellipse') {
+      editor.setCurrentTool('geo');
+      editor.setStyleForNextShapes(GeoShapeGeoStyle, geoId as any);
+    } else {
+      setTool(id);
+    }
+  };
 
   return (
     <div
-      className="absolute top-4 left-1/2 -translate-x-1/2 z-50 flex gap-3 p-3 bg-container2 border border-container2-border rounded-lg shadow-xl"
-      onClick={(e) => {
-        e.stopPropagation();
-        e.preventDefault();
-      }}
+      className="absolute top-4 left-1/2 -translate-x-1/2 z-50 flex gap-1 p-2 bg-container2 border border-container2-border rounded-lg shadow-xl"
+      onPointerDown={(e) => e.stopPropagation()}
     >
-      <button
-        className={`flex p-2 rounded transition-colors ${!erasing ? 'bg-primary text-white' : 'hover:bg-primary-hover text-text-secondary'}`}
-        onClick={() => {
-          setErasing(false)
-        }}
-      >
-        <FontAwesomeIcon icon={faPencilAlt} />
-      </button>
-      <button
-        className={`flex p-2 rounded transition-colors ${erasing ? 'bg-primary text-white' : 'hover:bg-primary-hover text-text-secondary'}`}
-        onClick={() => setErasing(true)}
-      >
-        <FontAwesomeIcon icon={faEraser} />
-      </button>
+      {tools.map(tool => (
+        <Tooltip key={tool.id} content={tool.label} vertical="bottom">
+          <button
+            className={`flex items-center justify-center p-2 rounded transition-colors ${activeTool === tool.id ? 'bg-primary text-white' : 'hover:bg-container3 text-text-secondary'}`}
+            onClick={() => handleToolClick(tool.id)}
+          >
+            <tool.icon size={20} />
+          </button>
+        </Tooltip>
+      ))}
 
-      {/* <div className="h-px bg-container3-border my-1" /> */}
+      <div className="w-px bg-container3-border mx-1" />
 
+      {shapes.map(shape => (
+        <Tooltip key={shape.id} content={shape.label} vertical="bottom">
+          <button
+            className={`flex items-center justify-center p-2 rounded transition-colors ${activeTool === 'geo' && editor?.getStyleForNextShape(GeoShapeGeoStyle) === shape.id ? 'bg-primary text-white' : 'hover:bg-container3 text-text-secondary'}`}
+            onClick={() => handleToolClick(shape.id, shape.id)}
+          >
+            <shape.icon size={20} />
+          </button>
+        </Tooltip>
+      ))}
     </div>
   )
 }
