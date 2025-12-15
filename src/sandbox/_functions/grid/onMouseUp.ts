@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { useGrid } from "../_providers/GridContextProvider";
-import { useCode } from "../_providers/CodeContextProvider";
-import { CreateComponentMenuVisibleState } from "../types/createComponentMenuTypes";
-import { BuilderMenuMode, useBuilderPanel } from "../_providers/BuilderPanelContextProvider";
-import { useMenus } from "../_providers/MenusContextProvider";
+import { useGrid } from "../../_providers/GridContextProvider";
+import { useCode } from "../../_providers/CodeContextProvider";
+import { CreateComponentMenuVisibleState } from "../../types/createComponentMenuTypes";
+import { BuilderMenuMode, useBuilderPanel } from "../../_providers/BuilderPanelContextProvider";
+import { useMenus } from "../../_providers/MenusContextProvider";
 
 export default function useOnMouseUp() {
 

@@ -11,6 +11,7 @@ interface TooltipProps {
   offsetX?: number | string; // horizontal offset
   offsetY?: number | string; // vertical offset
   className?: string;
+  condition?: boolean;
 }
 
 export default function Tooltip({
@@ -19,7 +20,8 @@ export default function Tooltip({
   delay = 0,
   offsetX = 0,
   offsetY = 0,
-  className = ""
+  className = "",
+  condition
 }: TooltipProps) {
   const [visible, setVisible] = useState(false);
   let timeout: NodeJS.Timeout;
@@ -65,7 +67,7 @@ export default function Tooltip({
       {children}
 
       <AnimatePresence>
-        {visible && (
+        {visible && (condition === undefined || condition) && (
           <motion.div
             initial={initial}
             animate={animate}

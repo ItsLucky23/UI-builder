@@ -29,7 +29,7 @@ export default function BottomLeftMenu() {
         content={drawingEnabled ? "Disable drawing mode" : "Enable drawing mode"}
         offsetY={"-200% - 12px"}
         offsetX={"50%"}
-        className="bg-container2 p-2 text-nowrap border border-container-border rounded"
+        className="bg-container2 p-2 text-nowrap border border-container2-border rounded"
       >
         <div
           className={`
@@ -51,7 +51,7 @@ export default function BottomLeftMenu() {
         content={showDrawings ? "Hide drawings" : "Show drawings"}
         offsetY={"-200% - 12px"}
         offsetX={"50%"}
-        className={`bg-container2 p-2 text-nowrap border border-container-border rounded`}
+        className={`bg-container2 p-2 text-nowrap border border-container2-border rounded`}
       >
         <div
           className={`
@@ -73,7 +73,7 @@ export default function BottomLeftMenu() {
         content={highlightInstances ? "Hide outlines" : "Show outlines"}
         offsetY={"-200% - 12px"}
         offsetX={"50%"}
-        className={`bg-container2 p-2 text-nowrap border border-container-border rounded`}
+        className={`bg-container2 p-2 text-nowrap border border-container2-border rounded`}
       >
         <div
           className={`
@@ -91,11 +91,11 @@ export default function BottomLeftMenu() {
       </Tooltip>
 
       {/* Toggle Selector mode */}
-      <Tooltip
+      {/* <Tooltip
         content={highlightInstances ? "Hide outlines" : "Show outlines"}
         offsetY={"-200% - 12px"}
         offsetX={"50%"}
-        className={`bg-container2 p-2 text-nowrap border border-container-border rounded`}
+        className={`bg-container2 p-2 text-nowrap border border-container2-border rounded`}
       >
         <div
           className={`
@@ -110,14 +110,14 @@ export default function BottomLeftMenu() {
             icon={faBorderAll}
           />
         </div>
-      </Tooltip>
+      </Tooltip> */}
 
       {/* //? disabled for now cause editor rerenders every time we time so the zoomsize gets reset, also it dont work with the scroll option */}
       {/* <Tooltip
         content={"Change zoom level"}
         offsetY={"-200% - 12px"}
         offsetX={"20px"}
-        className={`bg-container2 p-2 text-nowrap border border-container-border rounded`}
+        className={`bg-container2 p-2 text-nowrap border border-container2-border rounded`}
       >
         <div className={`
           MENU

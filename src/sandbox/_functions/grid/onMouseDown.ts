@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { useGrid } from "../_providers/GridContextProvider";
-import { useDrawing } from "../_providers/DrawingContextProvider";
-import { CreateComponentMenuVisibleState } from "../types/createComponentMenuTypes";
-import { useBuilderPanel } from "../_providers/BuilderPanelContextProvider";
-import { useMenus } from "../_providers/MenusContextProvider";
+import { useGrid } from "../../_providers/GridContextProvider";
+import { useDrawing } from "../../_providers/DrawingContextProvider";
+import { CreateComponentMenuVisibleState } from "../../types/createComponentMenuTypes";
+import { useBuilderPanel } from "../../_providers/BuilderPanelContextProvider";
+import { useMenus } from "../../_providers/MenusContextProvider";
 
 export default function useOnMouseDown() {
 

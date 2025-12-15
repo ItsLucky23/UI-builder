@@ -7,7 +7,7 @@ import { useBlueprints } from "../../_providers/BlueprintsContextProvider";
 import DrawingLayer from "../drawing/DrawingLayer";
 import BottomLeftMenu from "../menus/BottomLeftMenu";
 import DrawingSideMenu from "../drawing/DrawingSideMenu";
-import { getGridStyle } from "../../_functions/gridStyle";
+import { getGridStyle } from "../../_functions/grid/gridStyle";
 import { ScreenRenderer } from "./ScreenRenderer";
 import { useBuilderPanel } from "src/sandbox/_providers/BuilderPanelContextProvider";
 import DrawingTopMenu from "../drawing/DrawingTopMenu";
@@ -102,23 +102,23 @@ export default function Component2() {
 }
 
 export default function Grid() {
-  const { 
-    containerRef, 
-    dragging, 
-    zoom, 
+  const {
+    containerRef,
+    dragging,
+    zoom,
     offset
   } = useGrid();
 
-  const { 
-    setCodeWindows, 
-    activeCodeWindow, 
-    setActiveCodeWindow 
+  const {
+    setCodeWindows,
+    activeCodeWindow,
+    setActiveCodeWindow
   } = useCode();
 
-  const { 
-    blueprints, 
+  const {
+    blueprints,
     setBlueprints,
-    highlightInstances 
+    highlightInstances
   } = useBlueprints();
 
   useEffect(() => {
@@ -170,7 +170,7 @@ export default function Grid() {
         <CreateComponentMenu />
 
         <DrawingSideMenu />
-        
+
         <DrawingTopMenu />
       </div>
 

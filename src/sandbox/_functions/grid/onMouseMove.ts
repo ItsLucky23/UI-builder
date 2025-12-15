@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { useGrid } from "../_providers/GridContextProvider";
-import { useDrawing } from "../_providers/DrawingContextProvider";
-import { useBuilderPanel } from "../_providers/BuilderPanelContextProvider";
+import { useGrid } from "../../_providers/GridContextProvider";
+import { useDrawing } from "../../_providers/DrawingContextProvider";
+import { useBuilderPanel } from "../../_providers/BuilderPanelContextProvider";
 
 export default function useOnMouseMove() {
 
