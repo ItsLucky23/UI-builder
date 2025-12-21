@@ -310,7 +310,7 @@ export default function DrawingLayer() {
                       style={{ overflow: 'visible', pointerEvents: 'auto' }}
                     >
                       <button
-                        className="flex items-center justify-center bg-container2 border border-container2-border text-red-500 rounded shadow-lg hover:bg-container2-hover transition-colors"
+                        className="flex items-center justify-center bg-background2 rounded-full text-wrong outline-1 outline-wrong hover:bg-background2-hover transition-colors"
                         style={{
                           width: 32 / zoom,
                           height: 32 / zoom,

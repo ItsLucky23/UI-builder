@@ -21,7 +21,7 @@ export default function BottomLeftMenu() {
   return (
     <div className={`
       MENU
-      absolute bottom-4 left-4 z-50 text-title text-sm flex items-center gap-2
+      absolute bottom-4 left-4 z-50 text-text text-sm flex items-center gap-2
     `}>
 
       {/* draw icon */}
@@ -29,13 +29,13 @@ export default function BottomLeftMenu() {
         content={drawingEnabled ? "Disable drawing mode" : "Enable drawing mode"}
         offsetY={"-200% - 12px"}
         offsetX={"50%"}
-        className="bg-container2 p-2 text-nowrap border border-container2-border rounded"
+        className="bg-background2 p-2 text-nowrap border border-border2 rounded"
       >
         <div
           className={`
             MENU
-            p-2 rounded-full bg-container2 outline
-            ${drawingEnabled ? "outline-primary" : "outline-none"}
+            p-2 rounded-full bg-background2 outline
+            ${drawingEnabled ? "outline-border2" : "outline-none"}
           `}
           onClick={() => setDrawingEnabled(!drawingEnabled)}
         >
@@ -51,13 +51,13 @@ export default function BottomLeftMenu() {
         content={showDrawings ? "Hide drawings" : "Show drawings"}
         offsetY={"-200% - 12px"}
         offsetX={"50%"}
-        className={`bg-container2 p-2 text-nowrap border border-container2-border rounded`}
+        className={`bg-background2 p-2 text-nowrap border border-container2-border rounded`}
       >
         <div
           className={`
             MENU
-            p-2 rounded-full bg-container2 outline
-            ${showDrawings ? "outline-primary" : "outline-none"}
+            p-2 rounded-full bg-background2 outline
+            ${showDrawings ? "outline-border2" : "outline-none"}
           `}
           onClick={() => setShowDrawings(!showDrawings)}
         >
@@ -73,13 +73,13 @@ export default function BottomLeftMenu() {
         content={highlightInstances ? "Hide outlines" : "Show outlines"}
         offsetY={"-200% - 12px"}
         offsetX={"50%"}
-        className={`bg-container2 p-2 text-nowrap border border-container2-border rounded`}
+        className={`bg-background2 p-2 text-nowrap border border-border2 rounded`}
       >
         <div
           className={`
             MENU
-            p-2 rounded-full bg-container2 outline
-            ${highlightInstances ? "outline-primary" : "outline-none"}
+            p-2 rounded-full bg-background2 outline
+            ${highlightInstances ? "outline-border2" : "outline-none"}
           `}
           onClick={() => setHighlightInstances(prev => !prev)}
         >

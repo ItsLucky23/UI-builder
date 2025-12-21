@@ -34,68 +34,48 @@ export default function useOnMouseUp() {
     setActiveCodeWindow 
   } = useCode();
 
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
+  const handleOnMouseUp = (e: MouseEvent, leaveEvent: boolean) => {
+    e.preventDefault();
+    draggingRef.current = false;
+    setDragging(false);
 
-    const onMouseUp = (e: MouseEvent, leaveEvent: boolean) => {
-      e.preventDefault();
-      draggingRef.current = false;
-      setDragging(false);
+    const lastX = posMouseDown.current.x;
+    const lastY = posMouseDown.current.y;
+    if (!lastX || !lastY) { return };
 
-      const lastX = posMouseDown.current.x;
-      const lastY = posMouseDown.current.y;
-      if (!lastX || !lastY) { return };
+    const elem = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement;
+    if (elem && elem.closest('#createComponentMenu')) { return; }
 
-      const elem = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement;
-      if (elem && elem.closest('#createComponentMenu')) { return; }
+    if (elem && elem.closest('.VIEW')) { return; }
+    if (elem && elem.closest('.MENU')) { return; }
 
-      if (elem && elem.closest('.VIEW')) { return; }
-      if (elem && elem.closest('.MENU')) { return; }
+    const horizontalDifference = Math.abs(lastX - e.clientX);
+    const verticalDifference = Math.abs(lastY - e.clientY);
+    if (horizontalDifference < 2 && verticalDifference < 2) {
 
-      const horizontalDifference = Math.abs(lastX - e.clientX);
-      const verticalDifference = Math.abs(lastY - e.clientY);
-      if (horizontalDifference < 2 && verticalDifference < 2) {
-
-        if (!leaveEvent) {
-          setActiveCodeWindow(null);
-          setBuilderMenuMode(prev => {
-            if (prev !== BuilderMenuMode.CLOSED) {
-              setPrevBuilderMenuMode(prev);
-            }
-            return BuilderMenuMode.CLOSED;
-          });
-        }
-
-        if (activeCodeWindow) { return; }
-
-        setCreateComponentMenuOpen(prev => {
-          if (prev === CreateComponentMenuVisibleState.FORCECLOSE) {
-            return CreateComponentMenuVisibleState.CLOSED;
+      if (!leaveEvent) {
+        setActiveCodeWindow(null);
+        setBuilderMenuMode(prev => {
+          if (prev !== BuilderMenuMode.CLOSED) {
+            setPrevBuilderMenuMode(prev);
           }
-          return CreateComponentMenuVisibleState.OPEN;
+          return BuilderMenuMode.CLOSED;
         });
-        setCreateComponentMenuPosition({ x: e.clientX, y: e.clientY });
       }
-    };
 
-    const handleMouseUp = (e: MouseEvent) => onMouseUp(e, false);
-    const handleMouseLeave = (e: MouseEvent) => onMouseUp(e, true);
-    const handleContextMenu = (e: MouseEvent) => e.preventDefault();
+      if (activeCodeWindow) { return; }
 
-    container.addEventListener("mouseleave", handleMouseLeave, { passive: false });
-    container.addEventListener("mouseup", handleMouseUp, { passive: false });
-    container.addEventListener("contextmenu", handleContextMenu);
-
-    return () => {
-      container.removeEventListener("mouseleave", handleMouseLeave);
-      container.removeEventListener("mouseup", handleMouseUp);
-      container.removeEventListener("contextmenu", handleContextMenu);
-    };
-  }, [zoom, activeCodeWindow]);
+      setCreateComponentMenuOpen(prev => {
+        if (prev === CreateComponentMenuVisibleState.FORCECLOSE) {
+          return CreateComponentMenuVisibleState.CLOSED;
+        }
+        return CreateComponentMenuVisibleState.OPEN;
+      });
+      setCreateComponentMenuPosition({ x: e.clientX, y: e.clientY });
+    }
+  };
 
   useEffect(() => {
-
     const onMouseUp = (e: MouseEvent) => {
       e.preventDefault();
 
@@ -115,4 +95,7 @@ export default function useOnMouseUp() {
       window.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, [])
+
+  return { handleOnMouseUp }
+
 }

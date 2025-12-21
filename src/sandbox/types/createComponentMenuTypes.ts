@@ -1,8 +1,8 @@
 export enum CreateComponentMenuState {
   DEFAULT = "DEFAULT",
   COMPONENTS = "COMPONENTS",
-  SCREENS = "SCREENS",
   NOTES = "NOTES",
+  FLOWCHARTS = "FLOWCHARTS",
 }
 
 export enum CreateComponentMenuVisibleState {

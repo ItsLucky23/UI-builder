@@ -2,7 +2,7 @@ import { useDrawing } from "src/sandbox/_providers/DrawingContextProvider";
 import { HexColorPicker } from "react-colorful";
 import { useEffect, useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faArrowRight, faPalette } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faArrowRight, faArrowRightRotate, faPalette, faRedo, faUndo } from "@fortawesome/free-solid-svg-icons";
 import { useKeyboardShortcuts } from "src/sandbox/_functions/drawing/useKeyboardShortcuts";
 
 export default function DrawingSideMenu() {
@@ -62,7 +62,7 @@ export default function DrawingSideMenu() {
     };
   }, [])
 
-  if (!drawingEnabled) { return null }
+  // if (!drawingEnabled) { return null }
 
   const colors = [
     "#ef4444", // Red
@@ -75,7 +75,13 @@ export default function DrawingSideMenu() {
 
   return (
     <div
-      className="absolute left-4 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3 p-3 bg-container2 border border-container2-border rounded-lg shadow-xl w-36 select-none"
+      className={`
+        absolute left-4 top-1/2 -translate-y-1/2 z-50 
+        flex flex-col gap-3 p-3 w-36
+        bg-background2 border border-border2 rounded-lg text-text select-none
+        transition-all duration-200 origin-left
+        ${drawingEnabled ? 'opacity-100 scale-100' : 'opacity-0 scale-80'}
+      `}
       onClick={(e) => {
         e.stopPropagation();
         e.preventDefault();
@@ -83,33 +89,33 @@ export default function DrawingSideMenu() {
       onDragStart={(e) => e.preventDefault()}
     >
 
-      <div className="text-common">
-        <div className="flex justify-between items-center text-sm text-text-secondary">
+      <div className="">
+        <div className="flex justify-between items-center text-sm">
           <span>Size</span>
           {/* <span>{brushSize}px</span> */}
         </div>
         <div className="flex justify-between mt-1">
           <div
-            className={`font-semibold w-8 h-8 rounded flex items-center justify-center ${brushSize === (erasing ? 10 * 6 : 10) ? 'bg-primary' : 'bg-container3 hover:bg-primary-hover cursor-pointer'}`}
+            className={`font-semibold w-8 h-8 rounded flex items-center justify-center bg-background border ${brushSize === (erasing ? 10 * 6 : 10) ? 'border-primary' : 'border-transparent hover:border-border cursor-pointer'}`}
             onClick={() => { updateBrushSize(erasing ? 10 * 6 : 10) }}
           >S</div>
           <div
-            className={`font-semibold w-8 h-8 rounded flex items-center justify-center ${brushSize === (erasing ? 30 * 6 : 30) ? 'bg-primary' : 'bg-container3 hover:bg-primary-hover cursor-pointer'}`}
+            className={`font-semibold w-8 h-8 rounded flex items-center justify-center bg-background border ${brushSize === (erasing ? 30 * 6 : 30) ? 'border-primary' : 'border-transparent hover:border-border cursor-pointer'}`}
             onClick={() => { updateBrushSize(erasing ? 30 * 6 : 30) }}
           >M</div>
           <div
-            className={`font-semibold w-8 h-8 rounded flex items-center justify-center ${brushSize === (erasing ? 50 * 6 : 50) ? 'bg-primary' : 'bg-container3 hover:bg-primary-hover cursor-pointer'}`}
+            className={`font-semibold w-8 h-8 rounded flex items-center justify-center bg-background border ${brushSize === (erasing ? 50 * 6 : 50) ? 'border-primary' : 'border-transparent hover:border-border cursor-pointer'}`}
             onClick={() => { updateBrushSize(erasing ? 50 * 6 : 50) }}
           >L</div>
         </div>
       </div>
 
       {/* Line Style */}
-      <div className="text-common">
+      <div className="">
         <span className="text-sm text-text-secondary">Style</span>
         <div className="flex justify-between mt-1">
           <div
-            className={`w-8 h-8 rounded flex items-center justify-center cursor-pointer ${lineStyle === 'solid' ? 'bg-primary' : 'bg-container3 hover:bg-primary-hover'}`}
+            className={`w-8 h-8 rounded flex items-center justify-center cursor-pointer bg-background border ${lineStyle === 'solid' ? 'border-primary' : 'border-transparent hover:border-border'}`}
             onClick={() => updateLineStyle('solid')}
             title="Solid"
           >
@@ -118,7 +124,7 @@ export default function DrawingSideMenu() {
             </svg>
           </div>
           <div
-            className={`w-8 h-8 rounded flex items-center justify-center cursor-pointer ${lineStyle === 'dashed' ? 'bg-primary' : 'bg-container3 hover:bg-primary-hover'}`}
+            className={`w-8 h-8 rounded flex items-center justify-center cursor-pointer bg-background border ${lineStyle === 'dashed' ? 'border-primary' : 'border-transparent hover:border-border'}`}
             onClick={() => updateLineStyle('dashed')}
             title="Dashed"
           >
@@ -127,7 +133,7 @@ export default function DrawingSideMenu() {
             </svg>
           </div>
           <div
-            className={`w-8 h-8 rounded flex items-center justify-center cursor-pointer ${lineStyle === 'dotted' ? 'bg-primary' : 'bg-container3 hover:bg-primary-hover'}`}
+            className={`w-8 h-8 rounded flex items-center justify-center cursor-pointer bg-background border ${lineStyle === 'dotted' ? 'border-primary' : 'border-transparent hover:border-border'}`}
             onClick={() => updateLineStyle('dotted')}
             title="Dotted"
           >
@@ -139,7 +145,7 @@ export default function DrawingSideMenu() {
       </div>
 
       {/* Colors */}
-      <div className="text-common">
+      <div className="">
         <span className="text-sm text-text-secondary">Color</span>
         <div className="grid grid-cols-3 gap-2">
           {colors.map(color => (
@@ -155,11 +161,11 @@ export default function DrawingSideMenu() {
         </div>
       </div>
 
-      <div className="text-common">
+      <div className="">
         {/* Custom Color Picker */}
         <div className="relative" ref={colorPickerRef}>
           <button
-            className="w-full flex items-center p-2 bg-container3 hover:bg-container3-hover rounded-md text-sm text-text-secondary transition-colors"
+            className="w-full flex items-center p-2 bg-background border border-transparent hover:border-border rounded-md text-sm text-text-secondary transition-colors"
             onClick={() => setOpenColorPicker(!openColorPicker)}
           >
             <FontAwesomeIcon icon={faPalette} size="lg" />
@@ -183,17 +189,17 @@ export default function DrawingSideMenu() {
       {/* Undo / Redo */}
       <div className="flex gap-2">
         <button
-          className="flex-1 flex items-center justify-center gap-2 py-2 bg-container3 hover:bg-container3-hover rounded-md text-text-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex-1 flex items-center justify-center py-2 bg-background border border-transparent hover:border-border rounded-md transition-all"
           onClick={() => setHistoryIndex(prev => Math.max(0, prev - 1))}
           disabled={strokeHistory.length === 0} // Simple check, logic might need refinement based on index
         >
-          <FontAwesomeIcon icon={faArrowLeft} />
+          <FontAwesomeIcon icon={faUndo} size="sm" />
         </button>
         <button
-          className="flex-1 flex items-center justify-center gap-2 py-2 bg-container3 hover:bg-container3-hover rounded-md text-text-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex-1 flex items-center justify-center py-2 bg-background border border-transparent hover:border-border rounded-md transition-all"
           onClick={() => setHistoryIndex(prev => Math.min(prev + 1, strokeHistory.length))}
         >
-          <FontAwesomeIcon icon={faArrowRight} />
+          <FontAwesomeIcon icon={faRedo} size="sm" />
         </button>
       </div>
 

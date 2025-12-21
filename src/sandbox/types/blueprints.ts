@@ -1,8 +1,9 @@
 export type note = {
   id: string;
-  // content: string;
   position: { x: number; y: number; };
-  // content: 
+  content: string; // JSON content from TipTap
+  width: number;
+  height: number;
 }
 
 export type drawing = {

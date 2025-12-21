@@ -1,5 +1,5 @@
 // Tooltip.tsx
-import { useState, ReactNode } from "react";
+import { useState, useRef, ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface TooltipProps {
@@ -24,14 +24,20 @@ export default function Tooltip({
   condition
 }: TooltipProps) {
   const [visible, setVisible] = useState(false);
-  let timeout: NodeJS.Timeout;
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const showTooltip = () => {
-    timeout = setTimeout(() => setVisible(true), delay);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => setVisible(true), delay);
   };
 
   const hideTooltip = () => {
-    clearTimeout(timeout);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
     setVisible(false);
   };
 
@@ -60,7 +66,10 @@ export default function Tooltip({
 
   return (
     <div
-      style={{ display: "inline-block", position: "relative" }}
+      style={{ 
+        display: "inline-flex", 
+        position: "relative",
+      }}
       onMouseEnter={showTooltip}
       onMouseLeave={hideTooltip}
     >
@@ -79,7 +88,7 @@ export default function Tooltip({
               ...style,
             }}
           >
-            <div className={className}>
+            <div className={`select-none ${className}`}>
               {content}
             </div>
           </motion.div>

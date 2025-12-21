@@ -34,8 +34,16 @@ function MainTemplate({ children }: { children: React.ReactNode }) {
   return (
     <div className="w-full h-full overflow-hidden flex flex-col text-title">
 
-      <div className='w-full flex items-center p-2 bg-container gap-4'>
-        <div className='h-full flex-1 flex gap-2 items-center'>
+      <div className='w-full flex items-center p-2 bg-background border-border border-b-[1px] gap-4'>
+
+        <div className='h-full flex gap-2 items-center'>
+          <div className='min-w-8 max-w-8 h-8 rounded-full overflow-hidden'>
+            <img src='/logo.png'></img>
+          </div>
+          <h1 className='font-semibold text-base line-clamp-1'>{session?.name}</h1>
+        </div>
+
+        <div className='h-full flex gap-2 items-center'>
           <div className='min-w-8 max-w-8 h-8'>
             {session && (
               <Avatar user={session} />
@@ -44,26 +52,24 @@ function MainTemplate({ children }: { children: React.ReactNode }) {
           <h1 className='font-semibold text-base line-clamp-1'>{session?.name}</h1>
         </div>
 
-        {
-          session?.location?.previousLocation && session?.location?.previousLocation !== session?.location?.pathName && (
-            <Tooltip
-              content="Go back to previous page"
-              delay={300}
-              offsetY={"5px"}
-              offsetX={"5px"}
+        {/* {session?.location?.previousLocation && session?.location?.previousLocation !== session?.location?.pathName && (
+          <Tooltip
+            content="Go back to previous page"
+            delay={300}
+            offsetY={"5px"}
+            offsetX={"5px"}
+          >
+            <button 
+              className='p-2 bg-container2 border border-container2-border rounded-md cursor-pointer text-sm'
+              onClick={() => {
+                router(session.location?.previousLocation || config.loginRedirectUrl)
+              }}
             >
-              <button 
-                className='p-2 bg-container2 border border-container2-border rounded-md cursor-pointer text-sm'
-                onClick={() => {
-                  router(session.location?.previousLocation || config.loginRedirectUrl)
-                }}
-              >
-                <FontAwesomeIcon icon={faArrowLeft} size='lg' />
-              </button>
-            </Tooltip>
-          )
-        }
-
+              <FontAwesomeIcon icon={faArrowLeft} size='lg' />
+            </button>
+          </Tooltip>
+        )} */}
+{/* 
         <Tooltip
           content={location.pathname == '/home' ? "Go to settings" : "Go to home page"}
           delay={300}
@@ -79,14 +85,14 @@ function MainTemplate({ children }: { children: React.ReactNode }) {
           >
             <FontAwesomeIcon icon={location.pathname == '/home' ? faGear : faHome} size='lg' />
           </button>
-        </Tooltip>
+        </Tooltip> */}
 
-        <button 
+        {/* <button 
           className='bg-container2 border border-container2-border rounded-md py-2 px-6 cursor-pointer font-semibold'
           onClick={() => apiRequest({ name: 'logout' })}
         >
           Uitloggen
-        </button>
+        </button> */}
       </div>
 
       <div className='overflow-hidden w-full flex-grow'>

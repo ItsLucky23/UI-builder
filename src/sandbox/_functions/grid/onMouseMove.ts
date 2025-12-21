@@ -6,10 +6,8 @@ import { useBuilderPanel } from "../../_providers/BuilderPanelContextProvider";
 export default function useOnMouseMove() {
 
   const { 
-    containerRef, 
     draggingRef, 
     lastPos, 
-    zoom, 
     setOffset 
   } = useGrid();
 
@@ -18,27 +16,14 @@ export default function useOnMouseMove() {
     windowDividerDragging 
   } = useBuilderPanel();
 
-  const { 
-    drawingEnabled 
-  } = useDrawing();
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) { return; }
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!draggingRef.current) return;
-      
-      const dx = e.clientX - lastPos.current.x;
-      const dy = e.clientY - lastPos.current.y;
-      lastPos.current = { x: e.clientX, y: e.clientY };
-      setOffset(prev => ({ x: prev.x + dx, y: prev.y + dy }));
-    };
-
-    container.addEventListener("mousemove", handleMouseMove, { passive: false });
-
-    return () => container.removeEventListener("mousemove", handleMouseMove);
-  }, [zoom, drawingEnabled]);
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!draggingRef.current) return;
+    
+    const dx = e.clientX - lastPos.current.x;
+    const dy = e.clientY - lastPos.current.y;
+    lastPos.current = { x: e.clientX, y: e.clientY };
+    setOffset(prev => ({ x: prev.x + dx, y: prev.y + dy }));
+  };
 
   useEffect(() => {
     const rightPanel = document.getElementById("rightPanel");
@@ -63,4 +48,6 @@ export default function useOnMouseMove() {
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [])
+
+  return { handleMouseMove };
 }

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useGrid } from "../../_providers/GridContextProvider";
 import CreateComponentMenu from "../menus/CreateComponentMenu";
 import { useCode } from "../../_providers/CodeContextProvider";
@@ -11,6 +11,12 @@ import { getGridStyle } from "../../_functions/grid/gridStyle";
 import { ScreenRenderer } from "./ScreenRenderer";
 import { useBuilderPanel } from "src/sandbox/_providers/BuilderPanelContextProvider";
 import DrawingTopMenu from "../drawing/DrawingTopMenu";
+import { useDrawing } from "src/sandbox/_providers/DrawingContextProvider";
+import Note from "../notes/Note";
+import useOnMouseDown from "src/sandbox/_functions/grid/onMouseDown";
+import useOnMouseUp from "src/sandbox/_functions/grid/onMouseUp";
+import useOnMouseMove from "src/sandbox/_functions/grid/onMouseMove";
+import useOnMouseWheel from "src/sandbox/_functions/grid/onMouseWheel";
 
 const dummyData = {
   screens: [
@@ -97,7 +103,22 @@ export default function Component2() {
       `
     },
   ],
-  notes: [],
+  notes: [
+    {
+      id: "note1",
+      position: { x: 1500, y: 100 },
+      width: 400,
+      height: 300,
+      content: JSON.stringify({
+        type: 'doc',
+        content: [
+          { type: 'heading', attrs: { level: 1 }, content: [{ type: 'text', text: 'Project Notes' }] },
+          { type: 'paragraph', content: [{ type: 'text', text: 'Here is a sample note with a code block:' }] },
+          { type: 'codeBlock', attrs: { language: 'typescript', code: "console.log('Hello World');" } }
+        ]
+      })
+    }
+  ],
   drawings: [],
 }
 
@@ -138,33 +159,39 @@ export default function Grid() {
     return () => clearTimeout(timeout);
   }, [showZoom, zoom]);
 
-  const gridStyle = useMemo(() => {
-    return getGridStyle(zoom, offset);
-  }, [zoom, offset]);
+  // Using the new hook approach
+  const { handleWheel } = useOnMouseWheel();
+  const { handleMouseMove } = useOnMouseMove();
+  const { handleOnMouseUp } = useOnMouseUp();
+  const { handleMouseDown } = useOnMouseDown();
 
   return (
-    //* THIS DIVE IS THE GRID BACKGROUND
+    //* THIS DIV IS THE GRID BACKGROUND
     <div
       style={{
         width: "100%",
         overflow: "hidden",
         position: "relative",
-        ...gridStyle,
+        ...getGridStyle(zoom, offset),
 
-        // backgroundSize: `${50 * zoom}px ${50 * zoom}px`,
-        // backgroundPosition: `${offset.x}px ${offset.y}px`,
         cursor: dragging ? "grabbing" : "",
       }}
       className="bg-grid h-full"
       ref={containerRef}
+      onContextMenu={(e) => e.preventDefault()} //? makes it so we cant open the menu on right click
+      onMouseDown={(e) => handleMouseDown(e.nativeEvent)}
+      onMouseUp={(e) => handleOnMouseUp(e.nativeEvent, false)}
+      onMouseLeave={(e) => handleOnMouseUp(e.nativeEvent, true)}
+      onMouseMove={(e) => handleMouseMove(e.nativeEvent)}
+      onWheel={(e) => handleWheel(e.nativeEvent)}
     >
 
       {/* percentage */}
-      <div className={`absolute top-2 border border-container-border ${showZoom ? 'opacity-100' : 'opacity-0'} z-50 transition-all duration-200 left-2 bg-background text-title text-sm px-4 py-1 rounded`}>
+      <div className={`absolute top-2 border border-border ${showZoom ? 'opacity-100' : 'opacity-0'} z-50 transition-all duration-200 left-2 bg-background text-text text-sm px-4 py-1 rounded`}>
         {(zoom * 100).toString().endsWith(".5") ? (zoom * 100).toFixed(1) : (zoom * 100).toFixed(0)}%
       </div>
 
-      <div className=" pointer-events-auto!">
+      <div className="pointer-events-auto">
         <BottomLeftMenu />
 
         <CreateComponentMenu />
@@ -190,10 +217,10 @@ export default function Grid() {
           return null; // render nothing
         })}
 
-        {blueprints.notes.map(() => {
-          // instance is type note
-          return null; // render nothing
-        })}
+        {/* Notes Layer */}
+        {blueprints.notes.map((note) => (
+          <Note key={note.id} note={note} />
+        ))}
 
         {blueprints.drawings.map(() => {
           // instance is type drawing
@@ -213,10 +240,10 @@ export default function Grid() {
                 top: screenInstance.position.y,
               }}
               className={`
-                VIEW w-[1024px] h-full overflow-hidden
-                ${highlightInstances ? "outline-4 rounded-md" : "pointer-events-auto"}
-                ${highlightInstances && screenInstance.id != activeCodeWindow ? "outline-container2-border hover:outline-container3-border cursor-pointer" : ""}
-                ${highlightInstances && screenInstance.id == activeCodeWindow ? "outline-title" : ""}
+                VIEW w-[1024px] h-full overflow-hidden text-text
+                ${highlightInstances ? "outline-4 rounded-3xl" : "pointer-events-auto"}
+                ${highlightInstances && screenInstance.id != activeCodeWindow ? "outline-border hover:outline-border2 cursor-pointer" : ""}
+                ${highlightInstances && screenInstance.id == activeCodeWindow ? "outline-border2" : ""}
               `}
               onClick={() => {
                 setBuilderMenuMode(prevBuilderMenuMode);

@@ -10,5 +10,8 @@ module.exports = {
       colors: {}
     },
   },
-  plugins: [require("@tailwindcss/container-queries")],
+  plugins: [
+    require("@tailwindcss/container-queries"),
+    require("@tailwindcss/typography"),
+  ],
 };

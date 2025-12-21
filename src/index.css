@@ -1,6 +1,21 @@
 @import "tailwindcss";
 
 @theme {
+
+  --color-background: #171B26;
+  --color-background2: #1F2432;
+
+  --color-background-hover: #1C2130;
+  --color-background2-hover: #242B3A;
+
+  --color-border: #2B3245;
+  --color-border2: #3E465A;
+
+  --color-text: #FFFFFF;
+  --color-text2: #8B95A6;
+  --color-text3: #6B7384;
+
+
   --color-background: #EFF6FF; /* blue-50 */
 
   --color-container: #FFFFFF; /* white */
@@ -48,6 +63,9 @@
   --color-background: #171B26;
   --color-background2: #1F2432;
 
+  --color-background-hover: #1E2230; /* 1C2130 */
+  --color-background2-hover: #2A3042; /* 242B3A */
+
   --color-border: #2B3245;
   --color-border2: #3E465A;
 
@@ -66,6 +84,12 @@
 
   --color-primary: oklch(62.3% 0.214 259.815); /* blue-500 */
   --color-primary-hover: oklch(67.3% 0.234 260.815);
+
+  --background-grid: #171B26;
+  --background-grid-color: #171B26;
+  --background-grid-old: 
+    linear-gradient(90deg, #555 1px, transparent 1px),
+    linear-gradient(#555 1px, transparent 1px);
 }
 
 .dark2 {
