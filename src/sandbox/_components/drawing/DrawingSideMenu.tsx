@@ -2,7 +2,7 @@ import { useDrawing } from "src/sandbox/_providers/DrawingContextProvider";
 import { HexColorPicker } from "react-colorful";
 import { useEffect, useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faArrowRight, faArrowRightRotate, faPalette, faRedo, faUndo } from "@fortawesome/free-solid-svg-icons";
+import { faPalette, faRedo, faUndo } from "@fortawesome/free-solid-svg-icons";
 import { useKeyboardShortcuts } from "src/sandbox/_functions/drawing/useKeyboardShortcuts";
 
 export default function DrawingSideMenu() {
@@ -169,7 +169,6 @@ export default function DrawingSideMenu() {
             onClick={() => setOpenColorPicker(!openColorPicker)}
           >
             <FontAwesomeIcon icon={faPalette} size="lg" />
-            {/* <span className="text-xs whitespace-nowrap">Custom Color</span> */}
             <div
               className="w-16 h-4 rounded-xl ml-auto"
               style={{ backgroundColor: brushColor }}

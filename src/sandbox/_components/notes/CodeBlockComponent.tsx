@@ -1,6 +1,6 @@
 import { NodeViewWrapper } from '@tiptap/react'
 import { useCallback, useState } from 'react'
-import BaseCodeEditor from '../../editor/BaseCodeEditor'
+import BaseCodeEditor from '../editor/BaseCodeEditor'
 
 export default function CodeBlockComponent({ node, updateAttributes }: any) {
   // node.attrs.language
@@ -58,6 +58,7 @@ export default function CodeBlockComponent({ node, updateAttributes }: any) {
       </div>
       <div
         className="relative min-h-[50px]"
+        contentEditable={false}
         onMouseDown={(e) => e.stopPropagation()}
         onClick={(e) => e.stopPropagation()}
       > {/* Auto-growing height */}
