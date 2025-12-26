@@ -100,7 +100,7 @@ export default function BaseCodeEditor({
         onChange={onChange}
         options={{
           fontSize: 16,
-          minimap: { enabled: true },
+          minimap: { enabled: false },
           automaticLayout: true,
           autoClosingBrackets: "always",
           tabCompletion: "on",

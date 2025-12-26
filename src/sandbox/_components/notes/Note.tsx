@@ -1,10 +1,23 @@
-// import { useState } from "react";
 import { note } from "src/sandbox/types/blueprints";
 import { useBlueprints } from "src/sandbox/_providers/BlueprintsContextProvider";
 import NoteEditor from "./NoteEditor";
+import { useNotes } from "src/sandbox/_providers/NotesContextProvider";
+import { NoteOptionsVisibleState } from "src/sandbox/types/NotesOptionsTypes";
+import { useMenus } from "src/sandbox/_providers/MenusContextProvider";
+import { CreateComponentMenuVisibleState } from "src/sandbox/types/createComponentMenuTypes";
 
 export default function Note({ note }: { note: note }) {
   const { setBlueprints } = useBlueprints();
+  const {
+    noteOptionsMenuOpen,
+    setNoteOptionsMenuOpen,
+    setWasNoteRecentlyActive
+  } = useNotes();
+
+  const {
+    createComponentMenuOpen,
+    setCreateComponentMenuOpen
+  } = useMenus();
 
   const handleUpdate = (newContent: object) => {
     setBlueprints(prev => ({
@@ -29,6 +42,15 @@ export default function Note({ note }: { note: note }) {
           return;
         }
 
+        // Track that we're now active in a note
+        setWasNoteRecentlyActive(true);
+
+        if (noteOptionsMenuOpen == NoteOptionsVisibleState.OPEN) {
+          setNoteOptionsMenuOpen(NoteOptionsVisibleState.CLOSED);
+        }
+        if (createComponentMenuOpen == CreateComponentMenuVisibleState.OPEN) {
+          setCreateComponentMenuOpen(CreateComponentMenuVisibleState.CLOSED)
+        }
         e.stopPropagation()
       }}
       onMouseUp={(e) => {
@@ -41,12 +63,6 @@ export default function Note({ note }: { note: note }) {
       }}
       draggable={false}
     >
-      {/* Header / Drag Handle */}
-      {/* <div className="h-4 bg-muted cursor-move flex items-center justify-center group">
-        <div 
-          className="w-8 h-1 bg-border rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-        ></div>
-      </div> */}
 
       <div className="flex-1 overflow-hidden relative">
         <NoteEditor

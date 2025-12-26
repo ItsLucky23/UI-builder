@@ -17,13 +17,14 @@ import { BlueprintsProvider } from 'src/sandbox/_providers/BlueprintsContextProv
 import { DrawingProvider } from 'src/sandbox/_providers/DrawingContextProvider';
 import { MenusProvider } from 'src/sandbox/_providers/MenusContextProvider';
 import { BuilderPanelProvider } from 'src/sandbox/_providers/BuilderPanelContextProvider';
+import { NotesProvider } from 'src/sandbox/_providers/NotesContextProvider';
 
 const Templates = {
   main: MainTemplate,
   plain: PlainTemplate,
   sandbox: SandboxTemplate,
 }
-export  type Template = 'plain' | 'main' | 'sandbox';
+export type Template = 'plain' | 'main' | 'sandbox';
 
 function MainTemplate({ children }: { children: React.ReactNode }) {
 
@@ -69,7 +70,7 @@ function MainTemplate({ children }: { children: React.ReactNode }) {
             </button>
           </Tooltip>
         )} */}
-{/* 
+        {/* 
         <Tooltip
           content={location.pathname == '/home' ? "Go to settings" : "Go to home page"}
           delay={300}
@@ -135,9 +136,11 @@ function SandboxTemplate({ children }: { children: React.ReactNode }) {
           <MenusProvider>
             <CodeProvider>
               <DrawingProvider>
-                <MainTemplate>
-                  {children}
-                </MainTemplate>
+                <NotesProvider>
+                  <MainTemplate>
+                    {children}
+                  </MainTemplate>
+                </NotesProvider>
               </DrawingProvider>
             </CodeProvider>
           </MenusProvider>
@@ -179,7 +182,7 @@ export default function TemplateProvider({
         </div>
         <TemplateComponent>{children}</TemplateComponent>
       </div>
-    );  
+    );
   }
 
   return (

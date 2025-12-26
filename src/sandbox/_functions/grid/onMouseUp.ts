@@ -4,22 +4,28 @@ import { useCode } from "../../_providers/CodeContextProvider";
 import { CreateComponentMenuVisibleState } from "../../types/createComponentMenuTypes";
 import { BuilderMenuMode, useBuilderPanel } from "../../_providers/BuilderPanelContextProvider";
 import { useMenus } from "../../_providers/MenusContextProvider";
+import { useNotes } from "src/sandbox/_providers/NotesContextProvider";
+import { NoteOptionsVisibleState } from "src/sandbox/types/NotesOptionsTypes";
 
 export default function useOnMouseUp() {
 
-  const { 
-    containerRef, 
-    zoom, 
-    setDragging, 
-    draggingRef, 
-    posMouseDown 
+  const {
+    setDragging,
+    draggingRef,
+    posMouseDown
   } = useGrid();
 
-  const { 
-    lastPositionWindowDivider, 
-    windowDividerDragging, 
-    setWindowDivider, 
-    setWindowDividerPosition, 
+  const {
+    noteOptionsMenuOpen,
+    wasNoteRecentlyActive,
+    setWasNoteRecentlyActive
+  } = useNotes();
+
+  const {
+    lastPositionWindowDivider,
+    windowDividerDragging,
+    setWindowDivider,
+    setWindowDividerPosition,
     setBuilderMenuMode,
     setPrevBuilderMenuMode
   } = useBuilderPanel();
@@ -29,9 +35,9 @@ export default function useOnMouseUp() {
     setCreateComponentMenuOpen
   } = useMenus();
 
-  const { 
-    activeCodeWindow, 
-    setActiveCodeWindow 
+  const {
+    activeCodeWindow,
+    setActiveCodeWindow
   } = useCode();
 
   const handleOnMouseUp = (e: MouseEvent, leaveEvent: boolean) => {
@@ -64,6 +70,13 @@ export default function useOnMouseUp() {
       }
 
       if (activeCodeWindow) { return; }
+      if (noteOptionsMenuOpen == NoteOptionsVisibleState.OPEN) { return; }
+
+      // Don't open menu if user was recently active in a note
+      if (wasNoteRecentlyActive) {
+        setWasNoteRecentlyActive(false);
+        return;
+      }
 
       setCreateComponentMenuOpen(prev => {
         if (prev === CreateComponentMenuVisibleState.FORCECLOSE) {

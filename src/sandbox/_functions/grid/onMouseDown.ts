@@ -1,5 +1,3 @@
-// import { useEffect } from "react";
-import { useCallback } from "react";
 import { useGrid } from "../../_providers/GridContextProvider";
 import { useDrawing } from "../../_providers/DrawingContextProvider";
 import { CreateComponentMenuVisibleState } from "../../types/createComponentMenuTypes";
@@ -9,8 +7,6 @@ import { useMenus } from "../../_providers/MenusContextProvider";
 export default function useOnMouseDown() {
 
   const {
-    containerRef,
-    zoom,
     setDragging,
     draggingRef,
     lastPos,
@@ -58,8 +54,6 @@ export default function useOnMouseDown() {
     posMouseDown.current = { x: e.clientX, y: e.clientY };
 
     setCreateComponentMenuOpen(prev => {
-      console.log(prev)
-
       if (e.buttons == 4) {
         return CreateComponentMenuVisibleState.FORCECLOSE;
       }

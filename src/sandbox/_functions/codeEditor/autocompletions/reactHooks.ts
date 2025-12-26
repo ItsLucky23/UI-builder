@@ -42,14 +42,12 @@ export function ReactHooksImporter(monaco: typeof import("monaco-editor")) {
       const line = lines[importLineIndex];
       if (!line.includes(hook)) {
         // Add hook to existing import
-        console.log(line)
         let newLine = "";
         if (line.includes("{")) {
           newLine = line.replace('{', `{ ${hook},`);
         } else {
           newLine = line.replace(' from', `, { ${hook} } from`);
         }
-        console.log(newLine)
         model.applyEdits([{
           range: new monaco.Range(importLineIndex + 1, 1, importLineIndex + 1, line.length + 1),
           text: newLine

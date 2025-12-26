@@ -1,4 +1,4 @@
-import  * as monaco from "monaco-editor";
+import * as monaco from "monaco-editor";
 
 export default function InitInlineColorIcon(
   editorInstance: monaco.editor.IStandaloneCodeEditor,
@@ -16,7 +16,6 @@ export default function InitInlineColorIcon(
       tailwindColorDecorationIds,
       newColorDecorations
     );
-    console.log(tailwindColorDecorationIds)
   }
 
   updateColorIcons();
@@ -25,7 +24,7 @@ export default function InitInlineColorIcon(
 }
 
 function findTailwindColors(
-  model: monaco.editor.ITextModel, 
+  model: monaco.editor.ITextModel,
   extractColorValue: (cls: string) => string | null = () => null,
 ) {
   const regex = /\b(?:text|decoration|bg|divide|outline|ring|shadow|accent|caret|fill|stroke|border|border-t|border-b|border-l|border-r|border-x|border-y)-([a-z]+)-\d{3}\b/g;

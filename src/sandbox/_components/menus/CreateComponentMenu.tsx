@@ -6,20 +6,20 @@ import { faChartDiagram, faChartPie, faCode, faFileText, faNotesMedical, faNoteS
 import { useMenus } from "src/sandbox/_providers/MenusContextProvider";
 
 const DUMMY_FLOWCHARTS = Array.from({ length: 20 }, (_, i) => ({
-  id: `flowchart-${i}`,
-  name: `Flowchart ${i + 1}`,
+  id: `flowchart - ${i} `,
+  name: `Flowchart ${i + 1} `,
   description: `Description for flowchart ${i + 1}`
 }));
 
 const DUMMY_NOTES = Array.from({ length: 10 }, (_, i) => ({
-  id: `note-${i}`,
-  name: `Note ${i + 1}`,
+  id: `note - ${i} `,
+  name: `Note ${i + 1} `,
   content: `This is the content for note ${i + 1}`
 }));
 
 const DUMMY_COMPONENTS = Array.from({ length: 15 }, (_, i) => ({
-  id: `component-${i}`,
-  name: `Component ${i + 1}`,
+  id: `component - ${i} `,
+  name: `Component ${i + 1} `,
   description: `Description for component ${i + 1}`
 }));
 
@@ -51,7 +51,7 @@ function SelectionView({ items, onCreate, searchPlaceholder, createLabel }: Sele
         />
       </div>
 
-      <div 
+      <div
         className="flex-1 overflow-y-auto flex flex-col gap-1 pr-1 p-2"
       >
         {filteredItems.map(item => (
@@ -86,11 +86,14 @@ function SelectionView({ items, onCreate, searchPlaceholder, createLabel }: Sele
 
 export default function CreateComponentMenu() {
 
-  const { createComponentMenuOpen, createComponentMenuPosition } = useMenus();
+  const {
+    createComponentMenuOpen,
+    createComponentMenuPosition
+  } = useMenus();
 
   const [menuState, setMenuState] = useState<CreateComponentMenuState>(CreateComponentMenuState.DEFAULT);
 
-  useEffect(()=> {
+  useEffect(() => {
     if (createComponentMenuOpen !== CreateComponentMenuVisibleState.OPEN) { return; }
     setMenuState(CreateComponentMenuState.DEFAULT);
   }, [createComponentMenuOpen])
@@ -101,9 +104,9 @@ export default function CreateComponentMenu() {
     <AnimatePresence>
       {createComponentMenuOpen == CreateComponentMenuVisibleState.OPEN && (
         <motion.div
-          initial={{ opacity: 0, y: -5 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -5 }}
+          initial={{ opacity: 0, scale: 0.90, y: -5 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.90, y: -5 }}
           transition={{ duration: 0.2 }}
           style={{
             position: "absolute",
@@ -125,21 +128,21 @@ export default function CreateComponentMenu() {
                 <div className="text-xs font-bold text-text2 uppercase tracking-wider px-1">
                   Create
                 </div>
-                <div 
+                <div
                   className="p-2 hover:bg-background2-hover rounded cursor-pointer"
                   onClick={() => { setMenuState(CreateComponentMenuState.COMPONENTS) }}
                 >
                   <FontAwesomeIcon icon={faCode} className="text-muted mr-2" />
                   Component
                 </div>
-                <div 
+                <div
                   className="p-2 hover:bg-background2-hover rounded cursor-pointer"
                   onClick={() => { setMenuState(CreateComponentMenuState.NOTES) }}
                 >
                   <FontAwesomeIcon icon={faFileText} className="text-muted mr-2" />
                   Note
                 </div>
-                <div 
+                <div
                   className="p-2 hover:bg-background2-hover rounded cursor-pointer"
                   onClick={() => { setMenuState(CreateComponentMenuState.FLOWCHARTS) }}
                 >

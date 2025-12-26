@@ -88,3 +88,69 @@
 .ProseMirror li>p {
   margin: 0;
 }
+
+/* Placeholder text styling - shows on empty lines with cursor */
+.ProseMirror .is-empty-with-placeholder::before {
+  color: #71717a;
+  /* text-zinc-500 for gray placeholder */
+  content: attr(data-placeholder);
+  pointer-events: none;
+  position: absolute;
+}
+
+/* Task list styles */
+.ProseMirror ul[data-type="taskList"] {
+  list-style: none;
+  padding-left: 0;
+}
+
+.ProseMirror ul[data-type="taskList"] li {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.ProseMirror ul[data-type="taskList"] li > label {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  user-select: none;
+}
+
+.ProseMirror ul[data-type="taskList"] li > div {
+  flex: 1 1 auto;
+}
+
+.ProseMirror ul[data-type="taskList"] input[type="checkbox"] {
+  cursor: pointer;
+  appearance: none;
+  width: 1.1em;
+  height: 1.1em;
+  border: 2px solid var(--color-border2);
+  border-radius: 4px;
+  background-color: var(--color-background);
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.ProseMirror ul[data-type="taskList"] input[type="checkbox"]:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-background-hover);
+}
+
+.ProseMirror ul[data-type="taskList"] input[type="checkbox"]:checked {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.ProseMirror ul[data-type="taskList"] input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  width: 0.3em;
+  height: 0.6em;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+}

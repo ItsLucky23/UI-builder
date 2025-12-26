@@ -64,7 +64,6 @@ async function createTokensProvider(
     };
   }
 
-  console.log(9129312)
 
   return {
     getInitialState: () => vsctm.INITIAL,
@@ -72,14 +71,12 @@ async function createTokensProvider(
       const lineTokens = grammar.tokenizeLine(line, state);
       const tokens: monaco.languages.IToken[] = [];
 
-      console.log(lineTokens)
       for (const token of lineTokens.tokens) {
         const resolvedToken = TMToMonacoToken(colorTheme, token.scopes);
         tokens.push({
           startIndex: token.startIndex,
           scopes: resolvedToken,
         });
-        console.log(token)
       }
 
       return { tokens, endState: lineTokens.ruleStack };
@@ -93,7 +90,7 @@ class TokensProviderCache {
   constructor(
     private editor?: monaco.editor.IStandaloneCodeEditor | undefined,
     private colorTheme?: IColorTheme
-  ) {}
+  ) { }
 
   async getTokensProvider(
     scopeName: string

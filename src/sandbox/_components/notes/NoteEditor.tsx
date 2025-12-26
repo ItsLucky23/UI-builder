@@ -1,58 +1,20 @@
-import { useEditor, EditorContent, ReactNodeViewRenderer } from '@tiptap/react'
+import { useEditor, EditorContent } from '@tiptap/react'
+import { useEffect } from 'react'
 import StarterKit from '@tiptap/starter-kit'
-import CodeBlockComponent from './CodeBlockComponent'
+import TaskList from '@tiptap/extension-task-list'
+import TaskItem from '@tiptap/extension-task-item'
 import { getCaretPosition, CaretPosition } from '../../_functions/notes/getCaretPosition'
+import { PlaceholderPerLine } from '../../_functions/notes/PlaceholderPerLine'
 
 // Styling
 import 'src/NoteEditor.css'
 
 
-import { Node, mergeAttributes } from '@tiptap/core'
 import { handleCaretPositionChange } from 'src/sandbox/_functions/notes/handleCaretPosition'
+import { CustomCodeBlock } from './CodeBlockComponent'
+import { useNotes } from 'src/sandbox/_providers/NotesContextProvider'
+import { NoteOptionsVisibleState } from 'src/sandbox/types/NotesOptionsTypes'
 
-const CustomCodeBlock = Node.create({
-  name: 'codeBlock',
-  group: 'block',
-  atom: true,
-
-  addAttributes() {
-    return {
-      language: {
-        default: 'typescript',
-      },
-      code: {
-        default: '',
-      }
-    }
-  },
-
-  parseHTML() {
-    return [
-      {
-        tag: 'pre',
-      },
-    ]
-  },
-
-  renderHTML({ HTMLAttributes }) {
-    return ['div', mergeAttributes(HTMLAttributes)]
-  },
-
-  addNodeView() {
-    return ReactNodeViewRenderer(CodeBlockComponent)
-  },
-
-  addCommands() {
-    return {
-      setCodeBlock: (attributes: any) => ({ commands }: any) => {
-        return commands.setNode(this.name, attributes)
-      },
-      toggleCodeBlock: (attributes: any) => ({ commands }: any) => {
-        return commands.toggleNode(this.name, 'paragraph', attributes)
-      },
-    }
-  },
-})
 
 type NoteEditorProps = {
   initialContent?: string | object;
@@ -65,12 +27,26 @@ export default function NoteEditor({ initialContent, onUpdate, isEditable = true
 
   const handleCaretPosition = handleCaretPositionChange();
 
+  const {
+    setNoteOptionsMenuOpen,
+    setNoteOptionsMenuPosition,
+    setLastActiveEditor
+  } = useNotes();
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
         codeBlock: false, // implementation is replaced by CustomCodeBlock
       }),
       CustomCodeBlock,
+      PlaceholderPerLine,
+      TaskList,
+      TaskItem.configure({
+        nested: true,
+        HTMLAttributes: {
+          class: 'task-item',
+        },
+      }),
     ],
     content: initialContent ? (typeof initialContent === 'string' ? JSON.parse(initialContent) : initialContent) : { type: 'doc', content: [] },
     onUpdate: ({ editor }) => {
@@ -83,7 +59,35 @@ export default function NoteEditor({ initialContent, onUpdate, isEditable = true
         class: 'prose prose-sm dark:prose-invert max-w-none focus:outline-none p-4 min-h-[150px]',
       },
       handleKeyDown: (view, event) => {
-        handleCaretPosition(getCaretPosition(editor));
+        // Only adjust viewport position for navigation keys, not while typing
+        const isNavigationKey = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'PageUp', 'PageDown', 'Home', 'End'].includes(event.key);
+        if (isNavigationKey) {
+          handleCaretPosition(getCaretPosition(editor));
+        }
+
+        if (event.key == "/") {
+          const { state } = editor;
+          const { selection } = state;
+          const { $anchor } = selection;
+          const currentNode = $anchor.parent;
+
+          if (currentNode.textContent !== "") { return; }
+
+          const caretPos = getCaretPosition(editor);
+
+          // Save editor and cursor position before opening menu
+          setLastActiveEditor({
+            editor: editor,
+            position: selection.anchor
+          });
+
+          setNoteOptionsMenuPosition({
+            x: caretPos ? caretPos.absoluteX : 0,
+            y: caretPos ? caretPos.absoluteY : 0,
+          });
+          setNoteOptionsMenuOpen(NoteOptionsVisibleState.OPEN);
+          return true;
+        }
 
         if (event.key === 'Enter' && !event.shiftKey) {
 
@@ -105,44 +109,7 @@ export default function NoteEditor({ initialContent, onUpdate, isEditable = true
     >
       {/* Toolbar */}
       <div className="flex items-center gap-1 p-2 border-b border-border text-xs overflow-x-auto">
-        <button
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          className={`p-1 rounded hover:bg-muted ${editor.isActive('bold') ? 'bg-muted' : ''}`}
-        >
-          Bold
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={`p-1 rounded hover:bg-muted ${editor.isActive('italic') ? 'bg-muted' : ''}`}
-        >
-          Italic
-        </button>
-        <div className="w-[1px] h-4 bg-border mx-1"></div>
-        <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-          className={`p-1 rounded hover:bg-muted ${editor.isActive('heading', { level: 1 }) ? 'bg-muted' : ''}`}
-        >
-          H1
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          className={`p-1 rounded hover:bg-muted ${editor.isActive('heading', { level: 2 }) ? 'bg-muted' : ''}`}
-        >
-          H2
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={`p-1 rounded hover:bg-muted ${editor.isActive('bulletList') ? 'bg-muted' : ''}`}
-        >
-          List
-        </button>
-        <div className="w-[1px] h-4 bg-border mx-1"></div>
-        <button
-          onClick={() => editor.chain().focus().setCodeBlock().run()}
-          className={`p-1 rounded hover:bg-muted ${editor.isActive('codeBlock') ? 'bg-muted' : ''}`}
-        >
-          Code
-        </button>
+        MAYBE A TITLE OR SOME
       </div>
       <div className="p-4">
         <EditorContent editor={editor} className="prose prose-zinc dark:prose-invert max-w-none focus:outline-none" />

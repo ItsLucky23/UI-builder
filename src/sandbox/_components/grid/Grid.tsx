@@ -7,16 +7,15 @@ import { useBlueprints } from "../../_providers/BlueprintsContextProvider";
 import DrawingLayer from "../drawing/DrawingLayer";
 import BottomLeftMenu from "../menus/BottomLeftMenu";
 import DrawingSideMenu from "../drawing/DrawingSideMenu";
-import { getGridStyle } from "../../_functions/grid/gridStyle";
 import { ScreenRenderer } from "./ScreenRenderer";
 import { useBuilderPanel } from "src/sandbox/_providers/BuilderPanelContextProvider";
 import DrawingTopMenu from "../drawing/DrawingTopMenu";
-import { useDrawing } from "src/sandbox/_providers/DrawingContextProvider";
 import Note from "../notes/Note";
 import useOnMouseDown from "src/sandbox/_functions/grid/onMouseDown";
 import useOnMouseUp from "src/sandbox/_functions/grid/onMouseUp";
 import useOnMouseMove from "src/sandbox/_functions/grid/onMouseMove";
 import useOnMouseWheel from "src/sandbox/_functions/grid/onMouseWheel";
+import NoteOptionsMenu from "../menus/NoteOptionsMenu";
 
 const dummyData = {
   screens: [
@@ -165,6 +164,15 @@ export default function Grid() {
   const { handleOnMouseUp } = useOnMouseUp();
   const { handleMouseDown } = useOnMouseDown();
 
+  // Calculate grid style values
+  const spacing = zoom > 1 ? 50 : 100;
+  const opacity = 0.2;
+  const isLineGrid = zoom > 1;
+  const snappedSize = Math.round(spacing * zoom);
+  const snappedOffsetX = Math.round(offset.x);
+  const snappedOffsetY = Math.round(offset.y);
+  const dotSize = Math.max(1, Math.min(2, zoom * 2));
+
   return (
     //* THIS DIV IS THE GRID BACKGROUND
     <div
@@ -172,9 +180,21 @@ export default function Grid() {
         width: "100%",
         overflow: "hidden",
         position: "relative",
-        ...getGridStyle(zoom, offset),
-
         cursor: dragging ? "grabbing" : "",
+
+        // Use CSS variables for dynamic values to avoid expensive style recalculations
+        // This prevents lag when DevTools Elements tab is open
+        ['--grid-size' as string]: `${snappedSize}px`,
+        ['--grid-offset-x' as string]: `${snappedOffsetX}px`,
+        ['--grid-offset-y' as string]: `${snappedOffsetY}px`,
+        ['--grid-opacity' as string]: opacity,
+        ['--dot-size' as string]: `${dotSize}px`,
+
+        backgroundSize: 'var(--grid-size) var(--grid-size)',
+        backgroundPosition: 'var(--grid-offset-x) var(--grid-offset-y)',
+        backgroundImage: isLineGrid
+          ? `linear-gradient(rgba(255,255,255,var(--grid-opacity)) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,var(--grid-opacity)) 1px, transparent 1px)`
+          : `radial-gradient(circle, rgba(255,255,255,var(--grid-opacity)) var(--dot-size), transparent var(--dot-size))`,
       }}
       className="bg-grid h-full"
       ref={containerRef}
@@ -195,6 +215,8 @@ export default function Grid() {
         <BottomLeftMenu />
 
         <CreateComponentMenu />
+
+        <NoteOptionsMenu />
 
         <DrawingSideMenu />
 
