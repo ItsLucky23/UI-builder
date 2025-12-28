@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import StarterKit from '@tiptap/starter-kit'
 import TaskList from '@tiptap/extension-task-list'
 import TaskItem from '@tiptap/extension-task-item'
+import { NodeSelection } from '@tiptap/pm/state'
 import { getCaretPosition, CaretPosition } from '../../_functions/notes/getCaretPosition'
 import { PlaceholderPerLine } from '../../_functions/notes/PlaceholderPerLine'
 
@@ -60,7 +61,7 @@ export default function NoteEditor({ initialContent, onUpdate, isEditable = true
       },
       handleKeyDown: (view, event) => {
         // Only adjust viewport position for navigation keys, not while typing
-        const isNavigationKey = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'PageUp', 'PageDown', 'Home', 'End'].includes(event.key);
+        const isNavigationKey = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'PageUp', 'PageDown', 'Home', 'End', 'Enter', 'Backspace'].includes(event.key);
         if (isNavigationKey) {
           handleCaretPosition(getCaretPosition(editor));
         }
@@ -90,6 +91,33 @@ export default function NoteEditor({ initialContent, onUpdate, isEditable = true
         }
 
         if (event.key === 'Enter' && !event.shiftKey) {
+          const { state } = view;
+          const { selection } = state;
+
+          // Check if we have a NodeSelection (block is selected) with a code block
+          // This ensures we only focus Monaco when the code block itself is selected,
+          // not when the cursor is just adjacent to it
+          if (selection instanceof NodeSelection) {
+            const node = selection.node;
+
+            if (node && node.type.name === 'codeBlock') {
+              // Find the Monaco editor within the selected code block and focus it
+              // Use a slight delay to ensure the DOM is ready
+              setTimeout(() => {
+                const selectedCodeBlock = document.querySelector('.code-block');
+                const monacoId = selectedCodeBlock?.getAttribute('data-monaco-id');
+
+                if (monacoId) {
+                  const monacoEditor = (window as any).__monacoEditors?.[monacoId];
+
+                  if (monacoEditor) {
+                    monacoEditor.focus();
+                  }
+                }
+              }, 50);
+              return true; // Prevent default Enter behavior
+            }
+          }
 
           // Return false to allow the default Enter behavior to continue
           // Return true to prevent the default behavior

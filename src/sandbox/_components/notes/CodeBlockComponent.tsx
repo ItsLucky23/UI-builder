@@ -1,5 +1,5 @@
 import { NodeViewWrapper, ReactNodeViewRenderer } from '@tiptap/react'
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useRef } from 'react'
 import BaseCodeEditor from '../editor/BaseCodeEditor'
 import { Node, mergeAttributes } from '@tiptap/core'
 
@@ -34,12 +34,15 @@ export const CustomCodeBlock = Node.create({
   },
 
   renderHTML({ node, HTMLAttributes }) {
+    const code = node.attrs.code;
+    const codeText = typeof code === 'string' ? code : (code || '');
+
     return [
       'pre',
       mergeAttributes(HTMLAttributes, {
-        'data-language': node.attrs.language,
+        'data-language': node.attrs.language || 'typescript',
       }),
-      ['code', {}, node.attrs.code || '']
+      ['code', {}, codeText]
     ]
   },
 
@@ -59,7 +62,7 @@ export const CustomCodeBlock = Node.create({
   },
 })
 
-function CodeBlockComponent({ node, updateAttributes }: any) {
+function CodeBlockComponent({ node, updateAttributes, selected }: any) {
   // node.attrs.language
   // node.content (but for code block, content is text)
   // For editable code block in TipTap, usually it's best to rely on TipTap's text model
@@ -79,6 +82,12 @@ function CodeBlockComponent({ node, updateAttributes }: any) {
   // Ensure we have a stable unique ID for this code block instance
   const [uniqueId] = useState(() => node.attrs.id || Math.random().toString(36).substring(7));
 
+  // Store reference to Monaco editor for keyboard navigation
+  const monacoEditorRef = useRef<any>(null);
+
+  // Track whether Monaco is focused to hide outline while typing
+  const [isFocused, setIsFocused] = useState(false);
+
   const onChange = useCallback((value: string | undefined) => {
     // We update the node content.
     // However, TipTap CodeBlock expects simpler text. 
@@ -91,7 +100,10 @@ function CodeBlockComponent({ node, updateAttributes }: any) {
   }, [updateAttributes]);
 
   return (
-    <NodeViewWrapper className="code-block my-4 rounded-md overflow-hidden border border-border bg-background shadow-sm">
+    <NodeViewWrapper
+      className={`code-block my-4 rounded-md overflow-hidden border border-border bg-background shadow-sm ${selected && !isFocused ? 'selected' : ''}`}
+      data-monaco-id={uniqueId}
+    >
       <div className="flex items-center justify-between bg-background2 px-3 py-1 border-b border-border">
         <select
           contentEditable={false}
@@ -124,6 +136,30 @@ function CodeBlockComponent({ node, updateAttributes }: any) {
           onChange={onChange}
           language={language}
           path={`file:///note-${uniqueId}.tsx`}
+          onMount={(editor, monaco) => {
+            monacoEditorRef.current = editor;
+
+            // Store the Monaco editor instance globally so NoteEditor can access it
+            (window as any).__monacoEditors = (window as any).__monacoEditors || {};
+            (window as any).__monacoEditors[uniqueId] = editor;
+
+            // Track focus state to hide outline while typing
+            editor.onDidFocusEditorText(() => {
+              setIsFocused(true);
+            });
+
+            editor.onDidBlurEditorText(() => {
+              setIsFocused(false);
+            });
+
+            // Add Escape key handler to return focus to TipTap
+            editor.addCommand(monaco.KeyCode.Escape, () => {
+              const tiptapEditor = document.querySelector('.ProseMirror');
+              if (tiptapEditor) {
+                (tiptapEditor as HTMLElement).focus();
+              }
+            });
+          }}
           options={{
             minimap: { enabled: false },
             lineNumbers: "off",

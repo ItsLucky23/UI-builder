@@ -132,14 +132,14 @@
   gap: 0.5em;
 }
 
-.ProseMirror ul[data-type="taskList"] li > label {
+.ProseMirror ul[data-type="taskList"] li>label {
   flex: 0 0 auto;
   display: flex;
   align-items: center;
   user-select: none;
 }
 
-.ProseMirror ul[data-type="taskList"] li > div {
+.ProseMirror ul[data-type="taskList"] li>div {
   flex: 1 1 auto;
 }
 
@@ -175,4 +175,12 @@
   height: 0.6em;
   border: solid white;
   border-width: 0 2px 2px 0;
+}
+
+/* Code block selection highlight */
+.code-block.selected {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 8px;
+  transition: none !important;
 }
