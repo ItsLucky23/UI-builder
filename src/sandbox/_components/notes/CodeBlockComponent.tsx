@@ -23,12 +23,24 @@ export const CustomCodeBlock = Node.create({
     return [
       {
         tag: 'pre',
+        getAttrs: (element) => {
+          if (typeof element === 'string') return false;
+          const code = element.querySelector('code')?.textContent || '';
+          const language = element.getAttribute('data-language') || 'typescript';
+          return { code, language };
+        },
       },
     ]
   },
 
-  renderHTML({ HTMLAttributes }) {
-    return ['div', mergeAttributes(HTMLAttributes)]
+  renderHTML({ node, HTMLAttributes }) {
+    return [
+      'pre',
+      mergeAttributes(HTMLAttributes, {
+        'data-language': node.attrs.language,
+      }),
+      ['code', {}, node.attrs.code || '']
+    ]
   },
 
   addNodeView() {
