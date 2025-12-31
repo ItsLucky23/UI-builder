@@ -1,6 +1,7 @@
 import { NodeViewWrapper, ReactNodeViewRenderer } from '@tiptap/react'
-import { useCallback, useState, useRef } from 'react'
-import BaseCodeEditor from '../editor/BaseCodeEditor'
+import { useCallback, useState } from 'react'
+import CodeMirrorEditor from '../editor/CodeMirrorEditor'
+import { EditorView } from '@codemirror/view'
 import { Node, mergeAttributes } from '@tiptap/core'
 
 export const CustomCodeBlock = Node.create({
@@ -63,46 +64,22 @@ export const CustomCodeBlock = Node.create({
 })
 
 function CodeBlockComponent({ node, updateAttributes, selected }: any) {
-  // node.attrs.language
-  // node.content (but for code block, content is text)
-  // For editable code block in TipTap, usually it's best to rely on TipTap's text model
-  // But since we want Monaco, we might treat this node as an "island" or properly sync it.
-  // syncing bi-directionally can be tricky.
-
-  // Alternative: We store the code in attributes, expecting it to be a "void" node from TipTap's perspective?
-  // Or we try to sync `node.textContent`?
-
-  // Simplest for "Pro" feel: The code block is a distinct entity.
-  // We use node.attrs.code (custom attribute) or just sync with node.content.
-
-  // Let's try syncing with node content.
-
   const [language, setLanguage] = useState(node.attrs.language || 'typescript');
 
   // Ensure we have a stable unique ID for this code block instance
-  const [uniqueId] = useState(() => node.attrs.id || Math.random().toString(36).substring(7));
+  const [uniqueId] = useState(() => node.attrs.id || `cm-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`);
 
-  // Store reference to Monaco editor for keyboard navigation
-  const monacoEditorRef = useRef<any>(null);
-
-  // Track whether Monaco is focused to hide outline while typing
+  // Track whether CodeMirror is focused to hide outline while typing
   const [isFocused, setIsFocused] = useState(false);
 
   const onChange = useCallback((value: string | undefined) => {
-    // We update the node content.
-    // However, TipTap CodeBlock expects simpler text. 
-    // If we use standard codeBlock, we might need to update its text content.
-    // This is hard to do from inside the view in a "clean" way for standard nodes.
-
-    // BETTER APPROACH for complex inner editors:
-    // Update a custom attribute "code" and let the node be empty/void or just a container.
     updateAttributes({ code: value });
   }, [updateAttributes]);
 
   return (
     <NodeViewWrapper
       className={`code-block my-4 rounded-md overflow-hidden border border-border bg-background shadow-sm ${selected && !isFocused ? 'selected' : ''}`}
-      data-monaco-id={uniqueId}
+      data-code-block-id={uniqueId}
     >
       <div className="flex items-center justify-between bg-background2 px-3 py-1 border-b border-border">
         <select
@@ -126,50 +103,39 @@ function CodeBlockComponent({ node, updateAttributes, selected }: any) {
         {/* <div className="text-xs text-muted-foreground">Monaco Editor</div> */}
       </div>
       <div
-        className="relative min-h-[50px]"
+        className="relative"
+        style={{ minHeight: '50px', display: 'flex', flexDirection: 'column' }}
         contentEditable={false}
         onMouseDown={(e) => e.stopPropagation()}
         onClick={(e) => e.stopPropagation()}
-      > {/* Auto-growing height */}
-        <BaseCodeEditor
+      > {/* Auto-growing infinite height */}
+        <CodeMirrorEditor
           value={node.attrs.code || ''}
           onChange={onChange}
           language={language}
-          path={`file:///note-${uniqueId}.tsx`}
-          onMount={(editor, monaco) => {
-            monacoEditorRef.current = editor;
+          enableCaretTracking={true}
+          preventInitialFocus={true}
+          onMount={(view) => {
+            // Add enableEditing method to view for external focus
+            (view as any).enableEditing = () => {
+              view.dispatch({
+                effects: (view as any)._editableCompartment?.reconfigure?.(EditorView.editable.of(true))
+              })
+              view.focus()
+            }
 
-            // Store the Monaco editor instance globally so NoteEditor can access it
-            (window as any).__monacoEditors = (window as any).__monacoEditors || {};
-            (window as any).__monacoEditors[uniqueId] = editor;
-
-            // Track focus state to hide outline while typing
-            editor.onDidFocusEditorText(() => {
-              setIsFocused(true);
-            });
-
-            editor.onDidBlurEditorText(() => {
-              setIsFocused(false);
-            });
-
-            // Add Escape key handler to return focus to TipTap
-            editor.addCommand(monaco.KeyCode.Escape, () => {
-              const tiptapEditor = document.querySelector('.ProseMirror');
-              if (tiptapEditor) {
-                (tiptapEditor as HTMLElement).focus();
-              }
-            });
+            // Store globally for keyboard navigation (like Monaco did)
+            (window as any).__codeMirrorEditors = (window as any).__codeMirrorEditors || {};
+            (window as any).__codeMirrorEditors[uniqueId] = view;
           }}
-          options={{
-            minimap: { enabled: false },
-            lineNumbers: "off",
-            glyphMargin: false,
-            folding: false,
-            lineDecorationsWidth: 0,
-            lineNumbersMinChars: 0,
-            scrollBeyondLastLine: false,
-            padding: { top: 8, bottom: 8 }
+          onEscape={() => {
+            const tiptapEditor = document.querySelector('.ProseMirror');
+            if (tiptapEditor) {
+              (tiptapEditor as HTMLElement).focus();
+            }
           }}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
         />
       </div>
     </NodeViewWrapper>

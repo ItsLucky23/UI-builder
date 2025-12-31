@@ -2,10 +2,15 @@ import reactIndex from "../../../types/react/index.d.ts?raw";
 import reactGlobal from "../../../types/react/global.d.ts?raw";
 import reactDom from "../../../types/react-dom.d.ts?raw";
 import reactJsxRuntime from "../../../types/react-jsx-runtime.d.ts?raw";
+import { typescript } from "monaco-editor";
 // import reactHooksGlobals from "../../../types/react-hooks.d.ts?raw";
 
 export default function setCompilerOptions(monaco: typeof import("monaco-editor")) {
-  const ts = monaco.languages.typescript;
+
+  //? monaco.languages.typescript is deprecated, but using monaco.typescript or just the typescript export from monaco which is recommended it crashes the editor
+  const ts = monaco.languages.typescript as any;
+  // const ts = monaco.typescript;
+  // const ts = typescript;
 
   ts.typescriptDefaults.setCompilerOptions({
     target: ts.ScriptTarget.ESNext,
@@ -21,10 +26,10 @@ export default function setCompilerOptions(monaco: typeof import("monaco-editor"
     isolatedModules: true,
   });
 
-  const model = monaco.editor.getModels()[0];
-  if (model) {
-    monaco.editor.setModelLanguage(model, "typescript");
-  }
+  // const model = monaco.editor.getModels()[0];
+  // if (model) {
+  //   monaco.editor.setModelLanguage(model, "typescript");
+  // }
 
   // Inject all React-related types
   ts.typescriptDefaults.addExtraLib(

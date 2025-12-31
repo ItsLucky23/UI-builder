@@ -16,6 +16,8 @@ type BaseCodeEditorProps = {
   options?: monacoEditor.editor.IStandaloneEditorConstructionOptions;
   path?: string;
   onMount?: (editor: monacoEditor.editor.IStandaloneCodeEditor, monaco: typeof monacoEditor) => void;
+  onHeightUpdateStart?: () => void;
+  onHeightUpdateEnd?: () => void;
 }
 
 export default function BaseCodeEditor({
@@ -88,11 +90,15 @@ export default function BaseCodeEditor({
           if (onMount) onMount(editor, monaco);
 
           if (options?.scrollBeyondLastLine === false) {
+            const MAX_HEIGHT = 700; // Match the maxHeight in CodeBlockComponent
+
             const updateHeight = () => {
-              const contentHeight = Math.min(1000, editor.getContentHeight());
-              setHeight(contentHeight);
-              // editor.layout({ width: 0, height: contentHeight }); // Trigger layout ? no automaticLayout handles it if container resizes?
+              const contentHeight = editor.getContentHeight();
+              // Cap at max height to prevent updates beyond CSS maxHeight
+              const cappedHeight = Math.min(contentHeight, MAX_HEIGHT);
+              setHeight(cappedHeight);
             };
+
             editor.onDidContentSizeChange(updateHeight);
             updateHeight(); // Initial size
           }

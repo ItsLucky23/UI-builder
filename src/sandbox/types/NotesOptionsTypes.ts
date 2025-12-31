@@ -60,6 +60,59 @@ export const NoteOptionsCommands: { [key in NoteOptions]: (editor: any) => void 
     // Assuming 'Hint' maps to Blockquote, or a custom node if you have one
     editor.chain().focus().toggleBlockquote().run(),
 
-  [NoteOptions.CODE_BLOCK]: (editor) =>
-    editor.chain().focus().setCodeBlock({ language: 'typescript', code: '\n\n\n\n\n\n\n\n\n\n' }).run(),
+  [NoteOptions.CODE_BLOCK]: (editor) => {
+    // Insert the code block
+    editor.chain().focus().setCodeBlock({
+      language: 'typescript',
+      code: '\n\n\n\n\n\n\n\n\n\n'
+    }).run();
+
+    // Poll for Monaco editor to be registered and ready
+    let attempts = 0;
+    const maxAttempts = 20; // 2 seconds max
+
+    const pollForMonaco = () => {
+      attempts++;
+      console.log(`🔍 [Auto-focus] Attempt ${attempts}/${maxAttempts}`);
+
+      // The newly inserted code block is automatically selected by TipTap
+      const selectedCodeBlock = document.querySelector('.code-block.selected');
+      console.log('  Selected code block found:', !!selectedCodeBlock);
+
+      if (!selectedCodeBlock) {
+        if (attempts < maxAttempts) {
+          setTimeout(pollForMonaco, 100);
+        } else {
+          console.log('  ❌ Code block never appeared');
+        }
+        return;
+      }
+
+      const monacoId = selectedCodeBlock.getAttribute('data-monaco-id');
+      console.log('  Monaco ID:', monacoId);
+
+      if (!monacoId) {
+        if (attempts < maxAttempts) {
+          setTimeout(pollForMonaco, 100);
+        } else {
+          console.log('  ❌ Monaco ID never assigned');
+        }
+        return;
+      }
+
+      const monacoEditor = (window as any).__monacoEditors?.[monacoId];
+      console.log('  Monaco editor instance:', !!monacoEditor);
+
+      if (monacoEditor) {
+        monacoEditor.focus();
+        console.log('  ✅ Monaco focused!');
+      } else if (attempts < maxAttempts) {
+        setTimeout(pollForMonaco, 100);
+      } else {
+        console.log('  ❌ Monaco editor never registered');
+      }
+    };
+
+    setTimeout(pollForMonaco, 100);
+  },
 };

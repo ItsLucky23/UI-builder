@@ -14,11 +14,11 @@ export const handleCaretPositionChange = () => {
       let newY = prev.y;
       const absoluteY = position.absoluteY;
       const windowHeight = window.innerHeight;
-      if (absoluteY > windowHeight * 0.75) {
-        const remaining = (windowHeight * 0.75) - absoluteY;
+      if (absoluteY > windowHeight * 0.65) {
+        const remaining = (windowHeight * 0.65) - absoluteY;
         newY = prev.y + remaining;
-      } else if (absoluteY < windowHeight * 0.25) {
-        const remaining = (windowHeight * 0.25) - absoluteY;
+      } else if (absoluteY < windowHeight * 0.35) {
+        const remaining = (windowHeight * 0.35) - absoluteY;
         newY = prev.y + remaining;
       }
       return { ...prev, y: newY };

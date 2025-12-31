@@ -14,14 +14,11 @@ export const PlaceholderPerLine = Extension.create({
             const { doc, selection } = state
             const decorations: Decoration[] = []
 
-            // Get the current cursor position
             const { $anchor } = selection
 
             doc.descendants((node, pos) => {
-              // Check if this is the node where the cursor is
               const isCursorInNode = pos <= $anchor.pos && $anchor.pos <= pos + node.nodeSize
 
-              // Only add placeholder to empty text blocks (paragraph, heading, etc)
               if (
                 node.isTextblock &&
                 node.content.size === 0 &&

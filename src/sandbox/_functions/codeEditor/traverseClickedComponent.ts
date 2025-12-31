@@ -15,7 +15,6 @@ export default function traverseClickedComponent({
     const matched = userComponents.find(c => c.name == target.element?.innerText);
     if (matched) {
       console.log("Ctrl + clicked component:", matched.name);
-      // openComponentEditor(matched)
       event.preventDefault();
     }
   });

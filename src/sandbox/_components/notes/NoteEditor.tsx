@@ -94,24 +94,19 @@ export default function NoteEditor({ initialContent, onUpdate, isEditable = true
           const { state } = view;
           const { selection } = state;
 
-          // Check if we have a NodeSelection (block is selected) with a code block
-          // This ensures we only focus Monaco when the code block itself is selected,
-          // not when the cursor is just adjacent to it
           if (selection instanceof NodeSelection) {
             const node = selection.node;
 
             if (node && node.type.name === 'codeBlock') {
-              // Find the Monaco editor within the selected code block and focus it
-              // Use a slight delay to ensure the DOM is ready
               setTimeout(() => {
-                const selectedCodeBlock = document.querySelector('.code-block');
-                const monacoId = selectedCodeBlock?.getAttribute('data-monaco-id');
+                const selectedCodeBlock = document.querySelector('.code-block.selected');
+                const editorId = selectedCodeBlock?.getAttribute('data-code-block-id');
 
-                if (monacoId) {
-                  const monacoEditor = (window as any).__monacoEditors?.[monacoId];
+                if (editorId) {
+                  const codeMirrorView = (window as any).__codeMirrorEditors?.[editorId];
 
-                  if (monacoEditor) {
-                    monacoEditor.focus();
+                  if (codeMirrorView && codeMirrorView.enableEditing) {
+                    codeMirrorView.enableEditing();
                   }
                 }
               }, 50);
@@ -119,8 +114,6 @@ export default function NoteEditor({ initialContent, onUpdate, isEditable = true
             }
           }
 
-          // Return false to allow the default Enter behavior to continue
-          // Return true to prevent the default behavior
           return false;
         }
 
