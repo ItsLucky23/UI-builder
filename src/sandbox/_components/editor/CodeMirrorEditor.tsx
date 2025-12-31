@@ -198,26 +198,7 @@ export default function CodeMirrorEditor({
         EditorView.lineWrapping,
         // Make editor non-interactive until explicitly focused
         ...(preventInitialFocus ? [
-          editableCompartment.of(EditorView.editable.of(false)), // Start as non-editable
-          EditorView.domEventHandlers({
-            // Prevent all mouse interactions when not focused
-            mousedown: (e, view) => {
-              if (!view.hasFocus) {
-                e.preventDefault()
-                e.stopPropagation()
-                return true
-              }
-              return false
-            },
-            click: (e, view) => {
-              if (!view.hasFocus) {
-                e.preventDefault()
-                e.stopPropagation()
-                return true
-              }
-              return false
-            }
-          })
+          editableCompartment.of(EditorView.editable.of(false)),
         ] : []),
       ],
     })
@@ -249,11 +230,18 @@ export default function CodeMirrorEditor({
 
     // Make editor editable when it gains focus (if preventInitialFocus is enabled)
     if (preventInitialFocus && editorRef.current) {
-      editorRef.current.addEventListener('focusin', () => {
+      const editorElement = editorRef.current;
+
+      editorElement.addEventListener('focusin', () => {
         if (view) {
+          // Make editable
           view.dispatch({
             effects: editableCompartment.reconfigure(EditorView.editable.of(true))
           })
+          // Re-enable pointer events
+          if (editorElement) {
+            editorElement.style.pointerEvents = 'auto';
+          }
         }
       })
     }

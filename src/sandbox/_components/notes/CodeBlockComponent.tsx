@@ -106,9 +106,14 @@ function CodeBlockComponent({ node, updateAttributes, selected }: any) {
         className="relative"
         style={{ minHeight: '50px', display: 'flex', flexDirection: 'column' }}
         contentEditable={false}
-        onMouseDown={(e) => e.stopPropagation()}
-        onClick={(e) => e.stopPropagation()}
-      > {/* Auto-growing infinite height */}
+        onClick={() => {
+          // Activate editing on click
+          const codeMirrorView = (window as any).__codeMirrorEditors?.[uniqueId];
+          if (codeMirrorView && codeMirrorView.enableEditing) {
+            codeMirrorView.enableEditing();
+          }
+        }}
+      >
         <CodeMirrorEditor
           value={node.attrs.code || ''}
           onChange={onChange}
