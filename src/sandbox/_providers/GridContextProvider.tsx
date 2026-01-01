@@ -5,6 +5,7 @@ type GridContextType = {
   draggingRef: RefObject<boolean>;
   lastPos: RefObject<{ x: number; y: number }>;
   posMouseDown: RefObject<{ x: number; y: number }>;
+  zoomRef: RefObject<number>;
 
   dragging: boolean;
   setDragging: Dispatch<SetStateAction<boolean>>;
@@ -27,6 +28,10 @@ export const GridProvider = ({ children }: { children: ReactNode }) => {
   const draggingRef = useRef(false);
   const lastPos = useRef({ x: 0, y: 0 });
   const posMouseDown = useRef({ x: 0, y: 0 });
+  const zoomRef = useRef(1);
+
+  // Keep zoomRef in sync with zoom state
+  zoomRef.current = zoom;
 
   return (
     <GridContext.Provider value={{
@@ -34,6 +39,7 @@ export const GridProvider = ({ children }: { children: ReactNode }) => {
       draggingRef,
       lastPos,
       posMouseDown,
+      zoomRef,
 
       dragging,
       setDragging,

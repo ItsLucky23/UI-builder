@@ -152,6 +152,8 @@ html, body {
   margin: 0;
   width: 100%;
   height: 100%;
+  /* Prevent overscroll bounce and improve touchpad panning */
+  overscroll-behavior: none;
 }
 
 @layer utilities {

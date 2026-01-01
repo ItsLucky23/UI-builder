@@ -159,7 +159,7 @@ export default function Grid() {
   }, [showZoom, zoom]);
 
   // Using the new hook approach
-  const { handleWheel } = useOnMouseWheel();
+  useOnMouseWheel(); // Sets up wheel event listener internally
   const { handleMouseMove } = useOnMouseMove();
   const { handleOnMouseUp } = useOnMouseUp();
   const { handleMouseDown } = useOnMouseDown();
@@ -181,6 +181,10 @@ export default function Grid() {
         overflow: "hidden",
         position: "relative",
         cursor: dragging ? "grabbing" : "",
+        
+        // Prevent browser overscroll bounce and touch gesture interference
+        overscrollBehavior: "none",
+        touchAction: "none",
 
         // Use CSS variables for dynamic values to avoid expensive style recalculations
         // This prevents lag when DevTools Elements tab is open
@@ -203,7 +207,6 @@ export default function Grid() {
       onMouseUp={(e) => handleOnMouseUp(e.nativeEvent, false)}
       onMouseLeave={(e) => handleOnMouseUp(e.nativeEvent, true)}
       onMouseMove={(e) => handleMouseMove(e.nativeEvent)}
-      onWheel={(e) => handleWheel(e.nativeEvent)}
     >
 
       {/* percentage */}
