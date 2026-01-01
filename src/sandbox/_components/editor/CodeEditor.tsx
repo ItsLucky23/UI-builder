@@ -54,8 +54,6 @@ export default function CodeEditor() {
     };
   }, [blueprints, setBlueprints, activeCodeWindow, codeWindows]);
 
-  console.log('CodeEditor - language:', language, 'activeCodeWindow:', activeCodeWindow);
-
   return (
     <BaseCodeEditor
       value={code}

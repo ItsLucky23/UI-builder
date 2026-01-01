@@ -264,7 +264,7 @@ export default function Grid() {
 
         {/* Files Layer */}
         {blueprints.files?.map((file) => (
-          <File key={file.id} file={file} />
+          <File key={file.id} fileBlueprint={file} />
         ))}
 
         {blueprints.drawings.map(() => {

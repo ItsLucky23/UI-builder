@@ -1,20 +1,19 @@
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {useState} from "react";
-import {file} from "../../types/blueprints";
-import {useBlueprints} from "../../_providers/BlueprintsContextProvider";
-import {formatFileSize, getFileIcon, getMimeTypeCategory, getMonacoLanguage} from "../../_functions/files/fileUtils";
-import {useCode} from "../../_providers/CodeContextProvider";
-import {BuilderMenuMode, useBuilderPanel} from "../../_providers/BuilderPanelContextProvider";
+import { useState } from 'react';
+import { useBlueprints } from '../../_providers/BlueprintsContextProvider';
+import { file } from '../../types/blueprints';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { getFileIcon, getMimeTypeCategory, formatFileSize, getMonacoLanguage } from '../../_functions/files/fileUtils';
+import { useBuilderPanel, BuilderMenuMode } from '../../_providers/BuilderPanelContextProvider';
+import { useCode } from '../../_providers/CodeContextProvider';
 
-interface FileProps {
-  file: file;
+type FileProps = {
+  fileBlueprint: file;
 }
 
-export default function File({ file: fileBlueprint }: FileProps) {
-  const {setBlueprints} = useBlueprints();
-  const {setCodeWindows, setActiveCodeWindow} = useCode();
-  const {setBuilderMenuMode, setWindowDividerPosition, prevBuilderMenuMode} = useBuilderPanel();
-  
+export default function File({ fileBlueprint }: FileProps) {
+  const { setBlueprints } = useBlueprints();
+  const { setBuilderMenuMode, setWindowDividerPosition } = useBuilderPanel();
+  const { setCodeWindows, activeCodeWindow, setActiveCodeWindow, codeWindows } = useCode();
   const [isEditingName, setIsEditingName] = useState(false);
   const [editedName, setEditedName] = useState(fileBlueprint.fileName);
 
@@ -36,10 +35,24 @@ export default function File({ file: fileBlueprint }: FileProps) {
   };
 
   const handleDelete = () => {
+    // Remove from blueprints
     setBlueprints(prev => ({
       ...prev,
       files: prev.files.filter(f => f.id !== fileBlueprint.id)
     }));
+
+    // Remove from code windows if open
+    setCodeWindows(prev => prev.filter(cw => cw.id !== fileBlueprint.id));
+
+    // If this file was the active window, switch to another window
+    if (activeCodeWindow === fileBlueprint.id) {
+      const remainingWindows = codeWindows.filter(cw => cw.id !== fileBlueprint.id);
+      if (remainingWindows.length > 0) {
+        setActiveCodeWindow(remainingWindows[0].id);
+      } else {
+        setActiveCodeWindow('');
+      }
+    }
   };
 
   const handleViewContent = () => {
@@ -102,77 +115,72 @@ export default function File({ file: fileBlueprint }: FileProps) {
                     setEditedName(fileBlueprint.fileName);
                     setIsEditingName(false);
                   }
+                  e.stopPropagation();
                 }}
-                className="w-full bg-background border border-border rounded px-2 py-1 text-sm font-medium text-text outline-none focus:ring-2 focus:ring-primary"
+                onClick={(e) => e.stopPropagation()}
+                className="w-full px-2 py-1 bg-background border border-border rounded text-text focus:outline-none focus:border-primary"
                 autoFocus
               />
             ) : (
-              <div
-                className="text-sm font-medium text-text break-words cursor-text hover:bg-background-hover rounded px-2 py-1 -mx-2"
-                onClick={() => setIsEditingName(true)}
-                title="Click to rename"
+              <h3
+                className="font-semibold text-text truncate cursor-pointer hover:text-primary"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsEditingName(true);
+                }}
               >
                 {fileBlueprint.fileName}
-              </div>
+              </h3>
             )}
-            <div className="text-xs text-muted mt-1 px-2">
-              {formatFileSize(fileBlueprint.fileSize)} • {fileBlueprint.fileType.toUpperCase()}
-            </div>
+            <p className="text-sm text-muted mt-1">
+              {formatFileSize(fileBlueprint.fileSize)}
+            </p>
           </div>
         </div>
 
         {/* Preview area */}
-        <div className="mb-3 bg-background border border-border rounded p-2 min-h-[100px] flex items-center justify-center">
-          {isImage ? (
+        {isImage && (
+          <div className="mb-3 rounded overflow-hidden border border-border bg-background">
             <img
-              src={`data:${fileBlueprint.mimeType};base64,${fileBlueprint.fileContent}`}
+              src={fileBlueprint.fileContent}
               alt={fileBlueprint.fileName}
-              className="max-w-full max-h-48 object-contain"
+              className="w-full h-auto max-h-48 object-contain"
             />
-          ) : isTextFile && fileBlueprint.fileContent ? (
-            <div className="w-full max-h-32 overflow-hidden">
-              <pre className="text-xs text-text2 font-mono whitespace-pre-wrap break-words line-clamp-6">
-                {fileBlueprint.fileContent.substring(0, 200)}
-                {fileBlueprint.fileContent.length > 200 && '...'}
-              </pre>
-            </div>
-          ) : (
-            <div className="text-center">
-              <FontAwesomeIcon icon={icon} className="text-4xl text-muted mb-2" />
-              <div className="text-xs text-muted">
-                {mimeCategory === 'pdf' ? 'PDF Document' : 
-                 mimeCategory === 'binary' ? 'Binary File' : 
-                 'Preview not available'}
-              </div>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
 
-        {/* Action Buttons */}
+        {isTextFile && (
+          <div className="mb-3 p-3 rounded bg-background border border-border">
+            <pre className="text-xs text-muted font-mono whitespace-pre-wrap break-words line-clamp-3">
+              {fileBlueprint.fileContent.substring(0, 100)}
+              {fileBlueprint.fileContent.length > 100 && '...'}
+            </pre>
+          </div>
+        )}
+
+        {/* Action buttons */}
         <div className="flex gap-2">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleViewContent();
-            }}
-            disabled={!isTextFile}
-            className={`flex-1 px-3 py-2 text-sm font-medium rounded transition-colors ${
-              isTextFile
-                ? 'bg-primary hover:bg-primary-hover text-white cursor-pointer'
-                : 'bg-background text-text2 cursor-not-allowed opacity-50'
-            }`}
-            title={!isTextFile ? 'Monaco editor integration coming soon' : 'Open in editor'}
-          >
-            {isTextFile ? 'View/Edit' : 'View Only'}
-          </button>
+          {isTextFile && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleViewContent();
+              }}
+              className="flex-1 px-3 py-2 bg-primary hover:bg-primary/80 text-background rounded transition-colors"
+              title="Open in Monaco editor"
+            >
+              <FontAwesomeIcon icon={getFileIcon('code', 'text/plain')} className="mr-2" />
+              View/Edit
+            </button>
+          )}
           <button
             onClick={(e) => {
               e.stopPropagation();
               handleDelete();
             }}
-            className="px-3 py-2 text-sm font-medium rounded bg-wrong hover:bg-wrong-hover text-white transition-colors"
+            className="px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded transition-colors"
           >
-            Delete
+            <FontAwesomeIcon icon={getFileIcon('trash', 'text/plain')} />
           </button>
         </div>
       </div>
