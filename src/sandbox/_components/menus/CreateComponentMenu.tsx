@@ -1,9 +1,12 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { CreateComponentMenuState, CreateComponentMenuVisibleState } from "src/sandbox/types/createComponentMenuTypes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChartDiagram, faChartPie, faCode, faFileText, faNotesMedical, faNoteSticky, faPlus, faTextHeight } from "@fortawesome/free-solid-svg-icons";
+import { faChartDiagram, faChartPie, faCode, faFile, faFileText, faNotesMedical, faNoteSticky, faPlus, faTextHeight } from "@fortawesome/free-solid-svg-icons";
 import { useMenus } from "src/sandbox/_providers/MenusContextProvider";
+import { useBlueprints } from "src/sandbox/_providers/BlueprintsContextProvider";
+import { useGrid } from "src/sandbox/_providers/GridContextProvider";
+import { getFileExtension, getMimeTypeCategory, readFileAsBase64, readFileAsText, validateFileSize } from "src/sandbox/_functions/files/fileUtils";
 
 const DUMMY_FLOWCHARTS = Array.from({ length: 20 }, (_, i) => ({
   id: `flowchart - ${i} `,
@@ -88,10 +91,81 @@ export default function CreateComponentMenu() {
 
   const {
     createComponentMenuOpen,
-    createComponentMenuPosition
+    createComponentMenuPosition,
+    setCreateComponentMenuOpen
   } = useMenus();
 
+  const { blueprints, setBlueprints } = useBlueprints();
+  const { zoom, offset } = useGrid();
+
   const [menuState, setMenuState] = useState<CreateComponentMenuState>(CreateComponentMenuState.DEFAULT);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0 || !createComponentMenuPosition) return;
+
+    const file = files[0];
+
+    // Validate file size
+    if (!validateFileSize(file, MAX_FILE_SIZE)) {
+      alert(`File size exceeds 5MB limit. File size: ${(file.size / 1024 / 1024).toFixed(2)}MB`);
+      return;
+    }
+
+    try {
+      const fileExtension = getFileExtension(file.name);
+      const mimeCategory = getMimeTypeCategory(file.type);
+
+      let fileContent: string;
+
+      // Read file based on type
+      if (mimeCategory === 'text' || mimeCategory === 'image') {
+        if (mimeCategory === 'text') {
+          fileContent = await readFileAsText(file);
+        } else {
+          fileContent = await readFileAsBase64(file);
+        }
+      } else {
+        // Binary files (PDF, ZIP, etc.)
+        fileContent = await readFileAsBase64(file);
+      }
+
+      // Convert screen coordinates to world coordinates
+      const worldX = (createComponentMenuPosition.x - offset.x) / zoom;
+      const worldY = (createComponentMenuPosition.y - offset.y) / zoom;
+
+      // Create new file blueprint
+      const newFile = {
+        id: `file-${Date.now()}`,
+        position: { x: worldX, y: worldY },
+        fileName: file.name,
+        fileType: fileExtension,
+        mimeType: file.type,
+        fileSize: file.size,
+        fileContent,
+      };
+
+      // Add to blueprints
+      setBlueprints(prev => ({
+        ...prev,
+        files: [...prev.files, newFile]
+      }));
+
+      // Close menu
+      setCreateComponentMenuOpen(CreateComponentMenuVisibleState.CLOSED);
+
+      // Reset input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    } catch (error) {
+      console.error('Error reading file:', error);
+      alert('Failed to read file. Please try again.');
+    }
+  };
 
   useEffect(() => {
     if (createComponentMenuOpen !== CreateComponentMenuVisibleState.OPEN) { return; }
@@ -149,6 +223,13 @@ export default function CreateComponentMenu() {
                   <FontAwesomeIcon icon={faChartDiagram} className="text-muted mr-2" />
                   FlowChart
                 </div>
+                <div
+                  className="p-2 hover:bg-background2-hover rounded cursor-pointer"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <FontAwesomeIcon icon={faFile} className="text-muted mr-2" />
+                  File
+                </div>
               </div>
             ) : menuState === CreateComponentMenuState.COMPONENTS ? (
               <SelectionView
@@ -172,6 +253,14 @@ export default function CreateComponentMenu() {
                 createLabel="Create New Note"
               />
             ) : null}
+            
+            {/* Hidden file input */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              onChange={handleFileSelect}
+              style={{ display: 'none' }}
+            />
           </div>
         </motion.div>
       )}

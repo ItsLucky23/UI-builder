@@ -37,19 +37,27 @@ export default function BaseCodeEditor({
     { name: "MyButton", code: "export function MyButton() { return <button>Click</button> }" }
   ];
 
+  // Determine if we should use the custom theme (only for TS/JS)
+  const isTypeScriptOrJavaScript = ['typescript', 'javascript', 'tsx', 'jsx'].includes(language);
+  const editorTheme = isTypeScriptOrJavaScript ? "trae-dark" : "vs-dark";
+
   useEffect(() => {
     if (!monacoInstance) return;
 
     setCompilerOptions(monacoInstance);
     generateThemes(monacoInstance);
 
-    monacoInstance.editor.setTheme("trae-dark");
+    if (isTypeScriptOrJavaScript) {
+      monacoInstance.editor.setTheme("trae-dark");
+    } else {
+      monacoInstance.editor.setTheme("vs-dark");
+    }
 
     const disposeAutoCompletions = loadAutoCompletions(monacoInstance);
     return () => {
       disposeAutoCompletions();
     };
-  }, [monacoInstance]);
+  }, [monacoInstance, isTypeScriptOrJavaScript]);
 
   useEffect(() => {
     if (!editor) { return; }
@@ -81,11 +89,11 @@ export default function BaseCodeEditor({
         language={language}
         path={path}
         value={value}
-        theme={theme}
+        theme={editorTheme}
         onMount={(editor, monaco) => {
           setEditor(editor);
           if (monaco) {
-            monaco.editor.setTheme("trae-dark");
+            monaco.editor.setTheme(editorTheme);
           }
           if (onMount) onMount(editor, monaco);
 

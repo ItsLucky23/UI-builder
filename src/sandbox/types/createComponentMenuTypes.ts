@@ -3,6 +3,7 @@ export enum CreateComponentMenuState {
   COMPONENTS = "COMPONENTS",
   NOTES = "NOTES",
   FLOWCHARTS = "FLOWCHARTS",
+  FILES = "FILES",
 }
 
 export enum CreateComponentMenuVisibleState {

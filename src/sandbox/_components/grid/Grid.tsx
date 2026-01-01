@@ -11,10 +11,12 @@ import { ScreenRenderer } from "./ScreenRenderer";
 import { useBuilderPanel } from "src/sandbox/_providers/BuilderPanelContextProvider";
 import DrawingTopMenu from "../drawing/DrawingTopMenu";
 import Note from "../notes/Note";
+import File from "../files/File";
 import useOnMouseDown from "src/sandbox/_functions/grid/onMouseDown";
 import useOnMouseUp from "src/sandbox/_functions/grid/onMouseUp";
 import useOnMouseMove from "src/sandbox/_functions/grid/onMouseMove";
 import useOnMouseWheel from "src/sandbox/_functions/grid/onMouseWheel";
+import useOnFileDrop from "src/sandbox/_functions/grid/onFileDrop";
 import NoteOptionsMenu from "../menus/NoteOptionsMenu";
 
 const dummyData = {
@@ -119,6 +121,7 @@ export default function Component2() {
     }
   ],
   drawings: [],
+  files: [],
 }
 
 export default function Grid() {
@@ -163,6 +166,9 @@ export default function Grid() {
   const { handleMouseMove } = useOnMouseMove();
   const { handleOnMouseUp } = useOnMouseUp();
   const { handleMouseDown } = useOnMouseDown();
+  const { handleDragOver, handleDrop } = useOnFileDrop();
+
+  const [dragOver, setDragOver] = useState(false);
 
   // Calculate grid style values
   const spacing = zoom > 1 ? 50 : 100;
@@ -207,6 +213,15 @@ export default function Grid() {
       onMouseUp={(e) => handleOnMouseUp(e.nativeEvent, false)}
       onMouseLeave={(e) => handleOnMouseUp(e.nativeEvent, true)}
       onMouseMove={(e) => handleMouseMove(e.nativeEvent)}
+      onDragOver={(e) => {
+        handleDragOver(e.nativeEvent);
+        setDragOver(true);
+      }}
+      onDragLeave={() => setDragOver(false)}
+      onDrop={(e) => {
+        handleDrop(e.nativeEvent);
+        setDragOver(false);
+      }}
     >
 
       {/* percentage */}
@@ -245,6 +260,11 @@ export default function Grid() {
         {/* Notes Layer */}
         {blueprints.notes.map((note) => (
           <Note key={note.id} note={note} />
+        ))}
+
+        {/* Files Layer */}
+        {blueprints.files?.map((file) => (
+          <File key={file.id} file={file} />
         ))}
 
         {blueprints.drawings.map(() => {
@@ -293,6 +313,16 @@ export default function Grid() {
           )
         })}
       </div>
+
+      {/* Drag-and-drop visual indicator */}
+      {dragOver && (
+        <div 
+          className="absolute inset-0 pointer-events-none border-4 border-dashed border-primary bg-primary/10 z-50"
+          style={{
+            borderRadius: '8px',
+          }}
+        />
+      )}
 
       <DrawingLayer />
 
