@@ -17,14 +17,16 @@ import useOnMouseUp from "src/sandbox/_functions/grid/onMouseUp";
 import useOnMouseMove from "src/sandbox/_functions/grid/onMouseMove";
 import useOnMouseWheel from "src/sandbox/_functions/grid/onMouseWheel";
 import useOnFileDrop from "src/sandbox/_functions/grid/onFileDrop";
+import { isBabelCompatible } from "src/sandbox/_functions/files/babelUtils";
 import NoteOptionsMenu from "../menus/NoteOptionsMenu";
 
 const dummyData = {
-  screens: [
+  files: [
     {
       id: "view1",
-      name: "View 1",
+      name: "View1.tsx",
       position: { x: 100, y: 100 },
+      viewport: { width: 1440, height: 900, enabled: true },
       code:
         `import React, { useState, useEffect } from "react";
 export default function View1() {
@@ -50,8 +52,9 @@ export default function View1() {
     },
     {
       id: "view2",
-      name: "View 2",
+      name: "View2.tsx",
       position: { x: 1300, y: 1300 },
+      viewport: { width: 1440, height: 900, enabled: true },
       code: `
 import React from "react";
 export default function View2() {
@@ -62,11 +65,10 @@ export default function View2() {
 }
       `
     },
-  ],
-  components: [
     {
       id: "comp1",
-      name: "Component 1",
+      name: "Component1.tsx", 
+      position: { x: 2000, y: 100 },
       code: `
 import React from "react";
 export default function Component1() {
@@ -74,32 +76,6 @@ export default function Component1() {
   return <div>Component 1</div>;
   return <div>Component 1</div>;
   return <div>Component 1</div>;
-  return <div>Component 1</div>;
-  return <div>Component 1</div>;
-  return <div>Component 1</div>;
-  return <div>Component 1</div>;
-}
-      `
-    },
-    {
-      id: "comp2",
-      name: "Component 2",
-      code: `
-import React from "react";
-export default function Component2() {
-  return <div>Component 2</div>;
-  return <div>Component 2</div>;
-  return <div>Component 2</div>;
-  return <div>Component 2</div>;
-  return <div>Component 2</div>;
-  return <div>Component 2</div>;
-  return <div>Component 2</div>;
-  return <div>Component 2</div>;
-  return <div>Component 2</div>;
-  return <div>Component 2</div>;
-  return <div>Component 2</div>;
-  return <div>Component 2</div>;
-  return <div>Component 2</div>;
 }
       `
     },
@@ -121,7 +97,6 @@ export default function Component2() {
     }
   ],
   drawings: [],
-  files: [],
 }
 
 export default function Grid() {
@@ -252,65 +227,98 @@ export default function Grid() {
           left: 0,
         }}
       >
-        {blueprints.components.map(() => {
-          // instance is type component
-          return null; // render nothing
-        })}
-
         {/* Notes Layer */}
         {blueprints.notes.map((note) => (
           <Note key={note.id} note={note} />
         ))}
 
-        {/* Files Layer */}
-        {blueprints.files?.map((file) => (
-          <File key={file.id} fileBlueprint={file} />
-        ))}
+        {/* Files Layer - renders both code modules and uploaded files */}
+        {blueprints.files?.map((file) => {
+          // Check file type and view mode (with null safety)
+          const isBabelFile = file.name ? isBabelCompatible(file.name) : false;
+          
+          const shouldRenderAsScreen = (file.viewport?.enabled) || 
+                                      (isBabelFile && file.viewMode === 'rendered');
+
+          if (shouldRenderAsScreen && isBabelFile) {
+            return (
+              <div
+                key={file.id}
+                style={{
+                  position: 'absolute',
+                  left: file.position.x,
+                  top: file.position.y,
+                }}
+              >
+                <ScreenRenderer
+                  id={file.id}
+                  name={file.name}
+                  code={file.code}
+                  style={{
+                    width: file.viewport?.width || 800,
+                    height: file.viewport?.height || 600,
+                  }}
+                  className={`
+                    VIEW overflow-hidden text-text
+                    ${highlightInstances ? "outline-4 rounded-3xl" : "pointer-events-auto"}
+                    ${highlightInstances && file.id != activeCodeWindow ? "outline-border hover:outline-border2 cursor-pointer" : ""}
+                    ${highlightInstances && file.id == activeCodeWindow ? "outline-border2" : ""}
+                  `}
+                  onClick={() => {
+                    setBuilderMenuMode(prevBuilderMenuMode);
+                    setWindowDividerPosition(prev => prev || 50);
+                    setCodeWindows(prev => {
+                      const exists = prev.find(cw => cw.id === file.id);
+                      if (exists) {
+                        return prev;
+                      }
+                      return [
+                        ...prev,
+                        {
+                          id: file.id,
+                          name: file.name,
+                          code: file.code
+                        }
+                      ]
+                    })
+                    setActiveCodeWindow(file.id);
+                  }}
+                />
+                
+                {/* Toggle button - positioned outside/above the rendered component */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setBlueprints(prev => ({
+                      ...prev,
+                      files: prev.files.map(f =>
+                        f.id === file.id
+                          ? { 
+                              ...f, 
+                              viewMode: 'card' as const,
+                              viewport: f.viewport ? { ...f.viewport, enabled: false } : undefined
+                            }
+                          : f
+                      )
+                    }));
+                  }}
+                  className="absolute -top-14 left-0 px-5 py-2.5 bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 border-2 border-slate-500 hover:border-slate-400 text-white rounded-lg shadow-xl hover:shadow-2xl transition-all hover:scale-105 font-medium flex items-center gap-2 pointer-events-auto"
+                  title="Switch to card view"
+                >
+                  <span>⬅️</span>
+                  Back to Card
+                </button>
+              </div>
+            )
+          } else {
+            // Render as file card
+            return <File key={file.id} fileBlueprint={file} />;
+          }
+        })}
 
         {blueprints.drawings.map(() => {
           // instance is type drawing
           return null; // render nothing
-        })}
-
-        {blueprints.screens.map(screenInstance => {
-          return (
-            <ScreenRenderer
-              key={screenInstance.id}
-              id={screenInstance.id}
-              name={screenInstance.name}
-              code={screenInstance.code}
-              style={{
-                position: 'absolute',
-                left: screenInstance.position.x,
-                top: screenInstance.position.y,
-              }}
-              className={`
-                VIEW w-[1024px] h-full overflow-hidden text-text
-                ${highlightInstances ? "outline-4 rounded-3xl" : "pointer-events-auto"}
-                ${highlightInstances && screenInstance.id != activeCodeWindow ? "outline-border hover:outline-border2 cursor-pointer" : ""}
-                ${highlightInstances && screenInstance.id == activeCodeWindow ? "outline-border2" : ""}
-              `}
-              onClick={() => {
-                setBuilderMenuMode(prevBuilderMenuMode);
-                setWindowDividerPosition(prev => prev || 50);
-                setCodeWindows(prev => {
-                  const exists = prev.find(cw => cw.id === screenInstance.id);
-                  if (exists) {
-                    return prev;
-                  }
-                  return [
-                    ...prev,
-                    {
-                      id: screenInstance.id,
-                      name: `Component ${screenInstance.id}`,
-                      code: screenInstance.code
-                    }
-                  ]
-                })
-                setActiveCodeWindow(screenInstance.id);
-              }}
-            />
-          )
         })}
       </div>
 

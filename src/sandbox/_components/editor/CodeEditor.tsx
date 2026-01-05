@@ -1,8 +1,6 @@
 import { useMemo } from "react";
-// import { useMonaco } from "@monaco-editor/react";
 import { useCode } from "../../_providers/CodeContextProvider";
 import { useBlueprints } from "../../_providers/BlueprintsContextProvider";
-import { component, screen, file } from "../../types/blueprints";
 import BaseCodeEditor from "./BaseCodeEditor";
 
 export default function CodeEditor() {
@@ -19,14 +17,10 @@ export default function CodeEditor() {
     const activeWindow = codeWindows.find(cw => cw.id === activeCodeWindow);
     const windowLanguage = activeWindow?.language;
 
-    // Check screens, components, and files
-    const screen = blueprints.screens.find(s => s.id === activeCodeWindow);
-    const component = blueprints.components.find(c => c.id === activeCodeWindow);
+    // Find file in blueprints
     const fileItem = blueprints.files?.find(f => f.id === activeCodeWindow);
 
-    const bp = screen || component || fileItem;
-
-    if (!bp) {
+    if (!fileItem) {
       return {
         code: "",
         setCode: () => { },
@@ -37,17 +31,12 @@ export default function CodeEditor() {
     // Determine language - prioritize code window language, then default to typescript
     const lang = windowLanguage || "typescript";
 
-    // Get code content
-    const codeContent = 'code' in bp ? bp.code : (bp as file).fileContent;
-
     return {
-      code: codeContent,
+      code: fileItem.code,
       setCode: (newCode: string) => {
         setBlueprints(prev => ({
           ...prev,
-          screens: prev.screens.map(s => s.id === activeCodeWindow ? { ...s, code: newCode } as screen : s),
-          components: prev.components.map(c => c.id === activeCodeWindow ? { ...c, code: newCode } as component : c),
-          files: prev.files?.map(f => f.id === activeCodeWindow ? { ...f, fileContent: newCode } : f) || prev.files
+          files: prev.files?.map(f => f.id === activeCodeWindow ? { ...f, code: newCode } : f) || prev.files
         }));
       },
       language: lang

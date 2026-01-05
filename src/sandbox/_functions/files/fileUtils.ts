@@ -11,6 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 export function getFileExtension(fileName: string): string {
+  if (!fileName) return '';
   const parts = fileName.split('.');
   return parts.length > 1 ? parts[parts.length - 1].toLowerCase() : '';
 }
@@ -22,7 +23,6 @@ export function getMimeTypeCategory(mimeType: string): 'text' | 'image' | 'pdf' 
   if (mimeType.startsWith('video/')) return 'video';
   if (mimeType.startsWith('audio/')) return 'audio';
 
-  const textExtensions = ['json', 'xml', 'svg', 'js', 'ts', 'jsx', 'tsx', 'css', 'html', 'md', 'txt', 'lua', 'py', 'rb', 'go', 'rs', 'java', 'c', 'cpp', 'h', 'php', 'sh', 'bat', 'yaml', 'yml', 'toml', 'ini', 'conf'];
   if (mimeType.includes('javascript') || mimeType.includes('json') || mimeType.includes('xml')) {
     return 'text';
   }

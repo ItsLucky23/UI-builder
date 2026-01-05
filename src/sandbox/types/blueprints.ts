@@ -8,40 +8,43 @@ export type note = {
 
 export type drawing = {
   id: string;
-  // strokes: number[][][];
   position: { x: number; y: number; };
-  // strokes: number[][][];
 }
 
 export type codeContext = {
   id: string;
   name: string;
   code: string;
-  language?: string; // Optional language for Monaco editor (e.g., 'javascript', 'python', 'lua')
+  language?: string; // Optional language for Monaco editor
 }
 
-export type component = codeContext & {
-  position?: { x: number; y: number; };
-}
-
-export type screen = codeContext & {
-  position: { x: number; y: number; };
-}
-
+/**
+ * Unified file type - replaces component, screen, and previous file type
+ * Babel compatibility is determined dynamically from filename extension
+ */
 export type file = {
   id: string;
-  position: { x: number; y: number; };
-  fileName: string;
-  fileType: string; // file extension (e.g., 'js', 'png', 'pdf')
-  mimeType: string; // MIME type (e.g., 'image/png', 'application/pdf')
-  fileSize: number; // size in bytes
-  fileContent: string; // base64 for binary files, plain text for text files
+  position: { x: number; y: number };
+  name: string; // Full filename with extension (e.g., "MyComponent.tsx")
+  code: string; // Source code content
+
+  // Optional viewport settings for rendered files
+  viewport?: {
+    width: number;
+    height: number;
+    enabled: boolean;
+  };
+
+  // View mode: 'card' shows file card UI, 'rendered' shows Babel-compiled output
+  viewMode?: 'card' | 'rendered';
+
+  // Metadata
+  size?: number; // Original file size in bytes
+  lastModified?: number;
 }
 
 export type blueprints = {
-  components: component[];
-  screens: screen[];
+  files: file[];
   notes: note[];
   drawings: drawing[];
-  files: file[];
 }  

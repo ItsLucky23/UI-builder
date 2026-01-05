@@ -1,5 +1,5 @@
-import { createContext, useContext, useState, ReactNode, RefObject, SetStateAction, Dispatch, useRef } from 'react';
-import { blueprints, codeContext } from '../types/blueprints';
+import { createContext, useContext, useState, ReactNode, SetStateAction, Dispatch } from 'react';
+import { blueprints } from '../types/blueprints';
 
 type BlueprintsContextType = {
   blueprints: blueprints;
@@ -16,11 +16,10 @@ const BlueprintsContext = createContext<BlueprintsContextType | undefined>(undef
 
 export const BlueprintsProvider = ({ children }: { children: ReactNode }) => {
   const [blueprints, setBlueprints] = useState<blueprints>({
-    components: [],
-    screens: [],
+    files: [],
     notes: [],
     drawings: [],
-  }); //? blueprint is a unqiue item
+  }); //? blueprint is a unique item
   
   const [instances, setInstances] = useState<blueprints[]>([]); //? instance can contain any blueprint infinite times
 

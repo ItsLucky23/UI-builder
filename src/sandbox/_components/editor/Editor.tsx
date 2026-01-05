@@ -40,7 +40,7 @@ const Editor = () => {
             >
               <img src="/languages/react.png" alt={cw.name} className="w-4 flex-shrink-0" />
               <h1 className="select-none truncate flex-1 min-w-0">
-                {cw.name.includes('.') ? cw.name : `${cw.name}.tsx`}
+                {cw.name?.includes('.') ? cw.name : `${cw.name || 'Untitled'}.tsx`}
               </h1>
               <div className="flex items-center justify-center flex-shrink-0">
                 <div className={`hover:bg-background2 px-0.5 rounded transition-all duration-200 ${cw.id == activeCodeWindow ? "" : "opacity-0 group-hover:opacity-100"} `}>

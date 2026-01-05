@@ -141,12 +141,12 @@ export default function CreateComponentMenu() {
       const newFile = {
         id: `file-${Date.now()}`,
         position: { x: worldX, y: worldY },
-        fileName: file.name,
-        fileType: fileExtension,
-        mimeType: file.type,
-        fileSize: file.size,
-        fileContent,
+        name: file.name, // Changed from fileName
+        code: fileContent, // Changed from fileContent
+        size: file.size, // Added size property
       };
+
+      console.log('[MENU UPLOAD] Created file:', newFile);
 
       // Add to blueprints
       setBlueprints(prev => ({

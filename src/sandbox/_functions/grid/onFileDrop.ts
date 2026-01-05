@@ -22,8 +22,13 @@ export default function useOnFileDrop() {
   };
 
   const handleDrop = async (e: DragEvent) => {
+    console.log('[DROP EVENT] File drop detected!', e);
+
     // Don't allow drag-and-drop when drawing is enabled
-    if (drawingEnabled) { return; }
+    if (drawingEnabled) {
+      console.log('[DROP EVENT] Blocked - drawing is enabled');
+      return;
+    }
 
     e.preventDefault();
 
@@ -41,22 +46,27 @@ export default function useOnFileDrop() {
       }
 
       try {
-        const fileExtension = getFileExtension(file.name);
         const mimeCategory = getMimeTypeCategory(file.type);
+        console.log(`[File Upload] Starting: "${file.name}", Type: "${file.type}", Category: "${mimeCategory}", Size: ${file.size} bytes`);
 
-        let fileContent: string;
+        let fileContent: string = ''; // Initialize to empty string
 
         // Read file based on type
         if (mimeCategory === 'text' || mimeCategory === 'image') {
           if (mimeCategory === 'text') {
+            console.log('[File Upload] Reading as text...');
             fileContent = await readFileAsText(file);
           } else {
+            console.log('[File Upload] Reading as base64 (image)...');
             fileContent = await readFileAsBase64(file);
           }
         } else {
           // Binary files (PDF, ZIP, etc.)
+          console.log('[File Upload] Reading as base64 (binary)...');
           fileContent = await readFileAsBase64(file);
         }
+
+        console.log(`[File Upload] Content read successfully. Length: ${fileContent?.length || 0} chars, First 100 chars:`, fileContent?.substring(0, 100));
 
         // Convert screen coordinates to world coordinates
         const worldX = (e.clientX - offset.x) / zoom;
@@ -66,12 +76,12 @@ export default function useOnFileDrop() {
         const newFile = {
           id: `file-${Date.now()}-${i}`,
           position: { x: worldX, y: worldY },
-          fileName: file.name,
-          fileType: fileExtension,
-          mimeType: file.type,
-          fileSize: file.size,
-          fileContent,
+          name: file.name, // Full filename with extension
+          code: fileContent, // File content (text or base64)
+          size: file.size, // Original file size in bytes
         };
+
+        console.log('[File Upload] Created file blueprint:', newFile);
 
         // Add to blueprints
         setBlueprints(prev => ({
