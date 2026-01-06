@@ -50,8 +50,8 @@
   --color-wrong: oklch(63.7% 0.237 25.331); /* red-500 */
   --color-wrong-hover: oklch(57.7% 0.245 27.325); /* red-600 */
 
-  --color-primary: oklch(62.3% 0.214 259.815); /* blue-500 */
-  --color-primary-hover: oklch(54.6% 0.245 262.881); /* blue-600 */
+  --color-primary: #4f46e5;
+  --color-secondary: #475569;
 
   --background-grid: 
     linear-gradient(90deg, #eee 1px, transparent 1px),
@@ -82,8 +82,8 @@
   --color-wrong: oklch(63.7% 0.237 25.331); /* red-500 */
   --color-wrong-hover: oklch(57.7% 0.245 27.325); /* red-600 */
 
-  --color-primary: oklch(62.3% 0.214 259.815); /* blue-500 */
-  --color-primary-hover: oklch(67.3% 0.234 260.815);
+  --color-primary: #4f46e5;
+  --color-secondary: #475569;
 
   --background-grid: #171B26;
   --background-grid-color: #171B26;

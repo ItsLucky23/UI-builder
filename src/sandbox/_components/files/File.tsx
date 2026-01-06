@@ -6,6 +6,7 @@ import { getFileIcon, getMimeTypeCategory, formatFileSize, getMonacoLanguage, ge
 import { useBuilderPanel, BuilderMenuMode } from '../../_providers/BuilderPanelContextProvider';
 import { useCode } from '../../_providers/CodeContextProvider';
 import { isBabelCompatible } from '../../_functions/files/babelUtils';
+import { faCode, faDownload, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 type FileProps = {
   fileBlueprint: file;
@@ -160,7 +161,11 @@ export default function File({ fileBlueprint }: FileProps) {
         left: fileBlueprint.position.x,
         top: fileBlueprint.position.y,
       }}
-      onMouseDown={(e) => e.stopPropagation()}
+      onMouseDown={(e) => {
+        console.log(e.button)
+        if (e.button == 1) { return; }
+        e.stopPropagation()
+      }}
       onClick={(e) => e.stopPropagation()}
     >
       <div className="bg-background2 border border-border rounded-lg shadow-lg p-4 w-80">
@@ -170,7 +175,7 @@ export default function File({ fileBlueprint }: FileProps) {
             <FontAwesomeIcon icon={icon} />
           </div>
           <div className="flex-1 min-w-0">
-            {isEditingName ? (
+            {/* {isEditingName ? ( */}
               <input
                 type="text"
                 value={editedName}
@@ -184,13 +189,19 @@ export default function File({ fileBlueprint }: FileProps) {
                   }
                   e.stopPropagation();
                 }}
-                onClick={(e) => e.stopPropagation()}
-                className="w-full px-2 py-1 bg-background border border-border rounded text-text focus:outline-none focus:border-primary"
-                autoFocus
+                onClick={(e) => {
+                  setIsEditingName(true);
+                  e.stopPropagation()
+                }}
+                className={`
+                  w-full px-2 h-11 rounded text-text focus:outline-none border focus:border-primary
+                  ${isEditingName ? " bg-background" : "border-transparent"}
+                `}
+                // autoFocus
               />
-            ) : (
+            {/* ) : (
               <h3
-                className="font-semibold text-text truncate cursor-pointer hover:text-primary"
+                className="font-semibold text-text flex items-center truncate cursor-pointer hover:text-primary h-11"
                 onClick={(e) => {
                   e.stopPropagation();
                   setIsEditingName(true);
@@ -198,7 +209,7 @@ export default function File({ fileBlueprint }: FileProps) {
               >
                 {fileBlueprint.name}
               </h3>
-            )}
+            )} */}
             <p className="text-sm text-muted mt-1">
               {formatFileSize(fileSize)}
             </p>
@@ -229,56 +240,55 @@ export default function File({ fileBlueprint }: FileProps) {
           </div>
         )}
 
-        {/* Action buttons */}
-        <div className="flex gap-2">
-          {isFileBabelCompatible && (
+        <div className='flex flex-col gap-2'>
+          <div className='gap-2 w-full flex'>
+            {isFileBabelCompatible && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleToggleViewMode();
+                }}
+                className="flex-1 px-4 py-2.5 text-white rounded-lg bg-primary font-medium flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <FontAwesomeIcon icon={faCode}/>
+                {fileBlueprint.viewMode === 'rendered' ? 'Card View' : 'Render'}
+              </button>
+            )}
+            {isTextFile && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleViewContent();
+                }}
+                className="flex-1 px-4 py-2.5 text-white rounded-lg bg-secondary font-medium flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <FontAwesomeIcon icon={faEdit} />
+                View/Edit
+              </button>
+            )}
+          </div>
+
+          <div className="flex gap-2">
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                handleToggleViewMode();
+                handleDownload();
               }}
-              className="flex-1 px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transition-all hover:scale-[1.02] font-medium flex items-center justify-center gap-2"
-              title={fileBlueprint.viewMode === 'rendered' ? 'Show file card' : 'Show rendered output'}
+              className="px-4 py-2.5 bg- font-medium text-correct bg-correct/20 rounded-xl border border-correct/50 cursor-pointer"
             >
-              <FontAwesomeIcon 
-                icon={fileBlueprint.viewMode === 'rendered' ? getFileIcon('file', 'text/plain') : getFileIcon('code', 'text/plain')} 
-              />
-              {fileBlueprint.viewMode === 'rendered' ? 'Card View' : 'Render'}
+              <FontAwesomeIcon icon={faDownload} />
             </button>
-          )}
-          {isTextFile && (
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                handleViewContent();
+                handleDelete();
               }}
-              className="flex-1 px-4 py-2.5 bg-gradient-to-r from-primary to-primary-hover hover:from-primary-hover hover:to-primary text-background rounded-lg shadow-md hover:shadow-lg transition-all hover:scale-[1.02] font-medium flex items-center justify-center gap-2"
-              title="Open in Monaco editor"
+              className="px-4 py-2.5 bg- font-medium text-wrong bg-wrong/20 rounded-xl border border-wrong/50 cursor-pointer"
+              title="Delete file"
             >
-              <FontAwesomeIcon icon={getFileIcon('code', 'text/plain')} />
-              View/Edit
+              <FontAwesomeIcon icon={faTrash} />
             </button>
-          )}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDownload();
-            }}
-            className="px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white rounded-lg shadow-md hover:shadow-lg transition-all hover:scale-[1.02] font-medium"
-            title="Download file"
-          >
-            <FontAwesomeIcon icon={getFileIcon('download', 'text/plain')} />
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDelete();
-            }}
-            className="px-4 py-2.5 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-lg shadow-md hover:shadow-lg transition-all hover:scale-[1.02] font-medium"
-            title="Delete file"
-          >
-            <FontAwesomeIcon icon={getFileIcon('trash', 'text/plain')} />
-          </button>
+          </div>
         </div>
       </div>
     </div>

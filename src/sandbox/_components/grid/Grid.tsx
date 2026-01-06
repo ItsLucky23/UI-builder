@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
 import { useGrid } from "../../_providers/GridContextProvider";
 import CreateComponentMenu from "../menus/CreateComponentMenu";
-import { useCode } from "../../_providers/CodeContextProvider";
 import { blueprints } from "../../types/blueprints";
 import { useBlueprints } from "../../_providers/BlueprintsContextProvider";
 import DrawingLayer from "../drawing/DrawingLayer";
 import BottomLeftMenu from "../menus/BottomLeftMenu";
 import DrawingSideMenu from "../drawing/DrawingSideMenu";
-import { ScreenRenderer } from "./ScreenRenderer";
-import { useBuilderPanel } from "src/sandbox/_providers/BuilderPanelContextProvider";
 import DrawingTopMenu from "../drawing/DrawingTopMenu";
 import Note from "../notes/Note";
 import File from "../files/File";
@@ -19,6 +16,7 @@ import useOnMouseWheel from "src/sandbox/_functions/grid/onMouseWheel";
 import useOnFileDrop from "src/sandbox/_functions/grid/onFileDrop";
 import { isBabelCompatible } from "src/sandbox/_functions/files/babelUtils";
 import NoteOptionsMenu from "../menus/NoteOptionsMenu";
+import Render from "../files/Render";
 
 const dummyData = {
   files: [
@@ -107,16 +105,10 @@ export default function Grid() {
     offset
   } = useGrid();
 
-  const {
-    setCodeWindows,
-    activeCodeWindow,
-    setActiveCodeWindow
-  } = useCode();
 
   const {
     blueprints,
     setBlueprints,
-    highlightInstances
   } = useBlueprints();
 
   useEffect(() => {
@@ -124,7 +116,6 @@ export default function Grid() {
   }, [])
 
   const [showZoom, setShowZoom] = useState(false);
-  const { prevBuilderMenuMode, setBuilderMenuMode, setWindowDividerPosition } = useBuilderPanel();
 
   useEffect(() => {
     setShowZoom(true);
@@ -241,75 +232,10 @@ export default function Grid() {
                                       (isBabelFile && file.viewMode === 'rendered');
 
           if (shouldRenderAsScreen && isBabelFile) {
-            return (
-              <div
-                key={file.id}
-                style={{
-                  position: 'absolute',
-                  left: file.position.x,
-                  top: file.position.y,
-                }}
-              >
-                <ScreenRenderer
-                  id={file.id}
-                  name={file.name}
-                  code={file.code}
-                  style={{
-                    width: file.viewport?.width || 800,
-                    height: file.viewport?.height || 600,
-                  }}
-                  className={`
-                    VIEW overflow-hidden text-text
-                    ${highlightInstances ? "outline-4 rounded-3xl" : "pointer-events-auto"}
-                    ${highlightInstances && file.id != activeCodeWindow ? "outline-border hover:outline-border2 cursor-pointer" : ""}
-                    ${highlightInstances && file.id == activeCodeWindow ? "outline-border2" : ""}
-                  `}
-                  onClick={() => {
-                    setBuilderMenuMode(prevBuilderMenuMode);
-                    setWindowDividerPosition(prev => prev || 50);
-                    setCodeWindows(prev => {
-                      const exists = prev.find(cw => cw.id === file.id);
-                      if (exists) {
-                        return prev;
-                      }
-                      return [
-                        ...prev,
-                        {
-                          id: file.id,
-                          name: file.name,
-                          code: file.code
-                        }
-                      ]
-                    })
-                    setActiveCodeWindow(file.id);
-                  }}
-                />
-                
-                {/* Toggle button - positioned outside/above the rendered component */}
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setBlueprints(prev => ({
-                      ...prev,
-                      files: prev.files.map(f =>
-                        f.id === file.id
-                          ? { 
-                              ...f, 
-                              viewMode: 'card' as const,
-                              viewport: f.viewport ? { ...f.viewport, enabled: false } : undefined
-                            }
-                          : f
-                      )
-                    }));
-                  }}
-                  className="absolute -top-14 left-0 px-5 py-2.5 bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 border-2 border-slate-500 hover:border-slate-400 text-white rounded-lg shadow-xl hover:shadow-2xl transition-all hover:scale-105 font-medium flex items-center gap-2 pointer-events-auto"
-                  title="Switch to card view"
-                >
-                  <span>⬅️</span>
-                  Back to Card
-                </button>
-              </div>
-            )
+            return <Render 
+              key={file.id}
+              file={file}
+            />;
           } else {
             // Render as file card
             return <File key={file.id} fileBlueprint={file} />;
