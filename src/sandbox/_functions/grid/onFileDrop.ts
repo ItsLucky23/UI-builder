@@ -22,8 +22,6 @@ export default function useOnFileDrop() {
   };
 
   const handleDrop = async (e: DragEvent) => {
-    console.log('[DROP EVENT] File drop detected!', e);
-
     // Don't allow drag-and-drop when drawing is enabled
     if (drawingEnabled) {
       console.log('[DROP EVENT] Blocked - drawing is enabled');
@@ -47,26 +45,20 @@ export default function useOnFileDrop() {
 
       try {
         const mimeCategory = getMimeTypeCategory(file.type);
-        console.log(`[File Upload] Starting: "${file.name}", Type: "${file.type}", Category: "${mimeCategory}", Size: ${file.size} bytes`);
 
         let fileContent: string = ''; // Initialize to empty string
 
         // Read file based on type
         if (mimeCategory === 'text' || mimeCategory === 'image') {
           if (mimeCategory === 'text') {
-            console.log('[File Upload] Reading as text...');
             fileContent = await readFileAsText(file);
           } else {
-            console.log('[File Upload] Reading as base64 (image)...');
             fileContent = await readFileAsBase64(file);
           }
         } else {
           // Binary files (PDF, ZIP, etc.)
-          console.log('[File Upload] Reading as base64 (binary)...');
           fileContent = await readFileAsBase64(file);
         }
-
-        console.log(`[File Upload] Content read successfully. Length: ${fileContent?.length || 0} chars, First 100 chars:`, fileContent?.substring(0, 100));
 
         // Convert screen coordinates to world coordinates
         const worldX = (e.clientX - offset.x) / zoom;
