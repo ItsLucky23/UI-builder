@@ -1,7 +1,7 @@
 import { useGrid } from "../../_providers/GridContextProvider";
 import { useBlueprints } from "../../_providers/BlueprintsContextProvider";
 import { useDrawing } from "../../_providers/DrawingContextProvider";
-import { getFileExtension, getMimeTypeCategory, readFileAsBase64, readFileAsText, validateFileSize } from "../files/fileUtils";
+import { getFileExtension, getMimeTypeCategory, getMonacoLanguage, readFileAsBase64, readFileAsText, validateFileSize } from "../files/fileUtils";
 
 export default function useOnFileDrop() {
   const { zoom, offset } = useGrid();
@@ -45,16 +45,20 @@ export default function useOnFileDrop() {
 
       try {
         const mimeCategory = getMimeTypeCategory(file.type);
+        const extension = getFileExtension(file.name);
+        const monacoLanguage = getMonacoLanguage(extension);
 
-        let fileContent: string = ''; // Initialize to empty string
+        // Check if the file extension is a known text/code type by checking if Monaco recognizes it
+        // This handles cases where browsers don't provide proper MIME types for code files (.tsx, .ts, etc.)
+        const isKnownTextExtension = monacoLanguage !== 'plaintext' || extension === 'txt';
 
-        // Read file based on type
-        if (mimeCategory === 'text' || mimeCategory === 'image') {
-          if (mimeCategory === 'text') {
-            fileContent = await readFileAsText(file);
-          } else {
-            fileContent = await readFileAsBase64(file);
-          }
+        let fileContent: string = '';
+
+        // Read file based on type - prioritize extension check for code files
+        if (isKnownTextExtension || mimeCategory === 'text') {
+          fileContent = await readFileAsText(file);
+        } else if (mimeCategory === 'image') {
+          fileContent = await readFileAsBase64(file);
         } else {
           // Binary files (PDF, ZIP, etc.)
           fileContent = await readFileAsBase64(file);
@@ -62,18 +66,16 @@ export default function useOnFileDrop() {
 
         // Convert screen coordinates to world coordinates
         const worldX = (e.clientX - offset.x) / zoom;
-        const worldY = (e.clientY - offset.y) / zoom;
+        const worldY = (e.clientY - 50 - offset.y) / zoom;
 
         // Create new file blueprint
         const newFile = {
           id: `file-${Date.now()}-${i}`,
           position: { x: worldX, y: worldY },
-          name: file.name, // Full filename with extension
-          code: fileContent, // File content (text or base64)
-          size: file.size, // Original file size in bytes
+          name: file.name,
+          code: fileContent,
+          size: file.size,
         };
-
-        console.log('[File Upload] Created file blueprint:', newFile);
 
         // Add to blueprints
         setBlueprints(prev => ({

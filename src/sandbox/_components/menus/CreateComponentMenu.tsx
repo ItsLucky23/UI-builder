@@ -1,91 +1,13 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState, useRef } from "react";
-import { CreateComponentMenuState, CreateComponentMenuVisibleState } from "src/sandbox/types/createComponentMenuTypes";
+import { useRef } from "react";
+import { CreateComponentMenuVisibleState } from "src/sandbox/types/createComponentMenuTypes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChartDiagram, faChartPie, faCode, faFile, faFileText, faNotesMedical, faNoteSticky, faPlus, faTextHeight } from "@fortawesome/free-solid-svg-icons";
+import { faFileMedical, faNoteSticky, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { useMenus } from "src/sandbox/_providers/MenusContextProvider";
 import { useBlueprints } from "src/sandbox/_providers/BlueprintsContextProvider";
 import { useGrid } from "src/sandbox/_providers/GridContextProvider";
-import { getFileExtension, getMimeTypeCategory, readFileAsBase64, readFileAsText, validateFileSize } from "src/sandbox/_functions/files/fileUtils";
-
-const DUMMY_FLOWCHARTS = Array.from({ length: 20 }, (_, i) => ({
-  id: `flowchart - ${i} `,
-  name: `Flowchart ${i + 1} `,
-  description: `Description for flowchart ${i + 1}`
-}));
-
-const DUMMY_NOTES = Array.from({ length: 10 }, (_, i) => ({
-  id: `note - ${i} `,
-  name: `Note ${i + 1} `,
-  content: `This is the content for note ${i + 1}`
-}));
-
-const DUMMY_COMPONENTS = Array.from({ length: 15 }, (_, i) => ({
-  id: `component - ${i} `,
-  name: `Component ${i + 1} `,
-  description: `Description for component ${i + 1}`
-}));
-
-interface SelectionViewProps {
-  items: { id: string; name: string }[];
-  onCreate: () => void;
-  searchPlaceholder: string;
-  createLabel: string;
-}
-
-function SelectionView({ items, onCreate, searchPlaceholder, createLabel }: SelectionViewProps) {
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const filteredItems = items.filter(item =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  return (
-    <div className="flex flex-col h-full max-h-[310px]">
-
-      <div className="relative border-b border-border p-2">
-        <input
-          type="text"
-          placeholder={searchPlaceholder}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="bg-background2 p-2 rounded text-sm outline-none focus:ring-1 focus:ring-transparent w-full"
-          autoFocus
-        />
-      </div>
-
-      <div
-        className="flex-1 overflow-y-auto flex flex-col gap-1 pr-1 p-2"
-      >
-        {filteredItems.map(item => (
-          <div
-            key={item.id}
-            className="p-2 hover:bg-background2-hover rounded cursor-pointer text-sm flex items-center gap-2"
-          >
-            <FontAwesomeIcon icon={faCode} className="text-muted" />
-            {item.name}
-          </div>
-        ))}
-        {filteredItems.length === 0 && (
-          <div className="text-white/50 text-sm text-center py-4">
-            No items found
-          </div>
-        )}
-      </div>
-
-      <div className="relative p-4 border-t border-border">
-        <button
-          className="bg-primary hover:bg-primary-hover text-white p-2 rounded text-sm font-medium transition-colors mt-auto flex items-center justify-center gap-2 w-full"
-          onClick={onCreate}
-        >
-          <FontAwesomeIcon icon={faPlus} />
-          {createLabel}
-        </button>
-      </div>
-
-    </div>
-  );
-}
+import { getFileExtension, getMimeTypeCategory, getMonacoLanguage, readFileAsBase64, readFileAsText, validateFileSize } from "src/sandbox/_functions/files/fileUtils";
+import { inputDialog } from "src/_components/InputDialog";
 
 export default function CreateComponentMenu() {
 
@@ -95,14 +17,106 @@ export default function CreateComponentMenu() {
     setCreateComponentMenuOpen
   } = useMenus();
 
-  const { blueprints, setBlueprints } = useBlueprints();
+  const { setBlueprints } = useBlueprints();
   const { zoom, offset } = useGrid();
 
-  const [menuState, setMenuState] = useState<CreateComponentMenuState>(CreateComponentMenuState.DEFAULT);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
+  // Get world coordinates from menu position
+  const getWorldPosition = () => {
+    if (!createComponentMenuPosition) return { x: 0, y: 0 };
+    return {
+      x: (createComponentMenuPosition.x - offset.x) / zoom,
+      y: (createComponentMenuPosition.y - offset.y) / zoom
+    };
+  };
+
+  // Validation function for file names - must have an extension
+  const validateFileName = (name: string): string | null => {
+    if (!name.trim()) {
+      return 'File name is required';
+    }
+
+    const extension = getFileExtension(name);
+    if (!extension) {
+      return 'File name must include an extension (e.g., .txt, .tsx, .js)';
+    }
+
+    return null;
+  };
+
+  // Handle creating a new file
+  const handleCreateFile = async () => {
+    // Close the context menu first
+    setCreateComponentMenuOpen(CreateComponentMenuVisibleState.CLOSED);
+
+    const result = await inputDialog({
+      title: 'Create New File',
+      content: 'Enter a file name with extension (e.g., component.tsx)',
+      nameLabel: 'File Name',
+      namePlaceholder: 'myfile.tsx',
+      nameValidation: validateFileName
+    });
+
+    if (!result) return; // User cancelled
+
+    const worldPos = getWorldPosition();
+
+    const newFile = {
+      id: `file-${Date.now()}`,
+      position: worldPos,
+      name: result.name,
+      code: '', // Empty file
+      size: 0,
+    };
+
+    setBlueprints(prev => ({
+      ...prev,
+      files: [...prev.files, newFile]
+    }));
+  };
+
+  // Handle creating a new note
+  const handleCreateNote = async () => {
+    // Close the context menu first
+    setCreateComponentMenuOpen(CreateComponentMenuVisibleState.CLOSED);
+
+    const result = await inputDialog({
+      title: 'Add Note',
+      nameLabel: 'Title',
+      namePlaceholder: 'My Note'
+    });
+
+    if (!result) return; // User cancelled
+
+    const worldPos = getWorldPosition();
+
+    // Create initial TipTap JSON content with empty paragraph
+    const initialContent = {
+      type: 'doc',
+      content: [
+        { type: 'paragraph' }
+      ]
+    };
+
+    const newNote = {
+      id: `note-${Date.now()}`,
+      position: worldPos,
+      title: result.name,
+      content: JSON.stringify(initialContent),
+      width: 300,
+      height: 200,
+    };
+
+    setBlueprints(prev => ({
+      ...prev,
+      notes: [...prev.notes, newNote]
+    }));
+  };
+
+  // Handle file upload from input
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0 || !createComponentMenuPosition) return;
@@ -118,35 +132,34 @@ export default function CreateComponentMenu() {
     try {
       const fileExtension = getFileExtension(file.name);
       const mimeCategory = getMimeTypeCategory(file.type);
+      const monacoLanguage = getMonacoLanguage(fileExtension);
+
+      // Check if the file extension is a known text/code type by checking if Monaco recognizes it
+      // This handles cases where browsers don't provide proper MIME types for code files (.tsx, .ts, etc.)
+      const isKnownTextExtension = monacoLanguage !== 'plaintext' || fileExtension === 'txt';
 
       let fileContent: string;
 
-      // Read file based on type
-      if (mimeCategory === 'text' || mimeCategory === 'image') {
-        if (mimeCategory === 'text') {
-          fileContent = await readFileAsText(file);
-        } else {
-          fileContent = await readFileAsBase64(file);
-        }
+      // Read file based on type - prioritize extension check for code files
+      if (isKnownTextExtension || mimeCategory === 'text') {
+        fileContent = await readFileAsText(file);
+      } else if (mimeCategory === 'image') {
+        fileContent = await readFileAsBase64(file);
       } else {
         // Binary files (PDF, ZIP, etc.)
         fileContent = await readFileAsBase64(file);
       }
 
-      // Convert screen coordinates to world coordinates
-      const worldX = (createComponentMenuPosition.x - offset.x) / zoom;
-      const worldY = (createComponentMenuPosition.y - offset.y) / zoom;
+      const worldPos = getWorldPosition();
 
       // Create new file blueprint
       const newFile = {
         id: `file-${Date.now()}`,
-        position: { x: worldX, y: worldY },
-        name: file.name, // Changed from fileName
-        code: fileContent, // Changed from fileContent
-        size: file.size, // Added size property
+        position: worldPos,
+        name: file.name,
+        code: fileContent,
+        size: file.size,
       };
-
-      console.log('[MENU UPLOAD] Created file:', newFile);
 
       // Add to blueprints
       setBlueprints(prev => ({
@@ -166,11 +179,6 @@ export default function CreateComponentMenu() {
       alert('Failed to read file. Please try again.');
     }
   };
-
-  useEffect(() => {
-    if (createComponentMenuOpen !== CreateComponentMenuVisibleState.OPEN) { return; }
-    setMenuState(CreateComponentMenuState.DEFAULT);
-  }, [createComponentMenuOpen])
 
   if (!createComponentMenuPosition) { return null; }
 
@@ -197,63 +205,33 @@ export default function CreateComponentMenu() {
             }}
             id="createComponentMenu"
           >
-            {menuState === CreateComponentMenuState.DEFAULT ? (
-              <div className="flex flex-col gap-2 p-3">
-                <div className="text-xs font-bold text-text2 uppercase tracking-wider px-1">
-                  Create
-                </div>
-                <div
-                  className="p-2 hover:bg-background2-hover rounded cursor-pointer"
-                  onClick={() => { setMenuState(CreateComponentMenuState.COMPONENTS) }}
-                >
-                  <FontAwesomeIcon icon={faCode} className="text-muted mr-2" />
-                  Component
-                </div>
-                <div
-                  className="p-2 hover:bg-background2-hover rounded cursor-pointer"
-                  onClick={() => { setMenuState(CreateComponentMenuState.NOTES) }}
-                >
-                  <FontAwesomeIcon icon={faFileText} className="text-muted mr-2" />
-                  Note
-                </div>
-                <div
-                  className="p-2 hover:bg-background2-hover rounded cursor-pointer"
-                  onClick={() => { setMenuState(CreateComponentMenuState.FLOWCHARTS) }}
-                >
-                  <FontAwesomeIcon icon={faChartDiagram} className="text-muted mr-2" />
-                  FlowChart
-                </div>
-                <div
-                  className="p-2 hover:bg-background2-hover rounded cursor-pointer"
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  <FontAwesomeIcon icon={faFile} className="text-muted mr-2" />
-                  File
-                </div>
+            <div className="flex flex-col gap-2 p-3">
+              <div className="text-xs font-bold text-text2 uppercase tracking-wider px-1">
+                Create
               </div>
-            ) : menuState === CreateComponentMenuState.COMPONENTS ? (
-              <SelectionView
-                items={DUMMY_COMPONENTS}
-                onCreate={() => console.log("Create component")}
-                searchPlaceholder="Search components..."
-                createLabel="Create New Component"
-              />
-            ) : menuState === CreateComponentMenuState.FLOWCHARTS ? (
-              <SelectionView
-                items={DUMMY_FLOWCHARTS}
-                onCreate={() => console.log("Create flowchart")}
-                searchPlaceholder="Search Flowchart..."
-                createLabel="Create New Flowchart"
-              />
-            ) : menuState === CreateComponentMenuState.NOTES ? (
-              <SelectionView
-                items={DUMMY_NOTES}
-                onCreate={() => console.log("Create note")}
-                searchPlaceholder="Search notes..."
-                createLabel="Create New Note"
-              />
-            ) : null}
-            
+              <div
+                className="p-2 hover:bg-background2-hover rounded cursor-pointer"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <FontAwesomeIcon icon={faUpload} className="text-muted mr-2" />
+                Upload File
+              </div>
+              <div
+                className="p-2 hover:bg-background2-hover rounded cursor-pointer"
+                onClick={handleCreateFile}
+              >
+                <FontAwesomeIcon icon={faFileMedical} className="text-muted mr-2" />
+                Create New File
+              </div>
+              <div
+                className="p-2 hover:bg-background2-hover rounded cursor-pointer"
+                onClick={handleCreateNote}
+              >
+                <FontAwesomeIcon icon={faNoteSticky} className="text-muted mr-2" />
+                Add Note
+              </div>
+            </div>
+
             {/* Hidden file input */}
             <input
               ref={fileInputRef}

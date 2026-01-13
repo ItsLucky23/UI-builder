@@ -1,6 +1,9 @@
+import { Viewports } from "./viewportMapping";
+
 export type note = {
   id: string;
   position: { x: number; y: number; };
+  title: string; // Title of the note for display and search
   content: string; // JSON content from TipTap
   width: number;
   height: number;
@@ -29,11 +32,13 @@ export type file = {
   code: string; // Source code content
 
   // Optional viewport settings for rendered files
-  viewport?: {
-    width: number;
-    height: number;
-    enabled: boolean;
-  };
+  viewport?: Viewports;
+  rendered?: boolean;
+  // viewport?: {
+  //   width: number;
+  //   height: number;
+  //   enabled: boolean;
+  // };
 
   // View mode: 'card' shows file card UI, 'rendered' shows Babel-compiled output
   viewMode?: 'card' | 'rendered';

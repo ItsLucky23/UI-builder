@@ -4,13 +4,27 @@ import { useCode } from "src/sandbox/_providers/CodeContextProvider";
 import { useBlueprints } from "src/sandbox/_providers/BlueprintsContextProvider";
 import { useBuilderPanel } from "src/sandbox/_providers/BuilderPanelContextProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowDown, faCaretDown, faFile, faFileFragment, faLaptop } from "@fortawesome/free-solid-svg-icons";
+import { faFile } from "@fortawesome/free-solid-svg-icons";
+import Dropdown from "src/_components/Dropdown";
+import { viewportMapping, Viewports } from "src/sandbox/types/viewportMapping";
+import { useEffect } from "react";
 
 export default function Render({
   file,
+  setFile
 }: {
   file: file;
+  setFile: (fileUpdate: Partial<file>) => void;
 }) {
+
+  useEffect(() => {
+    console.log(viewportMapping[file.viewport ?? Viewports.NONE])
+    console.log(file.viewport)
+  }, [file.viewport])
+
+  const screenSize = file.viewport && file.viewport !== Viewports.NONE
+    ? viewportMapping[file.viewport]
+    : null;
 
   const {
     setCodeWindows,
@@ -23,10 +37,10 @@ export default function Render({
     highlightInstances
   } = useBlueprints();
 
-  const { 
-    prevBuilderMenuMode, 
-    setBuilderMenuMode, 
-    setWindowDividerPosition 
+  const {
+    prevBuilderMenuMode,
+    setBuilderMenuMode,
+    setWindowDividerPosition
   } = useBuilderPanel();
 
   return (
@@ -42,10 +56,14 @@ export default function Render({
         id={file.id}
         name={file.name}
         code={file.code}
-        style={{
-          width: file.viewport?.width || 800,
-          height: file.viewport?.height || 600,
-        }}
+        // style={{
+        //   width: viewportMapping[file.viewport ?? Viewports.NONE].width ?? 0,
+        //   height: viewportMapping[file.viewport ?? Viewports.NONE].height ?? 0,
+        // }}
+        style={screenSize ? {
+          width: screenSize.width ?? 0,
+          height: screenSize.height ?? 0,
+        } : {}}
         className={`
           VIEW overflow-hidden text-text
           ${highlightInstances ? "outline-4 rounded-3xl" : "pointer-events-auto"}
@@ -73,48 +91,28 @@ export default function Render({
         }}
       />
 
-      <div 
-        className="bg-background2 border h-10 border-border2/50 text-text text-sm absolute top-0 left-0 -translate-y-[200%] p-2 rounded-xl flex gap-2"
+      <div
+        className="bg-background2 border h-10 border-border2/50 text-text text-sm absolute top-0 left-0 -translate-y-[200%] rounded-xl flex"
       >
-        {/* <div className="">Laptop</div>
-        <div className="">Tablet</div>
-        <div className="">Phone</div>
-        <div className="">No viewport</div> */}
-        <div className="flex gap-2 items-center">
-          <FontAwesomeIcon icon={faLaptop} />
-          <h3>Change viewport</h3>
-          <FontAwesomeIcon icon={faCaretDown} />
-        </div>
+        <Dropdown
+          items={Viewports ? Object.values(Viewports) : []}
+          itemsPlaceholder={Viewports ? Object.values(Viewports) : []}
+          placeholder="Select viewport"
+          onChange={(v: Viewports) => { setFile({ viewport: v }); }}
+          value={file.viewport}
+          className="px-4"
+        />
         <div className="w-[1px] h-full bg-border2"></div>
-        <div className="flex gap-2 items-center">
+        <div
+          className="MENU flex gap-2 items-center px-4 cursor-pointer"
+          onClick={() => {
+            setFile({ viewMode: 'card' });
+          }}
+        >
           <FontAwesomeIcon icon={faFile} />
-          <h3>Unrender file</h3>
+          <h3 className="text-nowrap">Unrender file</h3>
         </div>
       </div>
-
-      
-      {/* <button
-        onClick={(e) => {
-          e.stopPropagation();
-          setBlueprints(prev => ({
-            ...prev,
-            files: prev.files.map(f =>
-              f.id === file.id
-                ? { 
-                    ...f, 
-                    viewMode: 'card' as const,
-                    viewport: f.viewport ? { ...f.viewport, enabled: false } : undefined
-                  }
-                : f
-            )
-          }));
-        }}
-        className="absolute -top-14 left-0 px-5 py-2.5 bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 border-2 border-slate-500 hover:border-slate-400 text-white rounded-lg shadow-xl hover:shadow-2xl transition-all hover:scale-105 font-medium flex items-center gap-2 pointer-events-auto"
-        title="Switch to card view"
-      >
-        <span>⬅️</span>
-        Back to Card
-      </button> */}
     </div>
   )
 }

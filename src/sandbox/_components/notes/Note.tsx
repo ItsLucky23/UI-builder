@@ -19,7 +19,15 @@ export default function Note({ note }: { note: note }) {
     setCreateComponentMenuOpen
   } = useMenus();
 
-  const handleUpdate = (newContent: object) => {
+  const handleUpdate = (newContent: any) => {
+    if (!newContent) {
+      setBlueprints(prev => ({
+        ...prev,
+        notes: prev.notes.filter(n => n.id !== note.id)
+      }));
+      return;
+    }
+
     setBlueprints(prev => ({
       ...prev,
       notes: prev.notes.map(n => n.id === note.id ? { ...n, content: JSON.stringify(newContent) } : n)
@@ -66,6 +74,7 @@ export default function Note({ note }: { note: note }) {
 
       <div className="flex-1 overflow-hidden relative">
         <NoteEditor
+          title={note.title}
           initialContent={note.content}
           onUpdate={handleUpdate}
         />

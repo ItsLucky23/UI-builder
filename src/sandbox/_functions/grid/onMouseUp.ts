@@ -54,6 +54,7 @@ export default function useOnMouseUp() {
 
     if (elem && elem.closest('.VIEW')) { return; }
     if (elem && elem.closest('.MENU')) { return; }
+    if (elem && elem.closest('.dropdown')) { return; }
 
     const horizontalDifference = Math.abs(lastX - e.clientX);
     const verticalDifference = Math.abs(lastY - e.clientY);

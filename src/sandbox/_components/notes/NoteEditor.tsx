@@ -18,13 +18,14 @@ import { NoteOptionsVisibleState } from 'src/sandbox/types/NotesOptionsTypes'
 
 
 type NoteEditorProps = {
+  title?: string;
   initialContent?: string | object;
-  onUpdate: (content: object) => void;
+  onUpdate: (content: any) => void;
   isEditable?: boolean;
   onCaretPositionChange?: (position: CaretPosition | null) => void;
 }
 
-export default function NoteEditor({ initialContent, onUpdate, isEditable = true, onCaretPositionChange }: NoteEditorProps) {
+export default function NoteEditor({ title, initialContent, onUpdate, isEditable = true, onCaretPositionChange }: NoteEditorProps) {
 
   const handleCaretPosition = handleCaretPositionChange();
 
@@ -66,10 +67,23 @@ export default function NoteEditor({ initialContent, onUpdate, isEditable = true
           handleCaretPosition(getCaretPosition(editor));
         }
 
+        const { $anchor } = editor.state.selection;
+        const isAtFirstLine = $anchor.parentOffset === 0 && $anchor.parent === editor.state.doc.firstChild;
+
+        //? when removing a line and we are at the top of the note and the note is empty we remove the note
+        if (
+          event.key === 'Backspace'
+          && editor.isEmpty
+          && isAtFirstLine
+        ) {
+          onUpdate(null);
+          return true;
+        }
+
+
         if (event.key == "/") {
           const { state } = editor;
           const { selection } = state;
-          const { $anchor } = selection;
           const currentNode = $anchor.parent;
 
           if (currentNode.textContent !== "") { return; }
@@ -129,8 +143,8 @@ export default function NoteEditor({ initialContent, onUpdate, isEditable = true
       className="note-editor w-full flex flex-col bg-background text-text"
     >
       {/* Toolbar */}
-      <div className="flex items-center gap-1 p-2 border-b border-border text-xs overflow-x-auto">
-        MAYBE A TITLE OR SOME
+      <div className="flex items-center gap-1 p-2 border-b border-border text-sm font-semibold overflow-x-auto">
+        {title || 'Untitled Note'}
       </div>
       <div className="p-4">
         <EditorContent editor={editor} className="prose prose-zinc dark:prose-invert max-w-none focus:outline-none" />

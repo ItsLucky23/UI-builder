@@ -2,9 +2,14 @@ import Grid from "./_components/grid/Grid";
 import Editor from "./_components/editor/Editor";
 import useOnMouseDown from "./_functions/grid/onMouseDown";
 import { BuilderMenuMode, useBuilderPanel } from "./_providers/BuilderPanelContextProvider";
+import { setMenuHandlerRef } from "src/_functions/menuHandler";
+import { useMenuHandler } from "src/_components/MenuHandler";
 
 export const template = 'sandbox';
 export default function Home() {
+
+  const ref = useMenuHandler();
+  setMenuHandlerRef(ref);
 
   const {
     windowDividerDragging,

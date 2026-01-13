@@ -1,0 +1,5939 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+The content has been processed where content has been compressed (code blocks are separated by ⋮---- delimiter).
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Content has been compressed - code blocks are separated by ⋮---- delimiter
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+.gitignore
+.repomixignore
+eslint.config.js
+ideas.md
+index.html
+package.json
+postcss.config.mjs
+prisma/schema.prisma
+README.md
+redis.conf
+scripts/bundleServer.ts
+scripts/clearServerRequests.ts
+scripts/generateServerRequests.ts
+server/auth/checkOrigin.ts
+server/auth/login.ts
+server/auth/loginConfig.ts
+server/dev/hotReload.ts
+server/dev/loader.ts
+server/dev/request.py
+server/functions/boardcaster.ts
+server/functions/db.ts
+server/functions/game.ts
+server/functions/redis.ts
+server/functions/session.ts
+server/functions/sleep.ts
+server/functions/tryCatch.ts
+server/prod/generatedApis.ts
+server/prod/serveFile.ts
+server/server.ts
+server/sockets/handleApiRequest.ts
+server/sockets/handleSyncRequest.ts
+server/sockets/socket.ts
+server/sockets/utils/activityBroadcaster.ts
+server/sockets/utils/logout.ts
+server/sockets/utils/onLocationChange.ts
+server/utils/console.log.ts
+server/utils/getParams.ts
+server/utils/repl.ts
+server/utils/serveAvatars.ts
+src/_components/Avatar.tsx
+src/_components/AvatarProvider.tsx
+src/_components/ConfirmMenu.tsx
+src/_components/Dropdown.tsx
+src/_components/Icon.tsx
+src/_components/LocationProvider.tsx
+src/_components/LoginForm.tsx
+src/_components/MenuHandler.tsx
+src/_components/Middleware.tsx
+src/_components/Navbar.tsx
+src/_components/Router.tsx
+src/_components/TemplateProvider.tsx
+src/_components/ThemeToggler.tsx
+src/_components/Tooltip.tsx
+src/_components/TranslationProvider.tsx
+src/_functions/confetti.ts
+src/_functions/icon.ts
+src/_functions/menuHandler.ts
+src/_functions/middlewareHandler.ts
+src/_functions/notify.ts
+src/_functions/sleep.ts
+src/_functions/translator.ts
+src/_functions/tryCatch.ts
+src/_locales/de.json
+src/_locales/en.json
+src/_locales/fr.json
+src/_locales/nl.json
+src/_providers/SessionProvider.tsx
+src/_providers/socketStatusProvider.tsx
+src/_sockets/apiRequest.ts
+src/_sockets/socketInitializer.ts
+src/_sockets/syncRequest.ts
+src/home/page.tsx
+src/index.css
+src/login/page.tsx
+src/main.tsx
+src/NoteEditor.css
+src/page.tsx
+src/register/page.tsx
+src/sandbox/_components/drawing/DrawingLayer.tsx
+src/sandbox/_components/drawing/DrawingSideMenu.tsx
+src/sandbox/_components/drawing/DrawingTopMenu.tsx
+src/sandbox/_components/editor/BaseCodeEditor.tsx
+src/sandbox/_components/editor/BuilderMenu.tsx
+src/sandbox/_components/editor/CodeEditor.tsx
+src/sandbox/_components/editor/CodeMirrorEditor.tsx
+src/sandbox/_components/editor/Editor.tsx
+src/sandbox/_components/files/File.tsx
+src/sandbox/_components/files/Render.tsx
+src/sandbox/_components/grid/ErrorBoundary.tsx
+src/sandbox/_components/grid/Grid.tsx
+src/sandbox/_components/grid/ScreenRenderer.tsx
+src/sandbox/_components/menus/BottomLeftMenu.tsx
+src/sandbox/_components/menus/CreateComponentMenu.tsx
+src/sandbox/_components/menus/NoteOptionsMenu.tsx
+src/sandbox/_components/notes/CodeBlockComponent.tsx
+src/sandbox/_components/notes/Note.tsx
+src/sandbox/_components/notes/NoteEditor.tsx
+src/sandbox/_functions/codeEditor/autocompletions/autocompletionHandler.ts
+src/sandbox/_functions/codeEditor/autocompletions/customComponents.ts
+src/sandbox/_functions/codeEditor/autocompletions/JSX.ts
+src/sandbox/_functions/codeEditor/autocompletions/reactHooks.ts
+src/sandbox/_functions/codeEditor/babel/compiler.ts
+src/sandbox/_functions/codeEditor/compilerOptions.ts
+src/sandbox/_functions/codeEditor/hoverTooltip.ts
+src/sandbox/_functions/codeEditor/tailwindcss/autoSuggestion.ts
+src/sandbox/_functions/codeEditor/tailwindcss/classDetector.ts
+src/sandbox/_functions/codeEditor/tailwindcss/color.js
+src/sandbox/_functions/codeEditor/tailwindcss/inlineColorIcon.ts
+src/sandbox/_functions/codeEditor/tailwindcss/tailwindcss.ts
+src/sandbox/_functions/codeEditor/themes/onig.wasm
+src/sandbox/_functions/codeEditor/themes/textmate/theme-converter.ts
+src/sandbox/_functions/codeEditor/themes/textmate/tm-to-monaco-token.ts
+src/sandbox/_functions/codeEditor/themes/textmate/wireTmGrammars.ts
+src/sandbox/_functions/codeEditor/themes/themes.ts
+src/sandbox/_functions/codeEditor/themes/trae_dark_color.json
+src/sandbox/_functions/codeEditor/themes/trae_dark_plus.json
+src/sandbox/_functions/codeEditor/traverseClickedComponent.ts
+src/sandbox/_functions/drawing/clientToWorld.ts
+src/sandbox/_functions/drawing/clipUtils.ts
+src/sandbox/_functions/drawing/eraseStroke.ts
+src/sandbox/_functions/drawing/exportUtils.ts
+src/sandbox/_functions/drawing/generateShapePoints.ts
+src/sandbox/_functions/drawing/getSvgPathFromStroke.ts
+src/sandbox/_functions/drawing/RenderDrawingPath.tsx
+src/sandbox/_functions/drawing/selectionUtils.ts
+src/sandbox/_functions/drawing/sharedUtils.ts
+src/sandbox/_functions/drawing/snappingUtils.ts
+src/sandbox/_functions/drawing/useDrawingEvents.ts
+src/sandbox/_functions/drawing/useKeyboardShortcuts.ts
+src/sandbox/_functions/files/babelUtils.ts
+src/sandbox/_functions/files/fileUtils.ts
+src/sandbox/_functions/grid/onFileDrop.ts
+src/sandbox/_functions/grid/onMouseDown.ts
+src/sandbox/_functions/grid/onMouseLeave.ts
+src/sandbox/_functions/grid/onMouseMove.ts
+src/sandbox/_functions/grid/onMouseUp.ts
+src/sandbox/_functions/grid/onMouseWheel.ts
+src/sandbox/_functions/notes/getCaretPosition.ts
+src/sandbox/_functions/notes/handleCaretPosition.ts
+src/sandbox/_functions/notes/PlaceholderPerLine.ts
+src/sandbox/_providers/BlueprintsContextProvider.tsx
+src/sandbox/_providers/BuilderPanelContextProvider.tsx
+src/sandbox/_providers/CodeContextProvider.tsx
+src/sandbox/_providers/DrawingContextProvider.tsx
+src/sandbox/_providers/GridContextProvider.tsx
+src/sandbox/_providers/MenusContextProvider.tsx
+src/sandbox/_providers/NotesContextProvider.tsx
+src/sandbox/page.tsx
+src/sandbox/types/blueprints.ts
+src/sandbox/types/createComponentMenuTypes.ts
+src/sandbox/types/gridProps.ts
+src/sandbox/types/NotesOptionsTypes.ts
+src/sandbox/types/react-jsx-runtime.d.ts
+src/sandbox/types/viewportMapping.ts
+src/scrollbar-dark.css
+src/scrollbar-white.css
+src/settings/_api/updateUser.ts
+src/settings/page.tsx
+src/test/_api/testApi.ts
+src/test/_sync/updateCounter_client.ts
+src/test/_sync/updateCounter_server.ts
+src/test/page.tsx
+src/types/react-hooks.d.ts
+src/types/react-jsx-runtime.d.ts
+src/vite-env.d.ts
+tailwind.config.js
+tsconfig.app.json
+tsconfig.json
+tsconfig.node.json
+tsconfig.server.json
+vite.config.ts
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path=".repomixignore">
+# Exclude dependencies and builds
+node_modules/
+dist/
+build/
+.next/
+public/
+
+# Exclude large data/config files
+package-lock.json
+yarn.lock
+*.svg
+*.png
+
+# Exclude logs and temp files
+*.log
+.env*
+
+src/sandbox/_functions/codeEditor/themes/TypeScriptReact.tmLanguage.json
+src/sandbox/types/react.d.ts
+src/types/react/index.d.ts
+public/themes/trae_dark.json
+src/sandbox/_functions/codeEditor/themes/trae_dark_vs.json
+src/sandbox/_functions/codeEditor/tailwindcss/classes.js
+src/sandbox/types/react-dom.d.ts
+src/types/react-dom.d.ts
+src/sandbox/types/react-global.d.ts
+src/types/react/global.d.ts
+envTemplate.txt
+configTemplate.txt
+</file>
+
+<file path="src/_components/Dropdown.tsx">
+import { faCaretDown, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState, useRef, useEffect } from "react";
+⋮----
+interface DropdownProps {
+  items: any[];
+  itemsPlaceholder?: string[]; // The nice text (e.g., "Open")
+  onChange?: (value: any) => void;
+  placeholder?: string; // The text to show when nothing is selected
+  value?: any;    // The actual code value (e.g., "OPEN")
+  className?: string; // Allow custom classes from parent
+}
+⋮----
+itemsPlaceholder?: string[]; // The nice text (e.g., "Open")
+⋮----
+placeholder?: string; // The text to show when nothing is selected
+value?: any;    // The actual code value (e.g., "OPEN")
+className?: string; // Allow custom classes from parent
+⋮----
+function handleClickOutside(event: MouseEvent)
+⋮----
+const getDisplayLabel = (val: any) =>
+⋮----
+onClick=
+⋮----
+{/* Current Selection / Title */}
+⋮----
+{/* Dropdown Menu */}
+⋮----
+e.stopPropagation();
+onChange(item);
+setIsOpen(false);
+</file>
+
+<file path="src/sandbox/types/viewportMapping.ts">
+export enum Viewports {
+  LAPTOP = "Laptop",
+  TABLET = "Tablet",
+  PHONE = "Phone",
+  NONE = "None",
+}
+</file>
+
+<file path=".gitignore">
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+.env
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+config.ts
+config
+
+uploads/**
+</file>
+
+<file path="eslint.config.js">
+import reactX from 'eslint-plugin-react-x' // Import react-x plugin
+// No need to import react-dom here
+⋮----
+// Replace ...tseslint.configs.recommended with this for strict type checking
+⋮----
+// Optionally add stylistic rules
+⋮----
+// From eslint-plugin-react-x
+⋮----
+reactX.configs.recommended, // Add react-x plugin's recommended configuration
+// No need to add react-dom.configs.recommended again, it's redundant
+⋮----
+// Removed react-x from plugins since it's already handled by extends
+// Removed react-dom here since it's already handled by extends
+⋮----
+// You can add specific custom rules for react-x or react-dom here if necessary
+⋮----
+//npx eslint src/**/*.tsx
+// ctrl + shift + p -> Restart TS server
+</file>
+
+<file path="ideas.md">
+diagram builder - [
+  <!-- use case diagram ( look at PlantUML vscode extensions, idea is to make this but we force alot of values from dropdowns and make a 2d grid and give everything a location so that we can use AI to make them. example being we have a boilerplate text wich you need to paste in ai and based on this info the ai can generate a UCD and we can import it and edit it easily)
+  description at the bottom or next to the diagram
+  img export
+  ...other diagrams -->
+  Types of diagrams:
+    Use Case Diagram (UCD)
+    Flowchart
+    Class Diagram
+    Entity-Relationship Diagram (ERD)
+
+  Features:
+    Force certain values via dropdowns to keep data structured (good for AI generation later)
+    Auto-arrange items on the 2D grid, but allow manual repositioning
+    Add descriptions at the bottom or side of each diagram element
+    Export: PNG, SVG, PDF
+    AI integration: Provide boilerplate text or prompts → AI generates diagram nodes/edges
+    Element styles: color coding for types of elements (actors, systems, processes, etc.)
+    Templates: pre-made diagram templates for common cases
+
+  Possible enhancements:
+    Version history for diagrams
+    Comments/annotations on each node
+    Import diagrams from PlantUML or other standard formats
+]
+
+User Story - [
+  <!-- simple table with 3 columns where they go like
+  "As USER" | "I wanna be able to FUNCTIONALITY" | "Because REASON"
+  As a teacher | I wanna be able to see student results | because i wanna be able to monitor them
+
+  the default values like "As", "I wanna be able to FUNCTIONALITY" and "Because REASON" you can change cause they are in a input field but just the default values -->
+  Columns:
+    Default: As [USER] | I want to [FUNCTIONALITY] | Because [REASON]
+    Optional columns
+  Features:
+    Inline editing of cells
+    Add/remove rows dynamically
+    Drag & drop rows for ordering
+    Default values auto-populate, but editable
+    Highlight incomplete stories or missing fields
+  Enhancements:
+    Filter by user role or priority
+    Export to CSV, Markdown, or PDF
+    Link user stories to requirements or diagrams for traceability
+]
+
+requirements report - [
+  simple table with columns you can enable/disable
+  X amount of questions so that you can ask yourself does this requirement fulfill these questions
+]
+
+Columns: Requirement ID, Description, Status, Priority, Assigned To, Compliance Check (Y/N), Notes
+
+Features:
+
+Enable/disable columns dynamically
+
+Add checklist questions for each requirement (e.g., “Does it have measurable acceptance criteria?”)
+
+Highlight requirements that don’t meet certain criteria
+
+Export options: PDF, CSV
+
+Enhancements:
+
+AI suggestions for missing or incomplete requirements
+
+Versioning/history of requirement changes
+
+Tags for categories or features
+
+notes - [
+  simple notes,
+  sorted list,
+  unsorted list
+
+  changable font sizes
+  changable text color
+]
+
+drawing - [
+  draw freely,
+  change size,
+  change color,
+  erase,
+  change erase size
+]
+
+code blocks - [
+
+]
+
+
+
+
+
+geidentificeerd
+grammaticaal correct
+atomain (moet aan 1 eis voldoen dus niet (authentication system: login and register system (FOUT)))
+geen verboden woorden (Expensive, cheap, quick, easy (heeft een andere betekenis in ieder zijn oog, voor anja is 100 euro duur en voor john is 300 euro goedkoop))
+geen ontwerpaspecten
+uniform gedefineerd
+meetbaar
+onderling consistent
+geprioriteerd
+eigenaar
+geaccepteerd
+tracebaar (waar gebruikt)
+</file>
+
+<file path="index.html">
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="./favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- <script src="https://unpkg.com/react-scan/dist/auto.global.js"></script> -->
+    <title>Vite + React + TS</title>
+  </head>
+  <body>
+    <div class="w-full h-svh m-0 p-0" id="root"></div>
+    <div 
+      class="w-full h-svh m-0 p-0 absolute top-0 pointer-events-none overflow-hidden" id="portalRoot"
+      style="z-index: 999999999;"
+    ></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+</file>
+
+<file path="postcss.config.mjs">
+
+</file>
+
+<file path="README.md">
+Self made tech stack.
+
+https://lucky23.gitbook.io/luckystack/
+</file>
+
+<file path="redis.conf">
+appendonly yes          # Enable AOF persistence
+appendfsync everysec    # Sync every write operation to disk every second
+</file>
+
+<file path="scripts/bundleServer.ts">
+import { build } from "esbuild";
+import { dependencies } from "../package.json";
+⋮----
+// Native Node.js modules
+⋮----
+entryPoints: ["server/server.ts"], // Adjust if entry is different
+outfile: "dist/server.js",         // Final bundled output
+⋮----
+target: "node22",                  // Match your runtime (Node 18, 20 etc.)
+format: "esm",                     // Your project uses "type": "module"
+</file>
+
+<file path="scripts/clearServerRequests.ts">
+//? used when running npm run dev
+//? in dev mode we dont need the production apis and syncs so we clear them to avoid it erroring when e.g. changing file names
+⋮----
+import fs from "fs";
+⋮----
+// console.log("✅ server/prod/generatedApis.ts Cleared");
+</file>
+
+<file path="scripts/generateServerRequests.ts">
+import fs from "fs";
+import path from "path";
+⋮----
+const normalizePath = (p: string)
+⋮----
+// Recursively walk dirs to collect _api and _sync files
+const walkSrcFiles = (dir: string, results: string[] = []) =>
+⋮----
+// if (file.endsWith("_client.ts")) continue; // skip client stubs
+⋮----
+// Collect server function files
+const walkFunctionFiles = (dir: string) =>
+⋮----
+// --------------------
+// Collect files
+// --------------------
+⋮----
+// --------------------
+// Buckets
+// --------------------
+⋮----
+// --------------------
+// Process API + Sync
+// --------------------
+⋮----
+// API
+⋮----
+// capture "games/boerZoektVrouw" and "getGameData"
+⋮----
+const routeKey = `api/${pagePath}/${apiName}`; // clean route-like key
+⋮----
+// Sync
+⋮----
+// --------------------
+// Process Functions
+// --------------------
+⋮----
+// --------------------
+// Close Maps
+// --------------------
+⋮----
+// --------------------
+// Final Output
+// --------------------
+</file>
+
+<file path="server/auth/checkOrigin.ts">
+const allowedOrigin = (origin: string) =>
+⋮----
+//? we check if the origin of the user is allowed to access the server directly
+⋮----
+//? if the origin is not allowed we check if the origin is allowed we port 80 or port 443 cause the browser removes these sometimes
+⋮----
+// origin = 'https://' + origin;
+</file>
+
+<file path="server/auth/login.ts">
+import dotenv from 'dotenv';
+import oauthProviders from "./loginConfig";
+import { IncomingMessage, ServerResponse } from 'http';
+import { URLSearchParams } from 'url';
+import { tryCatch } from '../functions/tryCatch';
+import { prisma } from '../functions/db';
+import { Prisma, PROVIDERS } from '@prisma/client';
+import bcrypt from 'bcrypt';
+import { randomBytes } from 'crypto';
+import { saveSession } from "../functions/session"
+import validator from "validator"
+import config, { SessionLayout } from '../../config';
+import path from 'path';
+import { existsSync } from 'fs';
+⋮----
+type paramsType = {
+  email?: string,
+  password?: string,
+  name?: string,
+  confirmPassword?: string,
+}
+⋮----
+// Route that starts the OAuth flow for the specified provider and redirects to the callback endpoint
+const loginWithCredentials = async (params: paramsType) =>
+⋮----
+if (name && confirmPassword) { //? register
+⋮----
+const checkEmail = async () =>
+⋮----
+//? check if email already exists
+⋮----
+//? email is not in use so we define the function to create the new user
+const createNewUser = async () =>
+⋮----
+//? here we create the new user
+⋮----
+} else { //? login
+//? here we define the function to find the user
+const findUser = async () =>
+⋮----
+//? attempt to find the user
+⋮----
+//? if we found a user we check if the password matches the hashed one in the db
+const checkPassword = async () =>
+⋮----
+//? if the password matches we return the user
+⋮----
+// Route that handles the callback from the OAuth provider
+const loginCallback = async (pathname: string, req: IncomingMessage, res: ServerResponse) =>
+⋮----
+//? check if provider exists
+const providerName = pathname.split('/')[3]; // Extract the provider (google/github)
+⋮----
+const queryString = req.url.split('?')[1]; // Get the part after '?'
+⋮----
+//? if no code provided in the url we return false (the code is used to get the access token and should be provided by the oauth provider)
+⋮----
+//? with the code we can get the access token
+const getToken = async () =>
+⋮----
+//? here we get the access token
+⋮----
+const getUserData = async () =>
+⋮----
+// const url = `${provider.userInfoURL}?alt=json&access_token=${access_token}`;
+⋮----
+//? with the access_token token we get the user data
+⋮----
+// const user = {
+//   id: '',
+//   name,
+//   provider: provider.name,
+//   email,
+//   createdAt: new Date(),
+//   updatedAt: new Date(),
+//   token: '',
+//   avatar,
+//   admin: false,
+//   language: config.defaultLanguage
+// }
+⋮----
+//? if we didnt find the email we try to get it with a external link if this one is provided
+⋮----
+const fetchUser = async () =>
+⋮----
+//? here we check if the user exists in the db
+⋮----
+//? if the user exists we assign it to the tempUser variable
+⋮----
+//? if the user doesnt exist we create a new one
+⋮----
+//? here we create a new token, create the users session and return the token as a sign of success
+⋮----
+// user.id = tempUser.id;
+// user.createdAt = tempUser.createdAt;
+// user.updatedAt = tempUser.updatedAt;
+// user.token = newToken;
+// user.admin = tempUser.admin
+// user.language = config.defaultLanguage;
+// if (tempUser.avatar) { user.avatar = tempUser.avatar; }
+</file>
+
+<file path="server/auth/loginConfig.ts">
+import dotenv from 'dotenv';
+import { tryCatch } from '../functions/tryCatch';
+⋮----
+dotenv.config(); // Load environment variables from .env file
+⋮----
+interface BasicProvider {
+  name: string;
+}
+⋮----
+interface FullProvider {
+  name: string,
+  clientID: string,
+  clientSecret: string,
+  callbackURL: string,
+  authorizationURL: string,
+  tokenExchangeURL: string,
+  tokenExchangeMethod: 'json' | 'form',
+  userInfoURL: string,
+  scope: string[],
+  getEmail?: (access_token: string) => Promise<string | false | undefined>,
+  nameKey: string,
+  emailKey: string, 
+
+  avatarKey?: string, //? the avatarKey represent the url to the img
+  avatarCodeKey: string, //? the avatarCodeKey should be the key representing the avatar id if the provider doesnt give the avatar url directly, we use the getAvatar function with this value together
+  getAvatar?: ({userData, avatarId}: {userData: Record<string, any>, avatarId: string}) => any
+}
+⋮----
+avatarKey?: string, //? the avatarKey represent the url to the img
+avatarCodeKey: string, //? the avatarCodeKey should be the key representing the avatar id if the provider doesnt give the avatar url directly, we use the getAvatar function with this value together
+⋮----
+type oauthProvidersProps = | BasicProvider | (Required<FullProvider>);
+⋮----
+// const backendUrl = `http${process.env.SECURE == 'true' ? 's' : ''}://${process.env.SERVER_IP}:${process.env.SERVER_PORT}`;
+⋮----
+const getEmail = async () =>
+⋮----
+//? if we found the email we set it to the user object
+⋮----
+// Default avatar (based on discriminator % 5)
+// const defaultAvatarIndex = userId % 5;
+// return `https://cdn.discordapp.com/embed/avatars/${defaultAvatarIndex}.png`;
+</file>
+
+<file path="server/dev/hotReload.ts">
+import chokidar from "chokidar";
+import { initializeApis, initializeFunctions, initializeSyncs } from "./loader";
+⋮----
+// ----------------------------
+// Watcher for Hot Reload
+// ----------------------------
+export const setupWatchers = () =>
+⋮----
+const handleChange = (path: string) =>
+⋮----
+const handleFunctionChange = (path: string) =>
+⋮----
+// Watch the main source folders
+⋮----
+// Watch functions separately
+</file>
+
+<file path="server/dev/loader.ts">
+import fs from "fs";
+import path from "path";
+import { pathToFileURL } from "url";
+import { tryCatch } from "../functions/tryCatch";
+⋮----
+// ----------------------------
+// Storage for loaded modules
+// ----------------------------
+⋮----
+// ----------------------------
+// Unified Initialization
+// ----------------------------
+export const initializeAll = async () =>
+⋮----
+// console.log(devFunctions)
+⋮----
+// ----------------------------
+// Helper: convert absolute path to proper file URL for import
+// ----------------------------
+const importFile = async (absolutePath: string) =>
+⋮----
+// ----------------------------
+// API Loader
+// ----------------------------
+export const initializeApis = async () =>
+⋮----
+const scanApiFolder = async (file: string, basePath = "") =>
+⋮----
+// const pageLocation = modulePath.split(`/${file}/`)[0].replace(/^src[\/\\]/, "");
+⋮----
+// ----------------------------
+// Sync Loader
+// ----------------------------
+export const initializeSyncs = async () =>
+⋮----
+const scanSyncFolder = async (file: string, basePath = "") =>
+⋮----
+// build the route key similar to API routes
+⋮----
+// remove last segment
+⋮----
+// // optional _server.ts
+// const serverFile = f.replace("_client.ts", "_server.ts");
+// const serverPath = path.join(fullPath, serverFile);
+⋮----
+// if (fs.existsSync(serverPath)) {
+//   const [errServer, serverModule] = await tryCatch(async () => importFile(serverPath));
+//   if (!errServer && typeof serverModule.main === "function") {
+//     // final key style: sync/games/boerZoektVrouw/getCards
+//     devSyncs[`sync/${pageLocation}/${f.replace("_client.ts", "_server")}`] = { main: serverModule.main, auth: serverModule.auth || {} };
+//   }
+// }
+⋮----
+// ----------------------------
+// Functions Loader
+// ----------------------------
+export const initializeFunctions = async () =>
+</file>
+
+<file path="server/dev/request.py">
+url = "http://192.168.178.68:80"
+data = {"name": "mike", "age": 18}
+⋮----
+response = requests.get(url, json=data)
+</file>
+
+<file path="server/functions/boardcaster.ts">
+import { ioInstance } from "../../server/sockets/socket"
+import { getSession } from "./session";
+⋮----
+export default async function boardcaster({
+  code,
+  event,
+  session,
+  data,
+  ignoreSelf
+}: {
+  code: string,
+  event: string,
+  session?: boolean,
+  data?: any,
+  ignoreSelf?: string
+})
+⋮----
+const tempCookie = tempSocket.handshake.headers.cookie; // get the cookie from the socket connection
+⋮----
+} //? we dont send the event to the client who called the event
+</file>
+
+<file path="server/functions/db.ts">
+import { PrismaClient } from '@prisma/client'
+</file>
+
+<file path="server/functions/game.ts">
+import redis from "./redis";
+⋮----
+export interface GameDataProps {
+  players: { 
+    id: string, 
+    name: string, 
+    avatar: string,
+    role: 'farmer' | 'queen' | 'manipulator' | null,
+    selected?: boolean
+  }[],
+  gameCode: string,
+  queenRoles: number,
+  manipulatorRoles: number,
+  currentCountdownId: number,
+  state: 'lobby' | 'loadingScreen' | 'started' | 'finished',
+  loadingScreenState: 'roulette' | 'focusFarmer' | 'focusPersonalCard' | null;
+  selectedRewards: { [key: string]: string[] },
+  availableRewards: {
+    name: string,
+    id: string
+  }[],
+  lives: number,
+  maxLives: number,
+  gameStartTime: number | null,
+  totalDrinkTime: number,
+  won: 'farmer' | 'player' | 'none' | false,
+  revealed: { 
+    id: string, 
+    role: 'queen' | 'manipulator'
+  }[],
+}
+⋮----
+const saveGameData = async (gameCode: string, data: GameDataProps) =>
+⋮----
+// console.log(gameCode)
+// console.log(data)
+⋮----
+await redis.expire(`${process.env.PROJECT_NAME}-games:${gameCode}`, 60 * 60 * 24 * 7); // same TTL as session or adjust
+⋮----
+const getGameData = async (gameCode: string) =>
+⋮----
+const getAllGameDatas = async () =>
+⋮----
+const deleteGameData = async (gameCode: string) =>
+⋮----
+const gameExists = async (gameCode: string): Promise<boolean> =>
+</file>
+
+<file path="server/functions/redis.ts">
+import Redis from 'ioredis';
+import dotenv from 'dotenv';
+⋮----
+//? here we create a Redis instance
+⋮----
+async function clearKeysWithPrefix(prefix: string)
+⋮----
+// delete keys in bulk
+</file>
+
+<file path="server/functions/session.ts">
+import type { SessionLayout } from "config";
+import redis from "./redis";
+// import { logout } from "../sockets/utils/logout";
+⋮----
+const saveSession = async (token: string, data: SessionLayout, newUser?: boolean) =>
+⋮----
+await redis.expire(`${process.env.PROJECT_NAME}-session:${token}`, 60 * 60 * 24 * 7); //? 7 days
+⋮----
+if (!io) { return false; } //? if this fails we are fucked but it should never fail
+⋮----
+if (newUser) { //? new user is true when someone logs in
+⋮----
+const sockets = io.sockets.adapter.rooms.get(tokenOfPreviousUser); // Set of socket IDs
+if (sockets) { //? if we found a client it means the user is still connected
+⋮----
+//? if we didnt find any clients it means the user is not connected, we can just delete there session data
+⋮----
+await redis.expire(tokensOfPreviousUsersKey, 60 * 60 * 24 * 7); //? 7 days
+⋮----
+const getSession = async (token: string | null) =>
+⋮----
+const deleteSession = async (token: string) =>
+⋮----
+// ioInstance?.to(token).emit('forceLogout');
+⋮----
+const getAllSessions = async () =>
+⋮----
+// const clearAllSessions = async () => {
+//   const sessions = await redis.keys("*");
+//   await Promise.all(sessions.map((session) => redis.del(session)));
+//   return true;
+// }
+</file>
+
+<file path="server/functions/sleep.ts">
+export default function sleep(ms: number)
+</file>
+
+<file path="server/functions/tryCatch.ts">
+const tryCatch = async <T, P>(func: (values: P) => Promise<T> | T, params?: P): Promise<[any, T | null]> =>
+</file>
+
+<file path="server/prod/generatedApis.ts">
+
+</file>
+
+<file path="server/prod/serveFile.ts">
+import fs from "fs";
+import { IncomingMessage, ServerResponse } from "http";
+import path from "path";
+import { fileURLToPath } from 'url';
+⋮----
+export const serveFavicon = (res: ServerResponse) =>
+⋮----
+//? here we get the favicon.ico file from the public folder and serve it to the client
+⋮----
+export const serveFile = async (req: IncomingMessage |
+⋮----
+//? if request is / (root) we serve the index.html
+⋮----
+//! here we avoid directory traversal attacks
+⋮----
+//? here we check if the file extension or just the filename is in the list of files we dont want to serve
+//? a file that is in the list below should not be able to run this function in the first place cause we filter the routePath using zod before calling this function
+//? but if it passes somehow, we avoid it being served
+⋮----
+//? here we get the content type of the file and serve it to the client
+//? if the file extension is not in the list below, we serve the index.html file
+⋮----
+//? attempt to read the file and serve it to the client
+</file>
+
+<file path="server/server.ts">
+import dotenv from 'dotenv';
+⋮----
+import http from 'http';
+import getParams from './utils/getParams';
+import { loginWithCredentials, loginCallback } from './auth/login';
+import { serveFavicon, serveFile } from './prod/serveFile';
+import loadSocket from './sockets/socket';
+import z from 'zod';
+import oauthProviders from "./auth/loginConfig";
+import { deleteSession } from './functions/session';
+import allowedOrigin from './auth/checkOrigin';
+import { SessionLayout } from '../config';
+import { initializeAll } from './dev/loader';
+import { setupWatchers } from './dev/hotReload';
+import { initConsolelog } from './utils/console.log';
+import { initRepl } from './utils/repl';
+import { serveAvatar } from './utils/serveAvatars';
+⋮----
+const ServerRequest = async (req: http.IncomingMessage, res: http.ServerResponse) =>
+⋮----
+res.setHeader('Referrer-Policy', 'no-referrer'); // prevents the browser from leaking sensative urls
+res.setHeader('X-Frame-Options', 'SAMEORIGIN'); // only allows iframes to use this pages content if on the same domain
+res.setHeader('X-XSS-Protection', '1; mode=block'); // prevents some xss attacks
+res.setHeader('X-Content-Type-Options', 'nosniff'); // prevents mimetype sniffing, this means that when sending a txt file it will not try to execute it as ddl if the user requested this
+⋮----
+//? here we load the application icon
+⋮----
+//? here we get the params from the request
+⋮----
+//? we log the request and if there are any params we log them with the request
+⋮----
+//? we dont use zod cause it doesnt allow you to pass in a id in the url
+// if (z.literal('/uploads/').safeParse(routePath).success) {
+⋮----
+//? triggers when logging in
+//? when using the credentials provider all the logic happends here else we redirect to the oauth provider and all the logic happends in the auth/callback api
+⋮----
+const providerName = routePath.split('/')[3]; // Extract the provider (google/github)
+⋮----
+//? here all the logic happends for login or creating an account with credentials
+⋮----
+//? if it failed to either login or creating an account then we return
+⋮----
+//? if it was successful then we apply the cookie and return the user id and reason for the login or account creation
+⋮----
+// const cookieOptions = process.env.NODE_ENV == "development" ?
+//   "HttpOnly; SameSite=Strict; Path=/; Max-Age=604800;":
+//   "HttpOnly; SameSite=Strict; Path=/; Max-Age=604800; Secure;";
+⋮----
+// return res.end(JSON.stringify({ status, reason, session }))
+// } else {
+⋮----
+//? this endpoint is triggerd by the oauth provider after the user has logged in
+⋮----
+//? if it failed to either login or creating an account then we return
+⋮----
+//? we successfully logged in or created an acocunt
+⋮----
+//? if the user already had a token then we delete the previous session data
+⋮----
+//? we set the cookie with the new token and redirect the user to the frontend
+⋮----
+res.writeHead(302, { Location: location }); // Redirect without exposing token in URL
+⋮----
+//? if the request is a file with one of the following extensions then we serve it
+//? png|jpg|jpeg|gif|svg|html|css|js
+⋮----
+} else { // for the index.html
+//? if the request doesnt fit any of the above then we serve the index.html file
+⋮----
+// @ts-ignore // typescript thinks ip needs to be a number
+</file>
+
+<file path="server/sockets/handleApiRequest.ts">
+import { tryCatch } from '../functions/tryCatch';
+import { apis, functions } from '../prod/generatedApis'
+import { devApis, devFunctions } from "../dev/loader"
+import { apiMessage } from './socket';
+import { getSession } from '../functions/session';
+import type { SessionLayout } from '../../config';
+import { Socket } from 'socket.io';
+import { logout } from './utils/logout';
+⋮----
+type handleApiRequestType = {
+  msg: apiMessage,
+  socket: Socket,
+  token: string | null,
+}
+⋮----
+const isFalsy = (value: any) =>
+⋮----
+const validateRequest = ({ auth, user }: {
+  auth: {
+    login: boolean;
+    additional?: {
+      key: string;
+      type?: 'string' | 'number' | 'boolean' | 'object' | 'function' | 'undefined';
+      value?: any;
+      mustBeFalsy?: boolean;
+      nullish?: boolean;
+    }[]
+  }, 
+  user: SessionLayout
+}) =>
+⋮----
+//? if the additional key is an array we check if the following
+//? if it has a key and a type we check if the user has the key and if the value is of the correct type
+//? if it has a key and a value we check if the user has the key and if the value is the same as the given value
+//? examples:
+//? { key: 'admin', type: 'boolean' } -> checks if the user has the key admin and if the value is of type boolean
+//? { key: 'admin', value: true } -> checks if the user has the key admin and if the value is true
+⋮----
+//? If nullish flag is set, check accordingly
+⋮----
+//? Check type if specified (skip null or undefined values)
+⋮----
+//? Check exact value if specified (strict equality)
+⋮----
+//? Check truthy/falsy if specified
+⋮----
+// export default async function handleApiRequest({ name, data, user }: handleApiRequestType) {
+export default async function handleApiRequest(
+⋮----
+// console.log(msg)
+//? this event gets triggerd when the client uses the apiRequest function from serverRequest.ts
+//? we check if the msg contains a name and check if there is a api that exist with this name
+⋮----
+//? if the name of the apiRequest is 'session' we return the users session data else we check if there is an api with this name
+⋮----
+//? check if there exist a function with the given name
+⋮----
+//? if the login key is true we check if the user has an id in the session object
+⋮----
+//? All checks passed so we call the api function and return the result
+</file>
+
+<file path="server/sockets/handleSyncRequest.ts">
+import { tryCatch } from "../functions/tryCatch";
+import { devSyncs, devFunctions } from "../dev/loader"
+import { syncs, functions } from '../prod/generatedApis'
+import { ioInstance, syncMessage } from "./socket";
+import { Socket } from "socket.io";
+import { getSession } from "../functions/session";
+import { SessionLayout } from "config";
+⋮----
+const isFalsy = (value: any) =>
+⋮----
+const validateRequest = ({ auth, user }: {
+  auth: {
+    login: boolean;
+    additional?: {
+      key: string;
+      type?: 'string' | 'number' | 'boolean' | 'object' | 'function' | 'undefined';
+      value?: any;
+      mustBeFalsy?: boolean;
+      nullish?: boolean;
+    }[]
+  }, 
+  user: SessionLayout
+}) =>
+⋮----
+//? if the additional key is an array we check if the following
+//? if it has a key and a type we check if the user has the key and if the value is of the correct type
+//? if it has a key and a value we check if the user has the key and if the value is the same as the given value
+//? examples:
+//? { key: 'admin', type: 'boolean' } -> checks if the user has the key admin and if the value is of type boolean
+//? { key: 'admin', value: true } -> checks if the user has the key admin and if the value is true
+⋮----
+//? If nullish flag is set, check accordingly
+⋮----
+//? Check type if specified (skip null or undefined values)
+⋮----
+//? Check exact value if specified (strict equality)
+⋮----
+//? Check truthy/falsy if specified
+⋮----
+// export default async function handleSyncRequest({ name, clientData, user, serverData, roomCode }: syncMessage) {
+export default async function handleSyncRequest({ msg, socket, token }: {
+  msg: syncMessage,
+  socket: Socket,
+  token: string | null,
+})
+⋮----
+//? first we validate the data
+⋮----
+//? we check if there is a client file or/and a server file, if they both dont exist we abort
+⋮----
+//? if the login key is true we check if the user has an id in the session object
+⋮----
+//? if the user has passed all the checks we call the preload sync function and return the result
+⋮----
+//? badReturn means it doesnt include a status key with the value 'success' || 'error'
+⋮----
+//? from here on we can assume that we have either called a server sync and got a proper result of we didnt call a server sync
+⋮----
+//? get the desired sockets based on the receiver key
+⋮----
+? ioInstance.sockets.sockets //? all connected sockets (Map)
+: ioInstance.sockets.adapter.rooms.get(receiver) //? Set of socket IDs in room
+⋮----
+//? now we check if we found any sockets
+⋮----
+//? here we loop over all the connected clients
+//? we keep track of an counter and await the loop every 100 iterations to avoid the server running out of memory and crashing
+⋮----
+? (socketEntry as [string, Socket])[1] //? Map entry
+: ioInstance.sockets.sockets.get(socketEntry as string); //? socket ID from Set
+⋮----
+//? check if they have a token stored in there cookie or session based on the settings
+const tempCookie = tempSocket.handshake.headers.cookie; // get the cookie from the socket connection
+⋮----
+//? here we get the users session of the client and run the sync function with the data and the users session data
+⋮----
+// if (clientSyncError) { socket.emit(`sync-${responseIndex}`, { status: "error", message: clientSyncError }); }
+⋮----
+//? if we return error we dont want this client to get the event
+⋮----
+//? if there is no client function we still want to send the server data to the clients
+</file>
+
+<file path="server/sockets/socket.ts">
+import dotenv from 'dotenv';
+⋮----
+import handleApiRequest from "./handleApiRequest";
+import { getSession, saveSession } from "../functions/session";
+import { Server as SocketIOServer } from 'socket.io';
+import handleSyncRequest from "./handleSyncRequest";
+import allowedOrigin from '../auth/checkOrigin';
+import { initAcitivityBroadcaster, socketConnected, socketDisconnecting, socketLeaveRoom } from './utils/activityBroadcaster';
+import config, { SessionLayout } from '../../config';
+⋮----
+export type apiMessage = {
+  name: string;
+  data: object;
+  responseIndex: number;
+}
+⋮----
+export type syncMessage = {
+  name: string;
+  data: object;
+  cb: string;
+  receiver: string;
+  responseIndex?: number;
+  ignoreSelf?: boolean;
+}
+⋮----
+export default function loadSocket(httpServer: any)
+⋮----
+//? here we create the SocketIOServer instance
+⋮----
+maxHttpBufferSize: 5 * 1024 * 1024, // 5 MB
+⋮----
+//? when a client connects to the SocketIO server we define there cookies and define some events to work with the exports of serverRequest.ts on the client
+⋮----
+const cookie = socket.handshake.headers.cookie; // get the cookie from the socket connection
+</file>
+
+<file path="server/sockets/utils/activityBroadcaster.ts">
+// ------------
+// Activity Broadcaster
+// ------------
+// This module provides info about the users activty
+// this is usefull to make a game to pause it for example when the user is not active
+⋮----
+import { Server, Socket } from "socket.io";
+import { deleteSession, getSession } from "../../functions/session";
+import handleSyncRequest from "../handleSyncRequest";
+import { ioInstance } from "../socket";
+⋮----
+export const socketConnected = async ({
+  token,
+  io
+}: {
+  token: string,
+  io: Server
+}) =>
+⋮----
+export const socketLeaveRoom = async ({ token, socket, newPath }: {
+  token: string | null,
+  socket: Socket,
+  newPath: string | null
+}) =>
+⋮----
+//? retrieve users session data
+⋮----
+/////////////
+//? EXAMPLE USAGE
+/////////////
+⋮----
+// console.log(`
+//   check1: ${pathName == '/games/test123'}
+//   check2: ${user.code}
+//   check3: ${!newPath || newPath !== pathName}
+// `, 'cyan');
+⋮----
+// //? if user is at a certain location we run a sync function to update the other players that are in the same room has him
+// if (
+//   pathName == '/games/test123' &&
+//   user.code &&
+//   (!newPath || newPath !== pathName)
+// ) {
+//   console.log('socket is leaving test123 game', 'cyan');
+//   handleSyncRequest({
+//     msg: {
+//       name: 'sync/games/test123/playerLeave',
+//       data: { gameCode: user.code, oldUser: user },
+//       cb: 'playerLeave',
+//       receiver: searchParams?.code, ignoreSelf: true
+//     },
+//     socket,
+//     token
+//   });
+//   socket.leave(user.code);
+// }
+⋮----
+const getDisconnectTime = ({ 
+  token, 
+  reason 
+}: {
+  token: string,
+  reason: string | undefined
+}) =>
+⋮----
+// ? 3000
+⋮----
+export const socketDisconnecting = async ({
+  token,
+  reason,
+  socket
+}: {
+  token: string,
+  reason: string,
+  socket: Socket
+}) =>
+⋮----
+return; //? if the user is already in the tempDisconnectedSockets array we ignore the disconnect event
+⋮----
+} else { return; } //? if the user has reconnected we dont run the logout function
+⋮----
+//? we only delete the session if the user disconnected themself, it the server kicked them it means that they were kicked from a game
+⋮----
+const informRoomPeers = async ({
+  token,
+  io = ioInstance,
+
+  event,
+  extraData,
+}: {
+  token: string,
+  io?: Server | null
+
+  event: 'userAfk' | 'userBack',
+  extraData?: any
+}) =>
+⋮----
+const tempCookie = tempSocket.handshake.headers.cookie; // get the cookie from the socket connection
+⋮----
+if (token == tempToken) { continue; } //? we dont send the event to the client who called the event
+⋮----
+export const initAcitivityBroadcaster = ({
+  token,
+  socket
+}: {
+  token: string,
+  socket: Socket,
+}) =>
+</file>
+
+<file path="server/sockets/utils/logout.ts">
+import { Socket } from "socket.io";
+import redis from "../../functions/redis";
+import { tryCatch } from "../../functions/tryCatch";
+import { disconnectTimers, tempDisconnectedSockets } from "./activityBroadcaster";
+import { deleteSession } from "../../functions/session";
+import { socketLeaveRoom } from "./activityBroadcaster";
+⋮----
+export const logout = async ({ token, socket, userId }: {
+  token: string | null,
+  socket: Socket | undefined,
+  userId: string | null,
+}) =>
+</file>
+
+<file path="server/sockets/utils/onLocationChange.ts">
+
+</file>
+
+<file path="server/utils/console.log.ts">
+export const initConsolelog = () =>
+⋮----
+// find color keyword and remove it from args
+⋮----
+// handle object vs text
+</file>
+
+<file path="server/utils/getParams.ts">
+import { IncomingMessage, ServerResponse } from "http";
+import { tryCatch } from "../functions/tryCatch";
+⋮----
+type getParamsType = {
+  method: string;
+  req: IncomingMessage;
+  res: ServerResponse;
+  queryString?: string;
+}
+⋮----
+export default async function getParams(
+⋮----
+//? if get request we return the query string as an object
+⋮----
+//? if a POST, PUT or DELETE method we return the body as an object
+⋮----
+//? we store the passed data chunks in a string
+⋮----
+//? here we parse the data depending on the content type
+//? if the content type is application/x-www-form-urlencoded we parse the data as a URLSearchParams object
+⋮----
+const parseData = () =>
+⋮----
+//? if the content type is application/json we parse the data as a JSON object
+⋮----
+// }
+</file>
+
+<file path="server/utils/repl.ts">
+import { getAllGameDatas, getGameData, saveGameData } from "../functions/game"
+import { deleteSession, getAllSessions, getSession } from "../functions/session"
+import repl from 'repl';
+⋮----
+export const initRepl = () =>
+⋮----
+.replace(/\[(\w+)\]/g, ".$1")   // turn [0] into .0
+.replace(/^\./, "")             // remove leading dot
+.split(/(?:\?\.)|\./);          // split on ?. or .
+⋮----
+// @ts-ignore
+⋮----
+// Parse the keys string into parts (supporting [0], ?. etc.)
+⋮----
+.replace(/\[(\w+)\]/g, ".$1") // turn [0] into .0
+.replace(/^\./, "")           // remove leading dot
+.split(/(?:\?\.)|\./);        // split on ?. or .
+⋮----
+// Walk into object and set the value
+⋮----
+// @ts-ignore
+target[key] = {}; // create missing objects
+⋮----
+// @ts-ignore
+⋮----
+// @ts-ignore
+⋮----
+// Persist the change (assuming you already have a saveGameData function)
+</file>
+
+<file path="src/_components/Avatar.tsx">
+import { backendUrl, SessionLayout } from "config";
+import { useAvatarContext } from "./AvatarProvider";
+⋮----
+// Unique key per avatar
+⋮----
+const FallbackImg = (
+</file>
+
+<file path="src/_components/AvatarProvider.tsx">
+import { createContext, useContext, useState, ReactNode } from "react";
+⋮----
+type AvatarStatus = 'avatar' | 'fallback';
+⋮----
+interface AvatarContextType {
+  avatarStatuses: Record<string, AvatarStatus>;
+  setAvatarStatus: (key: string, status: AvatarStatus) => void;
+}
+⋮----
+export const AvatarProvider = (
+⋮----
+const setAvatarStatus = (key: string, status: AvatarStatus) =>
+⋮----
+export const useAvatarContext = () =>
+</file>
+
+<file path="src/_components/ConfirmMenu.tsx">
+import { ReactNode, useState } from 'react';
+import { menuHandler } from 'src/_functions/menuHandler';
+⋮----
+interface ConfirmMenuProps {
+  title: string;
+  content?: string | ReactNode;
+  // confirm: () => void;
+  input?: string;
+  resolve: (val: boolean) => void;
+}
+⋮----
+// confirm: () => void;
+⋮----
+// export const ConfirmMenu = ({ title, content, confirm, input, resolve }: ConfirmMenuProps) => {
+⋮----
+const handleConfirm = () =>
+⋮----
+// confirm();
+⋮----
+const handleCancel = () =>
+⋮----
+onChange=
+⋮----
+// export const confirmDialog = async (props: Omit<ConfirmMenuProps, 'resolve'>): Promise<boolean> => {
+//   return await menuHandler.open(
+//     <ConfirmMenu {...props} resolve={(a) => {console.log(a)}} />,
+//     { dimBackground: true, background: 'bg-white', size: 'sm' }
+//   );
+// };
+⋮----
+return new Promise((resolve) =>
+</file>
+
+<file path="src/_components/Icon.tsx">
+interface Props {
+	name: string,
+	size?: string,
+	weight?: string,
+  customClasses?: string,
+  onClick?: () => void
+}
+</file>
+
+<file path="src/_components/MenuHandler.tsx">
+import { createContext, useContext, useState, ReactNode, ReactElement, useEffect, useLayoutEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { v4 as uuidv4 } from 'uuid';
+⋮----
+// Types
+interface MenuEntry {
+  id: string;
+  element: ReactElement;
+  options: MenuOptions;
+  isClosing?: boolean;
+  soonIsTop?: boolean;
+  resolver?: (value: any) => void;
+}
+⋮----
+interface MenuOptions {
+  dimBackground?: boolean;
+  background?: string;
+  size?: 'sm' | 'md' | 'lg';
+}
+⋮----
+interface MenuHandlerContextType {
+  open: (element: ReactElement, options?: MenuOptions) => Promise<any>;
+  replace: (element: ReactElement, options?: MenuOptions) => Promise<any>;
+  close: () => void;
+  closeAll: () => void;
+  logStack: () => void;
+}
+⋮----
+interface SlideInWrapperProps {
+  children: ReactNode;
+  isTop: boolean;
+  options: MenuOptions;
+  isClosing?: boolean;
+  soonIsTop?: boolean;
+}
+⋮----
+const SlideInWrapper = (
+⋮----
+// Start with off-screen to the right
+⋮----
+setLocation('center'); // trigger the transition
+⋮----
+// console.log("isClosing: ", isClosing, 'location: ', location, "top: ", isTop)
+⋮----
+setLocation('left'); // trigger the transition
+⋮----
+setLocation('right'); // trigger the transition
+⋮----
+setLocation('center'); // trigger the transition
+⋮----
+: '100% 0'; // initial
+⋮----
+export const useMenuHandler = () =>
+⋮----
+const open = (element: ReactElement, options: MenuOptions =
+⋮----
+const replace = (element: ReactElement, options: MenuOptions =
+⋮----
+const close = () =>
+⋮----
+// Prevent double-close
+⋮----
+// Mark top as closing
+⋮----
+top.resolver?.(null); // Resolve the promise with nul
+⋮----
+// Delay removal for animation
+⋮----
+}, 200); // Match animation duration
+⋮----
+const closeAll = () =>
+⋮----
+const logStack = () =>
+⋮----
+const handleKeyDown = (e: KeyboardEvent) =>
+⋮----
+// const { size = 'md', background = 'bg-white' } = options;
+⋮----
+sm: '384px', // max-w-sm
+md: '512px', // max-w-md
+lg: '768px', // max-w-lg
+⋮----
+// onClick={closeAll}
+⋮----
+onMouseUp=
+⋮----
+// onBackgroundClick={closeAll}
+</file>
+
+<file path="src/_components/Middleware.tsx">
+import { ReactNode, useEffect, useState } from "react";
+import middlewareHandler from "src/_functions/middlewareHandler"
+import { useLocation, useNavigate } from "react-router-dom";
+import { useSession } from "../_providers/SessionProvider";
+⋮----
+export default function Middleware(
+⋮----
+if (count > 500) break; // after 5 seconds we stop waiting for the session
+⋮----
+// const session = await apiRequest({ name: 'session' }) as SessionLayout;
+⋮----
+//! dont remove isMounted, read below
+//? i dont know why but the isMounted = false will always be false but because of this the navigate(-1) will always redirect to the previous page
+//? if we remove the isMounted variable than it will redirect to the previous page and then to the page before that one and so on wich we dont want
+//? e.g if we are on /test and go to /admin wich is not allowed we come back to /test, if we spam this request we come back to /test but if we remove the isMounted
+//? we first go back to /test but the second time we go back to the route before /test e.g /dashboard wich we dont want
+⋮----
+}, [location.pathname, sessionLoaded]); // important: rerun on path change
+</file>
+
+<file path="src/_components/Navbar.tsx">
+import { ReactNode, useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { SessionLayout } from "config";
+import Icon from "./Icon";
+import initializeRouter from "./Router";
+import Avatar from "./Avatar";
+import { useSession } from "../_providers/SessionProvider";
+import { apiRequest } from "src/_sockets/apiRequest";
+⋮----
+const clearPopups = () =>
+⋮----
+const displayPopup = (
+⋮----
+interface NavbarItemProps {
+  item: {
+    init?: ({ item, state, setState, pathname, session }: {
+      item: NavbarItemProps["item"],
+      state: NavbarItemProps["state"],
+      setState: NavbarItemProps["setState"],
+      pathname: NavbarItemProps["pathname"],
+      session: NavbarItemProps["session"],
+      router: NavbarItemProps["router"]
+    }) => ReactNode,
+    icon?: string,
+    label?: string,
+    path?: string,
+    action?: ({ item, state, setState, pathname, session }: { 
+      item: NavbarItemProps["item"], 
+      state: NavbarItemProps["state"], 
+      setState: NavbarItemProps["setState"], 
+      pathname: NavbarItemProps["pathname"],
+      session: NavbarItemProps["session"],
+      router: NavbarItemProps["router"]
+    }) => void,
+    bottom?: boolean,
+    hideOnFolded?: boolean,
+    hideOnExpended?: boolean
+  },
+  state: 'folded' | 'expended',
+  setState: (state: 'folded' | 'expended') => void,
+  pathname: string,
+  session: SessionLayout | null,
+  router: (location: string) => Promise<void> | void
+}
+⋮----
+if (state == 'expended')
+⋮----
+onClick=
+⋮----
+clearPopups();
+⋮----
+setState(value)
+⋮----
+{/* Top items */}
+</file>
+
+<file path="src/_components/ThemeToggler.tsx">
+import { useState } from "react";
+⋮----
+export default function ThemeToggler()
+⋮----
+//? on default we set the theme to the session of the user but we allow to change it using a useState hook
+//? reason for this is that the settings page can display how it looks in the differnt theme without needing to call the server to update the sesion if the user hasnt clicked save yet
+const updateTheme = (newTheme: string) =>
+</file>
+
+<file path="src/_components/TranslationProvider.tsx">
+// src/_components/translationProvider.tsx
+import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useMemo, useState } from "react";
+import { useSession } from "../_providers/SessionProvider";
+import nlJson from "src/_locales/nl.json";
+import enJson from "src/_locales/en.json";
+import deJson from "src/_locales/de.json";
+import frJson from "src/_locales/fr.json";
+import config from "config";
+⋮----
+const getLanguage = (language: string) =>
+⋮----
+export const TranslationProvider = (
+⋮----
+// const language = session?.language || config.defaultLanguage;
+⋮----
+export const useTranslation = () =>
+⋮----
+export const useUpdateLanguage = () =>
+⋮----
+// helper function for dynamic translation
+export const translate = ({ translationList, key, params }: {
+  translationList: Record<string, any>,
+  key: string,
+  params?: { key: string, value: string | number | boolean }[]
+}) =>
+</file>
+
+<file path="src/_functions/confetti.ts">
+//? function makes confetti appear on the screen
+export default function launchConfetti(): void
+</file>
+
+<file path="src/_functions/icon.ts">
+// src/icons.ts
+⋮----
+// export * from "@fortawesome/free-regular-svg-icons";
+// export * from "@fortawesome/free-brands-svg-icons";
+</file>
+
+<file path="src/_functions/menuHandler.ts">
+import { ReactElement } from 'react';
+import { useMenuHandler } from 'src/_components/MenuHandler';
+⋮----
+interface MenuOptions {
+  dimBackground?: boolean;
+  background?: string;
+  size?: 'sm' | 'md' | 'lg';
+}
+⋮----
+export const setMenuHandlerRef = (ref: ReturnType<typeof useMenuHandler>) =>
+</file>
+
+<file path="src/_functions/notify.ts">
+import { toast } from "sonner";
+import { translate } from "src/_components/TranslationProvider";
+import nlJson from "src/_locales/nl.json";
+import enJson from "src/_locales/en.json";
+import deJson from "src/_locales/de.json";
+import frJson from "src/_locales/fr.json";
+import { getCurrentSession } from "src/_providers/SessionProvider";
+// import Translator from "./translator";
+⋮----
+const Translator = () =>
+</file>
+
+<file path="src/_functions/sleep.ts">
+export default function sleep(ms: number)
+</file>
+
+<file path="src/_functions/translator.ts">
+// useTranslator.ts
+import { useTranslation, translate } from "src/_components/TranslationProvider";
+⋮----
+export const useTranslator = () =>
+</file>
+
+<file path="src/_functions/tryCatch.ts">
+//? wrap your funcions in this function and check if the first value has a truthy value if it does than there is an error
+//? if the first value is null than there is no error and you can access the second value wich is the response of your function
+</file>
+
+<file path="src/_locales/de.json">
+{
+  "test": "Hallo {{name}}",
+  "common": {
+    "whiteSpace": " ",
+    "error": "FEHLER",
+    "404": "Etwas ist schiefgelaufen, versuche es später erneut."
+  },
+  "middleware": {
+    "notAdmin": "Du bist kein Admin."
+  },
+  "login": {
+    "empty": "Keine E-Mail oder kein Passwort angegeben.",
+    "emailCharacterLimit": "E-Mail darf nicht länger als 191 Zeichen sein.",
+    "passwordCharacterMinimum": "Passwort muss mindestens 8 Zeichen lang sein.",
+    "passwordCharacterLimit": "Passwort darf nicht länger als 191 Zeichen sein.",
+    "nameCharacterLimit": "Name darf nicht länger als 191 Zeichen sein.",
+    "invalidEmailFormat": "Ungültiges E-Mail-Format.",
+    "passwordNotMatch": "Passwörter stimmen nicht überein.",
+    "emailExists": "E-Mail existiert bereits.",
+    "userCreated": "Benutzer erstellt.",
+    "createUserFailed": "Fehler beim Erstellen des Benutzers.",
+    "userNotFound": "Benutzer nicht gefunden.",
+    "wrongPassword": "Passwort stimmt nicht überein.",
+    "loggedIn": "Benutzer eingeloggt.",
+    "providerNotFound": "Provider nicht gefunden.",
+    "noReason": "Kein Grund angegeben."
+  },
+  "settings": {
+    "changeAvatar": "Avatar ändern",
+    "changeAvatarDescription": "JPG, GIF oder PNG. Max 4 MB.",
+    "language": {
+      "title": "Sprache",
+      "nl": "NL",
+      "en": "EN",
+      "de": "DE",
+      "fr": "FR"
+    },
+    "theme": {
+      "title": "Thema",
+      "light": "Hell",
+      "dark": "Dunkel"
+    },
+    "saveChanges": "Änderungen speichern",
+    "updatedUser": "Benutzer aktualisiert",
+    "failedUpdateUser": "Fehler beim Aktualisieren des Benutzers",
+    "noChangesMade": "Keine Änderungen vorgenommen",
+    "sizeToLarge": "Maximale Uploadgröße ist 4~5 MB, wähle ein kleineres Bild!!",
+    "loadingImg": "Foto wird geladen",
+    "imgLoaded": "Foto wurde geladen"
+  }
+}
+</file>
+
+<file path="src/_locales/en.json">
+{
+  "test": "Hallo {{name}}",
+  "common": {
+    "whiteSpace": " ",
+    "error": "ERROR",
+    "404": "Something went wrong, try again later."
+  },
+  "middleware": {
+    "notAdmin": "You are not an admin."
+  },
+  "login": {
+    "empty": "No email or password provided.",
+    "emailCharacterLimit": "Email can't be longer than 191 characters.",
+    "passwordCharacterMinimum": "Password must be at least 8 characters long.",
+    "passwordCharacterLimit": "Password can't be longer than 191 characters.",
+    "nameCharacterLimit": "Name can't be longer than 191 characters.",
+    "invalidEmailFormat": "Invalid email format.",
+    "passwordNotMatch": "Passwords do not match.",
+    "emailExists": "Email already exists.",
+    "userCreated": "User created.",
+    "createUserFailed": "Failed to create new user.",
+    "userNotFound": "User not found.",
+    "wrongPassword": "Password does not match.",
+    "loggedIn": "User logged in.",
+    "providerNotFound": "Provider not found.",
+    "noReason": "No reason provided."
+  },
+  "settings": {
+    "changeAvatar": "Change avatar",
+    "deleteAvatar": "Delete avatar",
+    "changeAvatarDescription": "JPG, GIF or PNG. 4MB max.",
+    "language": {
+      "title": "Language",
+      "nl": "NL",
+      "en": "EN",
+      "de": "DE",
+      "fr": "FR"
+    },
+    "theme": {
+      "title": "Theme",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "saveChanges": "Save changes",
+    "updatedUser": "updated the user",
+    "failedUpdateUser": "Failed to update the user",
+    "noChangesMade": "No changes made",
+    "sizeToLarge": "Max upload size is 4~5 MB, chose a smaller img!!",
+    "loadingImg": "Photo is loading",
+    "imgLoaded": "Photo has loaded"
+  }
+}
+</file>
+
+<file path="src/_locales/fr.json">
+{
+  "test": "Bonjour {{name}}",
+  "common": {
+    "whiteSpace": " ",
+    "error": "ERREUR",
+    "404": "Un problème est survenu, réessayez plus tard."
+  },
+  "middleware": {
+    "notAdmin": "Vous n'êtes pas administrateur."
+  },
+  "login": {
+    "empty": "Aucun e-mail ou mot de passe fourni.",
+    "emailCharacterLimit": "L'e-mail ne peut pas dépasser 191 caractères.",
+    "passwordCharacterMinimum": "Le mot de passe doit comporter au moins 8 caractères.",
+    "passwordCharacterLimit": "Le mot de passe ne peut pas dépasser 191 caractères.",
+    "nameCharacterLimit": "Le nom ne peut pas dépasser 191 caractères.",
+    "invalidEmailFormat": "Format d'e-mail invalide.",
+    "passwordNotMatch": "Les mots de passe ne correspondent pas.",
+    "emailExists": "L'e-mail existe déjà.",
+    "userCreated": "Utilisateur créé.",
+    "createUserFailed": "Échec de la création de l'utilisateur.",
+    "userNotFound": "Utilisateur non trouvé.",
+    "wrongPassword": "Le mot de passe est incorrect.",
+    "loggedIn": "Utilisateur connecté.",
+    "providerNotFound": "Fournisseur introuvable.",
+    "noReason": "Aucune raison fournie."
+  },
+  
+  "settings": {
+    "changeAvatar": "Changer d'avatar",
+    "changeAvatarDescription": "JPG, GIF ou PNG. Max 4 Mo.",
+    "language": {
+      "title": "Langue",
+      "nl": "NL",
+      "en": "EN",
+      "de": "DE",
+      "fr": "FR"
+    },
+    "theme": {
+      "title": "Thème",
+      "light": "Clair",
+      "dark": "Sombre"
+    },
+    "saveChanges": "Enregistrer les modifications",
+    "updatedUser": "utilisateur mis à jour",
+    "failedUpdateUser": "Échec de la mise à jour de l'utilisateur",
+    "noChangesMade": "Aucun changement effectué",
+    "sizeToLarge": "La taille maximale est de 4~5 Mo, choisissez une image plus petite !!",
+    "loadingImg": "La photo est en cours de chargement",
+    "imgLoaded": "La photo a été chargée"
+  }
+}
+</file>
+
+<file path="src/_locales/nl.json">
+{
+  "test": "Hallo {{name}}",
+  "common": {
+    "whiteSpace": " ",
+    "error": "FOUT",
+    "404": "Er is iets misgegaan, probeer het later opnieuw."
+  },
+  "middleware": {
+    "notAdmin": "Je bent geen admin."
+  },
+  "login": {
+    "empty": "Geen e-mail of wachtwoord opgegeven.",
+    "emailCharacterLimit": "E-mail mag niet langer zijn dan 191 tekens.",
+    "passwordCharacterMinimum": "Wachtwoord moet minimaal 8 tekens lang zijn.",
+    "passwordCharacterLimit": "Wachtwoord mag niet langer zijn dan 191 tekens.",
+    "nameCharacterLimit": "Naam mag niet langer zijn dan 191 tekens.",
+    "invalidEmailFormat": "Ongeldig e-mailformaat.",
+    "passwordNotMatch": "Wachtwoorden komen niet overeen.",
+    "emailExists": "E-mail bestaat al.",
+    "userCreated": "Gebruiker aangemaakt.",
+    "createUserFailed": "Gebruiker aanmaken mislukt.",
+    "userNotFound": "Gebruiker niet gevonden.",
+    "wrongPassword": "Wachtwoord komt niet overeen.",
+    "loggedIn": "Gebruiker ingelogd.",
+    "providerNotFound": "Provider niet gevonden.",
+    "noReason": "Geen reden opgegeven."
+  },
+  "settings": {
+    "changeAvatar": "Verander avatar",
+    "changeAvatarDescription": "JPG, GIF of PNG. Max 4MB.",
+    "language": {
+      "title": "Taal",
+      "nl": "NL",
+      "en": "EN",
+      "de": "DE",
+      "fr": "FR"
+    },
+    "theme": {
+      "title": "Thema",
+      "light": "Licht",
+      "dark": "Donker"
+    },
+    "saveChanges": "Wijzigingen opslaan",
+    "updatedUser": "gebruiker bijgewerkt",
+    "failedUpdateUser": "Bijwerken gebruiker mislukt",
+    "noChangesMade": "Geen wijzigingen gemaakt",
+    "sizeToLarge": "Maximale uploadgrootte is 4~5 MB, kies een kleinere afbeelding!!",
+    "loadingImg": "Foto word geladen",
+    "imgLoaded": "Foto is geladen"
+  }
+}
+</file>
+
+<file path="src/_providers/socketStatusProvider.tsx">
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  Dispatch,
+  SetStateAction,
+} from "react";
+⋮----
+export type SOCKETSTATUS =
+  | "CONNECTED"
+  | "DISCONNECTED"
+  | "RECONNECTING"
+  | "STARTUP";
+⋮----
+export interface statusContent {
+  status: SOCKETSTATUS;
+  reconnectAttempt?: number;
+  endTime?: number;
+}
+⋮----
+interface SocketStatusContextType {
+  socketStatus: {
+    self: statusContent;
+    [userId: string]: statusContent;
+  };
+  setSocketStatus: Dispatch<
+    SetStateAction<{
+      self: statusContent;
+      [userId: string]: statusContent;
+    }>
+  >;
+}
+⋮----
+export const SocketStatusProvider = (
+⋮----
+export const useSocketStatus = () =>
+</file>
+
+<file path="src/_sockets/apiRequest.ts">
+import { dev } from "config";
+import { toast } from "sonner";
+import { incrementResponseIndex, socket, waitForSocket } from "./socketInitializer";
+⋮----
+//? if we use apiRequest function and the called api name starts with 1 of the names below we apply a abort controller
+⋮----
+interface apiRequestType {
+  name: string;
+  data?: object;
+}
+⋮----
+export interface apiRequestReponse {
+  status: 'success' | 'error' | any;
+  result?: Record<string, any> | any;
+  message?: string;
+  messageParams?: Record<string, any>;
+}
+⋮----
+export const apiRequest = (
+⋮----
+// example: api/games/boerZoektVrouw/getGameData
+⋮----
+let abortFunc = () =>
+⋮----
+//? if we have an abort controller we abort it and create a new one
+⋮----
+//? here we create a new abort controller and add it to the map with the api fullname as the key
+⋮----
+abortFunc = () =>
+//? here we bind the abortFunc to the abort event so it will be called when the abort controller is aborted
+</file>
+
+<file path="src/_sockets/syncRequest.ts">
+import { dev, SessionLayout } from "config";
+import { toast } from "sonner";
+import { incrementResponseIndex, socket, waitForSocket } from "./socketInitializer";
+import { statusContent } from "src/_providers/socketStatusProvider";
+import { Dispatch, RefObject, SetStateAction } from "react";
+⋮----
+type syncRequestType = {
+  name: string;
+  data?: object | null;
+  receiver: any;
+  ignoreSelf?: boolean;
+}
+⋮----
+export const syncRequest = async (
+⋮----
+//? example: api/games/boerZoektVrouw/getGameData
+⋮----
+export const useSyncEvents = () =>
+⋮----
+const upsertSyncEventCallback = (name: string, cb: (params:
+⋮----
+export const useSyncEventTrigger = () =>
+⋮----
+const triggerSyncEvent = (name: string, clientData: any =
+⋮----
+export const initSyncRequest = async ({
+  socketStatus, 
+  setSocketStatus,
+  sessionRef
+}: {
+  socketStatus: {
+    self: statusContent;
+    [userId: string]: statusContent;
+  };
+  setSocketStatus: Dispatch<
+    SetStateAction<{
+      self: statusContent;
+      [userId: string]: statusContent;
+    }>
+  >;
+  sessionRef: RefObject<SessionLayout> | null;
+}) =>
+⋮----
+// reconnectAttempt: undefined,
+⋮----
+//? will not trigger when you call this event
+⋮----
+//? will not trigger when you call this event
+</file>
+
+<file path="src/login/page.tsx">
+import LoginForm from "src/_components/LoginForm";
+⋮----
+export default function App()
+</file>
+
+<file path="src/main.tsx">
+import { createRoot } from 'react-dom/client'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { Toaster } from 'sonner'
+⋮----
+import VConsole from 'vconsole';
+import { mobileConsole } from 'config'
+import LocationProvider from 'src/_components/LocationProvider'
+import { MenuHandlerProvider } from './_components/MenuHandler'
+import TemplateProvider from './_components/TemplateProvider'
+import type { Template } from './_components/TemplateProvider';
+import { AvatarProvider } from './_components/AvatarProvider'
+import { SessionProvider } from './_providers/SessionProvider'
+import { TranslationProvider } from './_components/TranslationProvider'
+import { SocketStatusProvider } from './_providers/socketStatusProvider'
+⋮----
+type PageWithTemplate = React.ComponentType & { template?: Template };
+const getRoutes = (pages: Record<string,
+⋮----
+//! eslint will tell you that the as Record<string, { default: React.ComponentType }> is not needed but it is for typescript to know what the type of pages is
+</file>
+
+<file path="src/page.tsx">
+import config from "config";
+import { useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useSession } from "./_providers/SessionProvider";
+⋮----
+export default function App()
+</file>
+
+<file path="src/register/page.tsx">
+import LoginForm from "src/_components/LoginForm";
+⋮----
+export default function App()
+</file>
+
+<file path="src/sandbox/_components/files/Render.tsx">
+import { file } from "src/sandbox/types/blueprints";
+import { ScreenRenderer } from "../grid/ScreenRenderer";
+import { useCode } from "src/sandbox/_providers/CodeContextProvider";
+import { useBlueprints } from "src/sandbox/_providers/BlueprintsContextProvider";
+import { useBuilderPanel } from "src/sandbox/_providers/BuilderPanelContextProvider";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFile } from "@fortawesome/free-solid-svg-icons";
+import Dropdown from "src/_components/Dropdown";
+import { viewportMapping, Viewports } from "src/sandbox/types/viewportMapping";
+import { useEffect } from "react";
+⋮----
+export default function Render({
+  file,
+  setFile
+}: {
+  file: file;
+setFile: (fileUpdate: Partial<file>)
+// style={{
+//   width: viewportMapping[file.viewport ?? Viewports.NONE].width ?? 0,
+//   height: viewportMapping[file.viewport ?? Viewports.NONE].height ?? 0,
+// }}
+⋮----
+onClick=
+⋮----
+onChange=
+</file>
+
+<file path="src/sandbox/_components/grid/ErrorBoundary.tsx">
+import React, { Component, ErrorInfo, ReactNode } from "react";
+⋮----
+interface Props {
+  children: ReactNode;
+  fallback?: (error: Error) => ReactNode;
+  resetKey?: any; // Changing this key resets the error boundary
+}
+⋮----
+resetKey?: any; // Changing this key resets the error boundary
+⋮----
+interface State {
+  hasError: boolean;
+  error: Error | null;
+}
+⋮----
+export class ErrorBoundary extends Component<Props, State> {
+⋮----
+public static getDerivedStateFromError(error: Error): State
+⋮----
+public componentDidCatch(error: Error, errorInfo: ErrorInfo)
+⋮----
+public componentDidUpdate(prevProps: Props)
+⋮----
+public render()
+</file>
+
+<file path="src/sandbox/_components/grid/ScreenRenderer.tsx">
+import React, { useEffect, useMemo, useState } from "react";
+import { compileTSX, loadModule } from "../../_functions/codeEditor/babel/compiler";
+import { ErrorBoundary } from "./ErrorBoundary";
+⋮----
+interface ScreenRendererProps {
+  code: string;
+  id: string;
+  name: string;
+  className?: string;
+  style?: React.CSSProperties;
+  onClick?: () => void;
+}
+⋮----
+export const ScreenRenderer = (
+</file>
+
+<file path="src/sandbox/_components/menus/NoteOptionsMenu.tsx">
+import { motion, AnimatePresence } from "framer-motion";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { NoteOptions, NoteOptionsCommands, NoteOptionsIcons, NoteOptionsVisibleState } from "src/sandbox/types/NotesOptionsTypes";
+import { useNotes } from "src/sandbox/_providers/NotesContextProvider";
+import { useEffect, useState } from "react";
+⋮----
+const closeMenuAndRestoreFocus = (shouldRestorePosition = true) =>
+⋮----
+// Restore focus to the editor at the saved position
+⋮----
+// Use setTimeout to ensure menu is closed before focusing
+⋮----
+const handleClickOutside = (event: MouseEvent) =>
+⋮----
+// Handle keyboard navigation
+⋮----
+const handleKeyDown = (event: KeyboardEvent) =>
+⋮----
+// Reset selected index when search changes
+⋮----
+{/* <div className="text-xs font-bold text-text2 uppercase tracking-wider px-1">
+                Create
+              </div> */}
+⋮----
+// Calculate actual visible index
+⋮----
+onMouseEnter=
+</file>
+
+<file path="src/sandbox/_functions/codeEditor/autocompletions/autocompletionHandler.ts">
+import { HTMLTagCloser } from "./JSX";
+import { ReactHooksImporter } from "./reactHooks";
+⋮----
+export default function loadAutoCompletions(monaco: typeof import("monaco-editor"))
+⋮----
+// Clean up on dispose
+</file>
+
+<file path="src/sandbox/_functions/codeEditor/autocompletions/customComponents.ts">
+
+</file>
+
+<file path="src/sandbox/_functions/codeEditor/autocompletions/JSX.ts">
+export function HTMLTagCloser(monaco: typeof import("monaco-editor"))
+</file>
+
+<file path="src/sandbox/_functions/codeEditor/babel/compiler.ts">
+//@ts-expect-error
+⋮----
+import React from "react";
+⋮----
+export function compileTSX(code: string)
+⋮----
+filename: 'file.tsx', // helpful for error reporting
+⋮----
+// console.log('Compiled code:', compiled);
+⋮----
+// export function loadModule(jsCode: string) {
+//   const module = { exports: {} };
+//   // const fn = new Function("module", "exports", "React", jsCode);
+//   const fn = new Function("React", `return ${jsCode}`);
+//   return fn(React);
+//   // fn(module, module.exports, React);
+⋮----
+//   // if ('default' in module.exports) {
+//   //   return module.exports.default
+//   // } else {
+//   //   return module.exports;
+//   // }
+// }
+export function loadModule(code: string)
+</file>
+
+<file path="src/sandbox/_functions/codeEditor/hoverTooltip.ts">
+export default function HoverTooltip(editor: monacoEditor.editor.IStandaloneCodeEditor)
+⋮----
+above: false //? yes just having this value set to false makes it apprear below or above the line whereever there is more space
+</file>
+
+<file path="src/sandbox/_functions/codeEditor/tailwindcss/autoSuggestion.ts">
+import { isInsideClassName } from "./classDetector";
+import { tailwindcssClasses } from "./classes";
+⋮----
+export default function InitAutoSuggestion(
+  monacoInstance: typeof monaco,
+  extractColorValue: (className: string) => string | null = () => null
+)
+⋮----
+const sortText = shade.padStart(3, "0"); // 50 -> "050", 400 -> "400"
+⋮----
+//? The range of text to replace
+⋮----
+function getClassFragmentRange(model: monaco.editor.ITextModel, position: monaco.Position)
+</file>
+
+<file path="src/sandbox/_functions/codeEditor/tailwindcss/classDetector.ts">
+export function isInsideClassName(text: string)
+⋮----
+// 1. Find className=
+⋮----
+// 2. Check first character after =
+⋮----
+// Case A: quote directly => className="..."
+⋮----
+// Case B: expression => className={ ... }
+⋮----
+// We look *inside* the expression for an unclosed string
+⋮----
+function isInsideUnclosedString(text: string)
+⋮----
+// Find first quote of any type
+⋮----
+// After the opening quote
+⋮----
+// If we haven't seen the same quote again -> open string
+</file>
+
+<file path="src/sandbox/_functions/codeEditor/tailwindcss/color.js">
+
+</file>
+
+<file path="src/sandbox/_functions/codeEditor/tailwindcss/tailwindcss.ts">
+import InitAutoSuggestion from "./autoSuggestion";
+⋮----
+import { tailwindcssColors } from "./color";
+import InitInlineColorIcon from "./inlineColorIcon";
+⋮----
+export default function InitTailwindcss(monacoInstance: typeof import("monaco-editor"), editorInstance: monaco.editor.IStandaloneCodeEditor)
+⋮----
+function extractColorValue(className: string): string | null
+</file>
+
+<file path="src/sandbox/_functions/codeEditor/themes/textmate/theme-converter.ts">
+import type { editor } from 'monaco-editor';
+⋮----
+interface IVScodeTheme {
+  $schema: string;
+  name?: string | undefined;
+  include?: string | undefined;
+  type: ThemeType | string;
+  tokenColors: TokenColor[];
+  colors?:
+    | {
+        [name: string]: string;
+      }
+    | undefined;
+}
+⋮----
+interface TokenColor {
+  name?: string;
+  scope: string[] | string;
+  settings: {
+    foreground?: string;
+    background?: string;
+    fontStyle?: string;
+  };
+}
+⋮----
+type ThemeType = 'light' | 'dark' | 'hcLight' | 'hcDark';
+⋮----
+function convertTheme(theme: IVScodeTheme): editor.IStandaloneThemeData
+</file>
+
+<file path="src/sandbox/_functions/codeEditor/themes/textmate/tm-to-monaco-token.ts">
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+⋮----
+// This file has been modified by adding the convenience function TMToMonacoToken.
+// See the original file at https://github.com/microsoft/vscode/blob/main/src/vs/workbench/services/textMate/common/TMHelper.ts
+⋮----
+export interface IColorTheme {
+  readonly tokenColors: ITokenColorizationRule[];
+}
+⋮----
+export interface ITokenColorizationRule {
+  name?: string;
+  scope?: string | string[];
+  settings: ITokenColorizationSetting;
+}
+⋮----
+export interface ITokenColorizationSetting {
+  foreground?: string;
+  background?: string;
+  fontStyle?: string; // italic, underline, strikethrough, bold
+}
+⋮----
+fontStyle?: string; // italic, underline, strikethrough, bold
+⋮----
+export function findMatchingThemeRule(
+  theme: IColorTheme,
+  scopes: string[],
+  onlyColorRules: boolean = true
+): ThemeRule | null
+⋮----
+function findMatchingThemeRule2(
+  theme: IColorTheme,
+  scope: string,
+  parentScopes: string[],
+  onlyColorRules: boolean
+): ThemeRule | null
+⋮----
+// Loop backwards, to ensure the last most specific rule wins
+⋮----
+export class ThemeRule {
+⋮----
+constructor(rawSelector: string, settings: ITokenColorizationSetting)
+⋮----
+public matches(scope: string, parentScopes: string[]): boolean
+⋮----
+private static _cmp(a: ThemeRule | null, b: ThemeRule | null): number
+⋮----
+// b > a
+⋮----
+// a > b
+⋮----
+// longer scope length > shorter scope length
+⋮----
+// more parents > less parents
+⋮----
+public isMoreSpecific(other: ThemeRule | null): boolean
+⋮----
+private static _matchesOne(selectorScope: string, scope: string): boolean
+⋮----
+private static _matches(
+    selectorScope: string,
+    selectorParentScopes: string[],
+    scope: string,
+    parentScopes: string[]
+): boolean
+⋮----
+// export const TMToMonacoToken = (theme: IColorTheme, scopes: string[]) => {
+//   const themeRule = findMatchingThemeRule(theme, scopes, true);
+//   return themeRule ? themeRule.scope : '';
+// };
+export const TMToMonacoToken = (theme: IColorTheme, scopes: string[]): string =>
+⋮----
+// fallback: use the editor foreground color or white
+⋮----
+// return the color, not the scope
+</file>
+
+<file path="src/sandbox/_functions/codeEditor/themes/themes.ts">
+export default function generateThemes(monaco: typeof import("monaco-editor"))
+⋮----
+// Types
+⋮----
+// Keywords
+⋮----
+// Comments
+⋮----
+const colorParser = (tokens: any[]) =>
+⋮----
+if (!token.scope) continue; // skip tokens without a scope
+⋮----
+// token: scope,
+⋮----
+import traeDarkColor from "./trae_dark_color.json"
+import traeDarkPlus from "./trae_dark_plus.json"
+import traeDarkVs from "./trae_dark_vs.json"
+⋮----
+export const traeDarkTheme = (monaco: typeof import("monaco-editor")) =>
+⋮----
+// Combine tokenColors from both VSCode files
+⋮----
+// Merge editor colors
+⋮----
+// Define Monaco theme
+</file>
+
+<file path="src/sandbox/_functions/codeEditor/themes/trae_dark_color.json">
+{
+  "$schema": "vscode://schemas/color-theme",
+  "name": "Trae Dark",
+  "colors": {
+    "editor.background": "#171B26",
+    "editor.foreground": "#DADDE5",
+    "editorCursor.foreground": "#DADDE5",
+    "editor.selectionBackground": "#c2caf229",
+    "editor.lineHighlightBackground": "#C2CAF214",
+    
+    "activityBar.background": "#24262B",
+    "activityBar.foreground": "#DADDE5",
+    "activityBar.inactiveForeground": "#9599A6",
+    "activityBarBadge.background": "#387BFF",
+    "activityBarBadge.foreground": "#FFFFFF",
+    
+    "sideBar.background": "#24262B",
+    "sideBar.foreground": "#DADDE5",
+    "sideBarTitle.foreground": "#9599A6",
+    "sideBarSectionHeader.background": "#33363D",
+    "sideBarSectionHeader.foreground": "#DADDE5",
+    
+    "tab.activeBackground": "#171B26",
+    "tab.activeForeground": "#DADDE5",
+    "tab.inactiveBackground": "#24262B",
+    "tab.inactiveForeground": "#9599A6",
+    "editorGroupHeader.tabsBackground": "#24262B",
+    
+    "statusBar.background": "#24262B",
+    "statusBar.foreground": "#DADDE5",
+    "statusBar.debuggingBackground": "#387BFF",
+    "statusBar.debuggingForeground": "#FFFFFF",
+    "statusBar.noFolderBackground": "#24262B",
+    
+    "titleBar.activeBackground": "#24262B",
+    "titleBar.activeForeground": "#DADDE5",
+    "titleBar.inactiveBackground": "#24262B",
+    "titleBar.inactiveForeground": "#9599A6",
+    
+    "input.background": "#33363D",
+    "input.foreground": "#DADDE5",
+    "input.placeholderForeground": "#9599A6",
+    "inputOption.activeBorder": "#387BFF",
+    
+    "dropdown.background": "#33363D",
+    "dropdown.foreground": "#DADDE5",
+    "dropdown.border": "#C2CAF229",
+    
+    "list.activeSelectionBackground": "#C2CAF229",
+    "list.activeSelectionForeground": "#DADDE5",
+    "list.hoverBackground": "#C2CAF214",
+    "list.hoverForeground": "#DADDE5",
+    "list.inactiveSelectionBackground": "#C2CAF214",
+    "list.inactiveSelectionForeground": "#DADDE5",
+    
+    "button.background": "#387BFF",
+    "button.foreground": "#FFFFFF",
+    "button.hoverBackground": "#78A5FF",
+    
+    "scrollbarSlider.background": "#DDE2E940",
+    "scrollbarSlider.hoverBackground": "#DDE2E959",
+    "scrollbarSlider.activeBackground": "#DDE2E980",
+    
+    "editorGroup.border": "#3A3D45",
+    "panel.border": "#3A3D45",
+    "sideBar.border": "#3A3D45",
+    
+    "focusBorder": "#C2CAF229",
+    "foreground": "#DADDE5",
+    "widget.shadow": "#00000029",
+    "selection.background": "#C2CAF229"
+  }
+}
+</file>
+
+<file path="src/sandbox/_functions/codeEditor/themes/trae_dark_plus.json">
+{"$schema":"vscode://schemas/color-theme","name":"Dark+","include":"./dark_vs.json","tokenColors":[{"name":"Function declarations","scope":["entity.name.function","support.function","support.constant.handlebars","source.powershell variable.other.member","entity.name.operator.custom-literal"],"settings":{"foreground":"#F29D79"}},{"name":"Types declaration and references","scope":["support.class","support.type","entity.name.type","entity.name.namespace","entity.other.attribute","entity.name.scope-resolution","entity.name.class","storage.type.numeric.go","storage.type.byte.go","storage.type.boolean.go","storage.type.string.go","storage.type.uintptr.go","storage.type.error.go","storage.type.rune.go","storage.type.cs","storage.type.generic.cs","storage.type.modifier.cs","storage.type.variable.cs","storage.type.annotation.java","storage.type.generic.java","storage.type.java","storage.type.object.array.java","storage.type.primitive.array.java","storage.type.primitive.java","storage.type.token.java","storage.type.groovy","storage.type.annotation.groovy","storage.type.parameters.groovy","storage.type.generic.groovy","storage.type.object.array.groovy","storage.type.primitive.array.groovy","storage.type.primitive.groovy"],"settings":{"foreground":"#81CFE0"}},{"name":"Types declaration and references, TS grammar specific","scope":["meta.type.cast.expr","meta.type.new.expr","support.constant.math","support.constant.dom","support.constant.json","entity.other.inherited-class","punctuation.separator.namespace.ruby"],"settings":{"foreground":"#B38CFF"}},{"name":"Control flow / Special keywords","scope":["keyword.control","source.cpp keyword.operator.new","keyword.operator.delete","keyword.other.using","keyword.other.directive.using","keyword.other.operator","entity.name.operator"],"settings":{"foreground":"#B38CFF"}},{"name":"Variable and parameter name","scope":["variable","meta.definition.variable.name","support.variable","entity.name.variable","constant.other.placeholder"],"settings":{"foreground":"#DED47E"}},{"name":"Constants and enums","scope":["variable.other.constant","variable.other.enummember"],"settings":{"foreground":"#80BBFF"}},{"name":"Object keys, TS grammar specific","scope":["meta.object-literal.key"],"settings":{"foreground":"#E0E3EE"}},{"name":"CSS property value","scope":["support.constant.property-value","support.constant.font-name","support.constant.media-type","support.constant.media","constant.other.color.rgb-value","constant.other.rgb-value","support.constant.color"],"settings":{"foreground":"#82D99F"}},{"name":"Regular expression groups","scope":["punctuation.definition.group.regexp","punctuation.definition.group.assertion.regexp","punctuation.definition.character-class.regexp","punctuation.character.set.begin.regexp","punctuation.character.set.end.regexp","keyword.operator.negation.regexp","support.other.parenthesis.regexp"],"settings":{"foreground":"#DED47E"}},{"scope":["constant.character.character-class.regexp","constant.other.character-class.set.regexp","constant.other.character-class.regexp","constant.character.set.regexp"],"settings":{"foreground":"#82D99F"}},{"scope":["keyword.operator.or.regexp","keyword.control.anchor.regexp"],"settings":{"foreground":"#E0E3EE"}},{"scope":"keyword.operator.quantifier.regexp","settings":{"foreground":"#E0E3EE"}},{"scope":["constant.character","constant.other.option"],"settings":{"foreground":"#80BBFF"}},{"scope":"constant.character.escape","settings":{"foreground":"#80BBFF"}},{"scope":"entity.name.label","settings":{"foreground":"#82D99F"}},{"scope":"variable.other.property","settings":{"foreground":"#E0E3EE"}}],"semanticTokenColors":{"newOperator":"#E0E3EE","stringLiteral":"#82D99F","customLiteral":"#E0E3EE","numberLiteral":"#F48CCA"}}
+</file>
+
+<file path="src/sandbox/_functions/drawing/clientToWorld.ts">
+export const clientToWorld = (
+  clientX: number,
+  clientY: number,
+  overlayEl: SVGSVGElement | null,
+  offset: { x: number, y: number },
+  zoom: number
+) =>
+</file>
+
+<file path="src/sandbox/_functions/drawing/clipUtils.ts">
+import { StrokeData, DrawingPoint } from "src/sandbox/_providers/DrawingContextProvider";
+⋮----
+type Rect = { x: number, y: number, width: number, height: number };
+⋮----
+/**
+ * Clips a single segment (p1 -> p2) against a rectangle.
+ * Returns null if strictly outside, or [start, end] points of the visible segment.
+ * Note: simplistic Sutherland-Hodgman or Cohen-Sutherland approach for a single segment.
+ */
+function clipSegment(p1: DrawingPoint, p2: DrawingPoint, rect: Rect): [DrawingPoint, DrawingPoint] | null
+⋮----
+const INSIDE = 0; // 0000
+const LEFT = 1;   // 0001
+const RIGHT = 2;  // 0010
+const BOTTOM = 4; // 0100
+const TOP = 8;    // 1000
+⋮----
+const computeOutCode = (x: number, y: number) =>
+⋮----
+if (y < minY) code |= TOP; // Note: Ensure Y coordinates match system (Top < Bottom?) Usually screen coords: Top is smaller Y.
+// Wait, in standard math Y goes up. In screen, Y goes down.
+// If Y goes down (0 at top), then "Top" of rect (visually) is minY.
+// If y < minY, it is ABOVE the rect. In code names, this is often called TOP or BOTTOM depending on convention.
+// Let's stick to numerical checks.
+// y < minY -> "Above" (Top)
+else if (y > maxY) code |= BOTTOM; // "Below"
+⋮----
+// Bitwise OR is 0. Trivially accept and exit.
+⋮----
+// Bitwise AND is not 0. Trivially reject and exit.
+⋮----
+// Failed both tests, so calculate the line segment to clip
+// from an outside point to an intersection with clip edge
+⋮----
+// At least one endpoint is outside the clip rectangle; pick it.
+⋮----
+// Find intersection point;
+// using formulas y = y1 + slope * (x - x1), x = x1 + (1 / slope) * (y - y1)
+if (outcodeOut & BOTTOM) {           // point is below the clip rect
+⋮----
+} else if (outcodeOut & TOP) { // point is above the clip rect
+⋮----
+} else if (outcodeOut & RIGHT) {  // point is to the right of clip rect
+⋮----
+} else if (outcodeOut & LEFT) {   // point is to the left of clip rect
+⋮----
+// Now we move outside point to intersection point to clip
+// and ready for next pass.
+⋮----
+// Interpolate attributes (size, color)
+// Simple linear interpolation based on distance ratio?
+// Or just inherit from p1/p2.
+// For 'perfect-freehand', color/size per point matters.
+// We'll just clone p1 props for start, p2 props for end for simplicity,
+// or better: interpolate size.
+⋮----
+// Accurate approach:
+// If x1 != p1.x, x1 is an intersection.
+// We construct new points.
+⋮----
+// We should strictly interpolate size if possible, to avoid "popping" thickness.
+⋮----
+export function clipStrokesToRect(strokes: StrokeData[], rect: Rect): StrokeData[]
+⋮----
+// Optimization: Intersect bounding box first?
+// We already have hit testing for that, but let's just do point by point.
+⋮----
+// Single point: check point in rect
+⋮----
+// If currentPoints is empty, start new strip
+⋮----
+// Check continuity.
+// If last point of current strip is same as c1 (visual equality or microscopic tolerance)
+⋮----
+// connected
+⋮----
+// Discontinuity (gap bridged by outside segment, but we shouldn't bridge it)
+// Wait, if we are here, clipSegment returned a segment efficiently.
+// If there was a gap, clipSegment would have returned different coordinates?
+// Actually, if we skip an "outside" segment, we enter this block with a NEW c1.
+// So we must flush currentPoints to a stroke and start new.
+⋮----
+// Case: p1-p2 IN. p2-p3 OUT. p3-p4 IN.
+// i=0: p1-p2 -> c1=p1, c2=p2. currentPoints: [p1, p2].
+// i=1: p2-p3 -> null (outside). Loop continues.
+// i=2: p3-p4 -> c1=p3, c2=p4.
+// currentPoints has [p1, p2].
+// We check last (p2) vs c1 (p3). Dist > 0.
+// This is a GAP.
+// So we must save [p1, p2] as a stroke and start new [p3...].
+⋮----
+// Add stroke
+⋮----
+// Don't add if single point? (Unless dots)
+// Drawing needs at least 1 point (rendered as dot) or 2?
+⋮----
+// Add end point
+⋮----
+// Segment fully outside.
+// If we have accumulated points, we effectively "cut" here.
+⋮----
+// Flush remaining
+⋮----
+id: crypto.randomUUID(), // New ID to avoid conflicts
+</file>
+
+<file path="src/sandbox/_functions/drawing/exportUtils.ts">
+import { StrokeData } from "src/sandbox/_providers/DrawingContextProvider";
+import { getStroke } from 'perfect-freehand'
+import { getSvgPathFromStroke } from './getSvgPathFromStroke'
+import { getStrokesBoundingBox } from './selectionUtils'
+⋮----
+// Shared options for getStroke to ensure consistent rendering
+const getStrokeOptions = (pointSize: number) => (
+⋮----
+// Shared bounds logic
+const calculateViewBox = (strokes: StrokeData[], customBounds?:
+⋮----
+export const downloadSvg = (strokes: StrokeData[], customBounds?:
+⋮----
+// 2. Generate SVG Content
+⋮----
+// Freehand / Shape
+⋮----
+// Fill
+⋮----
+// Stroke
+⋮----
+// 3. Trigger Download
+⋮----
+export const downloadPng = (strokes: StrokeData[], customBounds?:
+⋮----
+// Generate SVG string
+⋮----
+const triggerDownload = (url: string, filename: string) =>
+</file>
+
+<file path="src/sandbox/_functions/drawing/generateShapePoints.ts">
+import { DrawingPoint, ShapeType } from "src/sandbox/_providers/DrawingContextProvider";
+⋮----
+export function generateShapePoints(
+  start: { x: number, y: number },
+  end: { x: number, y: number },
+  shapeType: ShapeType,
+  brushSize: number,
+  color: string
+): DrawingPoint[]
+⋮----
+// Use a higher density step to smooth out shapes and ensure corners are good.
+// Previously: Math.max(1, brushSize / 4).
+// New: Math.max(1, brushSize / 10) ensures at least 10 "stamps" per brush diameter.
+⋮----
+const addPoint = (x: number, y: number) =>
+⋮----
+// We use interpolation for edges to guarantee we hit the corners exactly,
+// regardless of whether the side length is divisible by the step size.
+⋮----
+// Top edge (minX, minY) -> (maxX, minY)
+⋮----
+// Right edge (maxX, minY) -> (maxX, maxY)
+⋮----
+// Bottom edge (maxX, maxY) -> (minX, maxY)
+// Note: iterating backwards or just swapping start/end logic
+⋮----
+// Left edge (minX, maxY) -> (minX, minY)
+⋮----
+// Circumference approximation to determine steps
+⋮----
+// Ensure accurate curvature even for small circles with large brushes
+⋮----
+// Top to Right
+⋮----
+// Right to Bottom
+⋮----
+// Bottom to Left
+⋮----
+// Left to Top
+⋮----
+// 1. Draw shaft (Start -> End)
+⋮----
+// 2. Draw Arrowhead
+// Angle of the line
+⋮----
+// Length of wings (approx 20% of length or capped min/max?)
+// Let's use a fixed reasonable size for predictability, scaled by brush size slightly
+⋮----
+const wingAngle = Math.PI / 6; // 30 degrees
+⋮----
+// Wing 1
+⋮----
+// From End to x1,y1
+⋮----
+// Wing 2
+⋮----
+// From End to x2,y2
+</file>
+
+<file path="src/sandbox/_functions/drawing/getSvgPathFromStroke.ts">
+export function getSvgPathFromStroke(stroke: number[][]): string
+</file>
+
+<file path="src/sandbox/_functions/drawing/selectionUtils.ts">
+import { DrawingPoint, StrokeData } from "src/sandbox/_providers/DrawingContextProvider";
+import { measureTextDimensions } from "./sharedUtils";
+⋮----
+/**
+ * Calculates the distance between a point (p) and a line segment (v - w).
+ */
+function distToSegmentSquared(p:
+⋮----
+function distToSegment(p:
+⋮----
+/**
+ * Checks if a point is close enough to any segment in the stroke.
+ */
+export function hitTestStroke(point:
+⋮----
+// TEXT HIT TEST
+⋮----
+const padding = 10 / zoom; // Generous padding for easier selection
+⋮----
+// Base threshold, adjusted by zoom. Use largest point size in stroke as rough thickness guide?
+// Or just a fixed "comfortable" click radius.
+// Prompt says: "close enough to the rendered vector path".
+// Let's use a base pixel threshold + stroke width logic.
+⋮----
+// Average stroke width for this stroke? Or max?
+⋮----
+const hitThreshold = (strokeWidth / 2) + (10 / zoom); // 10 screen pixels tolerance
+⋮----
+/**
+ * Returns true if the stroke is considered "inside" the selection box.
+ * Criteria: > 40% of points inside.
+ */
+export function isStrokeInRect(stroke: StrokeData, rect:
+⋮----
+// Handle negative width/height by normalizing rect
+⋮----
+/**
+ * Returns true if the stroke intersects with the selection box (even partially).
+ * Uses simple AABB intersection.
+ */
+export function isStrokeIntersectingRect(stroke: StrokeData, rect:
+⋮----
+// Check AABB intersection
+⋮----
+/**
+ * Returns true if a point is inside the given rectangle bounds.
+ */
+export function isPointInRect(point:
+⋮----
+/**
+ * Calculates the bounding box of a set of strokes.
+ */
+export function getStrokesBoundingBox(strokes: StrokeData[]):
+⋮----
+// HANDLE TEXT - Calculate dimensions dynamically
+⋮----
+// HANDLE NORMAL STROKES
+⋮----
+// Add padding: Half the max stroke width (to cover the stroke thickness) + 5px visual clearance
+⋮----
+/**
+ * Returns the resize handle that was hit, or null.
+ * Handles: 'nw', 'ne', 'sw', 'se'
+ */
+export function hitTestResizeHandle(point:
+⋮----
+const tolerance = handleSize; // generous hit area
+⋮----
+const check = (x: number, y: number) =>
+⋮----
+// Corners (visual positions are shifted by half handle size, but we check center/corner)
+// Actually in DrawingLayer we render: x={minX - 4/zoom} ...
+// So center of handle is at minX, minY.
+</file>
+
+<file path="src/sandbox/_functions/drawing/sharedUtils.ts">
+/**
+ * Shared utilities for drawing operations.
+ * Consolidates duplicate geometry and text measurement logic.
+ */
+⋮----
+/**
+ * Ray casting algorithm to check if a point is inside a polygon.
+ * Used by fill tool and eraser on filled shapes.
+ */
+export const isPointInPolygon = (
+  point: { x: number; y: number },
+  polygon: { x: number; y: number }[]
+): boolean =>
+⋮----
+/**
+ * Measures the dimensions of text content using canvas.
+ * Returns { width, height } for the text at given font size.
+ */
+export const measureTextDimensions = (
+  text: string | undefined,
+  fontSize: number
+):
+⋮----
+width = Math.max(50, maxWidth + 20); // padding
+</file>
+
+<file path="src/sandbox/_functions/drawing/snappingUtils.ts">
+import { StrokeData } from "src/sandbox/_providers/DrawingContextProvider";
+import { getStrokesBoundingBox } from "./selectionUtils";
+⋮----
+export type SnappingGuide = {
+  type: 'horizontal' | 'vertical' | 'gap-horizontal' | 'gap-vertical';
+  orientation: 'horizontal' | 'vertical';
+  position: number; // For line guides
+  start: number;
+  end: number;
+  gapSize?: number; // For gap guides
+};
+⋮----
+position: number; // For line guides
+⋮----
+gapSize?: number; // For gap guides
+⋮----
+/**
+ * Calculates snapping offsets and guides for a moving set of objects.
+ */
+export function getSnappingGuides(
+  movingStrokes: StrokeData[],
+  otherStrokes: StrokeData[],
+  dragOffset: { x: number, y: number },
+  zoom: number
+):
+⋮----
+const SNAP_THRESHOLD = 8 / zoom; // Slightly larger threshold for better feel
+⋮----
+// 1. Calculate bounding box of moving strokes with current dragOffset
+⋮----
+// 2. Identify candidate snap lines AND gap intervals from other strokes
+⋮----
+// Store bounds for gap analysis
+⋮----
+// 3. Find closest snaps (Alignment)
+⋮----
+// --- Alignment Snapping ---
+⋮----
+// Snap X
+⋮----
+const checkX = (current: number) =>
+⋮----
+// Snap Y
+⋮----
+const checkY = (current: number) =>
+⋮----
+// --- Gap Snapping ---
+// Only check if we haven't found a strong alignment snap, OR try to combine?
+// Usually Gap snapping is subtle. Let's prioritize alignment, but if alignment is loose, check gaps.
+// Actually, gap snapping should also adjust snapDx/snapDy.
+⋮----
+// We look for gaps between 'moving' and 'A', matching gap between 'A' and 'B'.
+⋮----
+// Horizontal Gaps
+// We need to sort objects by X to find neighbors? Not strict, but helps.
+// Brute force: match (Moving <-> A) distance to (A <-> B) distance.
+⋮----
+if (minDistX === SNAP_THRESHOLD) { // Only try gap snap if no strong alignment snap
+// Look for X gaps
+// 1. Moving is Right of A: Gap = Moving.Left - A.Right. Match with A.Left - B.Right?
+// 2. Moving is Left of A: Gap = A.Left - Moving.Right.
+⋮----
+// Check gaps between A and other B's
+// We only care about X gaps if they are vertically aligned (loosely) ?
+// For simplicity, just check pure X projection gaps first, or require overlap in Y?
+// Standard design tools usually require some overlap in orthogonal axis.
+⋮----
+// Case 1: Moving is on the Right of A ( A [gap] Moving )
+// We want Gap(A, Moving) == Gap(B, A)
+// => Moving.Left - A.Right == A.Left - B.Right
+// => Moving.Left = A.Right + (A.Left - B.Right)
+⋮----
+// If B is left of A ( B [gap] A )
+⋮----
+const diff = targetLeft - movingPoints.left; // Adjust moving so Left hits target
+⋮----
+// Don't add guide yet, wait for best.
+⋮----
+// If B is right of A ( A [gap] B ) -> We want Moving [gap] A ?? No, logic usually implies sequence.
+// If we are placing Moving to the Left of A: Moving [gap] A. Match B [gap] A? (i.e. B is Left of A too?)
+// Or A [gap] B?
+// Let's simplified: Check if Moving is placing itself such that it creates a gap equal to ANY existing gap between X-neighbors A and B.
+⋮----
+// Also Handle explicit "Gap of 10" mentioned by user?
+// "when having a gap of 10 and than getting a third object it should be able to also snap... when it has a gap to one of the items with a gap of 10"
+// This confirms detecting existing gaps.
+⋮----
+// Simplified Gap Search for X (Optimized)
+// Find all horizontal gaps between existing objects A and B.
+⋮----
+// For every pair A, B where OverlapY, calculate gap.
+⋮----
+if (Math.max(A.minY, B.minY) < Math.min(A.maxY, B.maxY)) { // Overlap Y
+const gap1 = A.minX - B.maxX; // B is left of A
+⋮----
+const gap2 = B.minX - A.maxX; // A is left of B
+⋮----
+// Now check if Moving creates a matching gap with ANY A
+if (minDistX === SNAP_THRESHOLD) { // Only if no alignment
+⋮----
+if (Math.max(currentBounds.minY, A.minY) < Math.min(currentBounds.maxY, A.maxY)) { // Overlap Y
+// Check Moving to Right of A
+⋮----
+gapSnapDx = g - currentGapRight; // Correction
+⋮----
+// Check Moving to Left of A
+⋮----
+gapSnapDx = -(g - currentGapLeft); // Correction: move moving left (negative) to increase gap?
+// gap = A.minX - (Right + dx) = A.minX - Right - dx
+// We want gap == g
+// g = A.minX - Right - dx  =>  dx = A.minX - Right - g
+// Current Gap = A.minX - Right
+// dx = Current - g.
+// Wait, if current is 12, g is 10. we want distance 10.
+// A.min - Right = 12. We want 10. We need to move Right by +2 (right).
+// dx = 2.
+// dx = currentGap - g.
+⋮----
+// Same logic for Y Gaps
+⋮----
+if (Math.max(A.minX, B.minX) < Math.min(A.maxX, B.maxX)) { // Overlap X
+⋮----
+// FIX: Use the SNAPPED X position to check for vertical column overlap.
+// If we just snapped to an alignment guide in X, we are now "in the column".
+⋮----
+if (Math.max(snappedMinX, A.minX) < Math.min(snappedMaxX, A.maxX)) { // Overlap X (using snapped position)
+// Moving Below A (Top - A.Bottom)
+⋮----
+// we want Gap == g
+// Gap = (Top + dy) - A.maxY
+// g = Top + dy - A.maxY
+// dy = g + A.maxY - Top
+// = g - (Top - A.maxY) = g - currentGap
+⋮----
+// Moving Above A (A.Top - Moving.Bottom)
+⋮----
+// Gap = A.minY - (Bottom + dy)
+// g = A.minY - Bottom - dy
+// dy = A.minY - Bottom - g
+// dy = currentGap - g
+⋮----
+// 4. Generate Guides (Recalculate with final snap)
+⋮----
+// Re-verify alignment guides
+// ... (Simplification: just show guide if we snapped)
+⋮----
+// Find what we snapped to
+⋮----
+// Did we snap to a specific target?
+// Or was it a gap snap?
+// Visual feedback for gap snap is trickier (showing two gaps equal).
+// For alignment:
+⋮----
+// Check alignments again
+⋮----
+// If not aligned, it was a gap snap?
+⋮----
+// We can add "Gap" guides here later. For now, simple vertical line at edges to show 'something' happened?
+// Ideally we show arrows <-> 10px <->
+</file>
+
+<file path="src/sandbox/_functions/drawing/useDrawingEvents.ts">
+import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
+import { clientToWorld } from "./clientToWorld";
+import { useGrid } from "src/sandbox/_providers/GridContextProvider";
+import { ErasingMode, useDrawing, StrokeData } from "src/sandbox/_providers/DrawingContextProvider";
+import { eraseStokePoint, eraseStroke } from "./eraseStroke";
+import { generateShapePoints } from "./generateShapePoints";
+import { hitTestStroke, isStrokeInRect, getStrokesBoundingBox, isPointInRect, hitTestResizeHandle } from "./selectionUtils";
+import { getSnappingGuides, SnappingGuide } from "./snappingUtils";
+import { isPointInPolygon } from "./sharedUtils";
+⋮----
+export default function useDrawingEvents()
+⋮----
+// Selection transient state
+⋮----
+// Internal state machine for selection interaction
+⋮----
+const initialSelectedIds = useRef<string[]>([]); // Snapshot of selection at drag start
+⋮----
+// Resize state
+⋮----
+// Text Tool State
+⋮----
+const textInputRef = useRef<HTMLTextAreaElement | null>(null); // To focus
+⋮----
+// Cursor state
+⋮----
+// --- HOVER / CURSOR LOGIC (Passive) ---
+// If not dragging/drawing, we update cursor based on what's under it
+⋮----
+// 1. Check Resize Handles FIRST (if selections exist)
+⋮----
+// Map handle to cursor style
+⋮----
+setEraserPos(null); // Hide eraser
+⋮----
+// 2. Check Selection (Dragging existing selection) or Hovering selectable items
+// We allow dragging IF selectionMode OR (we have a selection and we are in 'hybrid' mode?)
+// Actually, if we have a selection, we can always drag it if we click inside.
+⋮----
+// Check inside existing selection
+⋮----
+// Check for unselected strokes (only if selection mode)
+// In Draw Mode, we do NOT want to show 'move' cursor on unselected items, because clicking them would just draw.
+⋮----
+// Optimization: Reverse loop
+⋮----
+hoverCursor = 'move'; // Or 'pointer'? 'move' implies draggable.
+⋮----
+setEraserPos(null); // Hide eraser when hovering UI elements?
+⋮----
+return; // Passive move, done.
+⋮----
+// Reset cursor if we start drawing/interacting or move to empty space (handled by fallback in UI)
+// Persist cursor if we are dragging/resizing
+⋮----
+setCursorStyle(null); // Default to crosshair/none for drawing
+⋮----
+// --- SELECTION OVERRIDE LOGIC ---
+// If not in selection mode, but we have items selected, check if we are interacting with them.
+⋮----
+// We only check for override on the initial CLICK.
+// However, if we are DRAGGING (buttons=1, not firstHit), we need to know if we are in an override state!
+// But selectionState.current handles that once started.
+// The issue is: on Move, 'firstHit' is false. overrideToSelection becomes false.
+// But 'selectionState.current' should preserve the state.
+⋮----
+// Check interaction
+⋮----
+// Also, if we are ALREADY interacting (dragging), we treat it as selection mode effectively.
+⋮----
+// --- SELECTION MODE LOGIC ---
+⋮----
+// MOUSE DOWN
+⋮----
+// PRIORITY: Marquee Mode (Force Box Selection)
+⋮----
+// Clear selection unless Shift/Ctrl
+⋮----
+// 0. Check Resize Handles FIRST
+⋮----
+return; // Stop here, we are resizing
+⋮----
+// 0.5 Check for specific hit stroke FIRST
+⋮----
+// 1. Check inside selection
+⋮----
+// Store hit stroke even if inside selection, for single-click selection
+⋮----
+// If we clicked inside selection (or resize handle), we are interacting with selection.
+⋮----
+return; // Consumed event
+⋮----
+// If we are overriding (Hybrid Mode) and we didn't click inside selection or resize handle:
+⋮----
+// Fall through to drawing logic
+// do NOT return
+⋮----
+// Normal Selection Mode behavior: Check for other strokes to select
+⋮----
+// MOUSE MOVE
+⋮----
+// --- RESIZING ---
+⋮----
+// Anchor logic
+⋮----
+// Re-calculate original handle pos
+⋮----
+// Current bounds width/height
+// We use the pointer position x, y as the new handle position
+⋮----
+// Resize Text: Scale font size and move X position only
+// Keep Y position fixed - text only scales horizontally
+⋮----
+// Move X position with anchor, keep Y fixed
+⋮----
+y: p.y, // Keep Y position fixed
+// Scale font size proportionally
+⋮----
+size: p.size * ((scaleX + scaleY) / 2) // Approximate size scaling
+⋮----
+// --- DRAG / BOX SELECT ---
+⋮----
+// Snapping Logic
+⋮----
+return; // Consumed drag
+⋮----
+return; // Consumed drag
+⋮----
+// Return if consuming interaction
+⋮----
+// ----------------------------
+⋮----
+// For partial erase, use smaller radius for finer control
+⋮----
+// Find hit stroke (Check inside first, then partial hit if needed?)
+// We prioritize "inside" hits for closed shapes.
+// We iterate structure topmost first? (reverse index)
+⋮----
+// Check if closed (visually)
+⋮----
+// Actually generateShapePoints may not repeat the first point.
+// Let's assume visual closure is enough or strict closure.
+⋮----
+// Raycasting works best if the polygon is effectively closed.
+// If we treat the points as a polygon, the edge (last -> first) is implied.
+⋮----
+// Also check edge hit as fallback?
+⋮----
+// Update Fill AND Outline Color
+⋮----
+// Start Drawing a Shape
+⋮----
+setActiveSnappingGuides([]); // Reset guides
+⋮----
+// If we click to draw, we should Deselect others
+⋮----
+// Snapping while drawing
+⋮----
+// --- TEXT TOOL LOGIC ---
+⋮----
+// If we click on an existing text, we might want to edit it?
+// Let's check hit test first.
+⋮----
+// Check top-most text
+⋮----
+// Clicked on an existing text field
+⋮----
+// First, clean up current editing session if any
+⋮----
+// Check if this text is already selected
+⋮----
+// Second click on already-selected text -> enter edit mode
+⋮----
+// First click -> select only (no edit)
+⋮----
+setEditingTextId(null); // Make sure not editing
+⋮----
+// If clicking same text we're already editing, do nothing (stay in edit)
+⋮----
+// Clicked empty space
+⋮----
+// Clean up empty text if we were editing, then just unfocus (don't create new)
+⋮----
+setSelectedStrokeIds([]); // Also deselect
+return; // Just unfocus, don't create new text
+⋮----
+// If we have a selection, deselect it and RETURN (Do not create new text yet)
+⋮----
+// No selection, no editing - create new text field
+⋮----
+points: [{ x, y, color: brushColor, size: 24 }], // Point 0 is origin, use fixed 24px font
+text: "", // Empty start
+⋮----
+setSelectedStrokeIds([]); // DO NOT select it initially, just edit
+⋮----
+// We stay in text mode.
+⋮----
+setSelectedStrokeIds([]); // Deselect on freehand drawing too
+⋮----
+// --- Clipboard Support ---
+⋮----
+const handleKeyDown = async (e: KeyboardEvent) =>
+⋮----
+// Copy: Ctrl+C
+⋮----
+// Cut: Ctrl+X
+⋮----
+// Delete
+⋮----
+// Paste: Ctrl+V
+⋮----
+} catch { return; } // Not stroke data
+⋮----
+// Validate structure loosely
+⋮----
+// Offset and ID regen
+// Use mouse position if available, otherwise offset slightly
+⋮----
+// Calculate center of pasted strokes
+⋮----
+setActiveSnappingGuides([]); // Clear guides
+⋮----
+// Handle Selection State Transitions
+⋮----
+// Persist the box for Export
+⋮----
+// DO NOT select strokes. This is purely for export cropping.
+// Ensure no selection is active to avoid confusion
+⋮----
+// It was just a click
+⋮----
+// Toggle selection
+⋮----
+// Simple Click without modifier -> Select ONLY this one
+⋮----
+// Check if it is TEXT
+⋮----
+// If we are in Text Mode OR Selection Mode, allow editing?
+// User said: "clicking on it again makes us edit it again"
+// If it's selected, and we click it again...
+⋮----
+// First click selects it (already done above).
+// Maybe we only edit if Text Mode?
+// User said: "clicking outside makes us untoggle... clicking on it again makes us edit"
+// Logic: If already selected, enter edit mode.
+⋮----
+// Actually, if we are in text mode, maybe first click edits?
+⋮----
+// Clicked empty: Commit text if editing
+⋮----
+// We might have just finished drawing.
+⋮----
+lineStyle: lineStyle, // Apply current line style
+⋮----
+// Auto-Select the new stroke!
+</file>
+
+<file path="src/sandbox/_functions/drawing/useKeyboardShortcuts.ts">
+import { useEffect } from "react";
+import { useDrawing } from "src/sandbox/_providers/DrawingContextProvider";
+⋮----
+export function useKeyboardShortcuts()
+⋮----
+const handleKeyDown = (e: KeyboardEvent) =>
+⋮----
+// Don't interfere with text input
+⋮----
+// Undo: Ctrl + Z (only if not typing - let browser handle native undo in text fields)
+⋮----
+// Delete: Delete or Backspace (only if not typing)
+⋮----
+// Delete selected strokes
+⋮----
+// Add to history
+</file>
+
+<file path="src/sandbox/_functions/files/babelUtils.ts">
+import { getFileExtension } from './fileUtils';
+⋮----
+export function isBabelCompatible(filename: string): boolean
+⋮----
+export function getFilenameWithoutExtension(filename: string): string
+⋮----
+// Validate filename format (basic validation)
+export function isValidFilename(filename: string): boolean
+</file>
+
+<file path="src/sandbox/_functions/grid/onMouseLeave.ts">
+
+</file>
+
+<file path="src/sandbox/_providers/BuilderPanelContextProvider.tsx">
+import { createContext, useContext, useState, ReactNode, RefObject, SetStateAction, Dispatch, useRef, useEffect } from 'react';
+⋮----
+export enum BuilderMenuMode {
+  CODE = "CODE",
+  BUILDER = "BUILDER",
+  CLOSED = "CLOSED"
+}
+⋮----
+type BuilderPanelContextType = {
+  builderMenuMode: BuilderMenuMode;
+  setBuilderMenuMode: Dispatch<SetStateAction<BuilderMenuMode>>;
+  
+  prevBuilderMenuMode: BuilderMenuMode;
+  setPrevBuilderMenuMode: Dispatch<SetStateAction<BuilderMenuMode>>;
+
+  windowDividerDragging: RefObject<boolean>;
+
+  windowDivider: boolean;
+  setWindowDivider: Dispatch<SetStateAction<boolean>>;
+
+  windowDividerPosition: number | null;
+  setWindowDividerPosition: Dispatch<SetStateAction<number | null>>;
+
+  lastPositionWindowDivider: RefObject<number>;
+};
+</file>
+
+<file path="src/sandbox/_providers/NotesContextProvider.tsx">
+import { createContext, useContext, useState, ReactNode, SetStateAction, Dispatch, useEffect } from 'react';
+import { NoteOptionsVisibleState } from '../types/NotesOptionsTypes';
+import { Editor } from '@tiptap/react';
+⋮----
+type NotesContextType = {
+  noteOptionsMenuOpen: NoteOptionsVisibleState;
+  setNoteOptionsMenuOpen: Dispatch<SetStateAction<NoteOptionsVisibleState>>;
+  noteOptionsMenuPosition: { x: number; y: number } | null;
+  setNoteOptionsMenuPosition: Dispatch<SetStateAction<{ x: number; y: number } | null>>;
+  lastActiveEditor: { editor: Editor; position: number } | null;
+  setLastActiveEditor: Dispatch<SetStateAction<{ editor: Editor; position: number } | null>>;
+  wasNoteRecentlyActive: boolean;
+  setWasNoteRecentlyActive: Dispatch<SetStateAction<boolean>>;
+};
+⋮----
+export const NotesProvider = (
+⋮----
+const minHeight = 340; // value has no relation to menu height, just a comfortable min height
+const minWidth = 20; // value has no relation to menu width, just a comfortable min width
+⋮----
+const menuHeight = 312 / 2; // menu opens half up and half down from the cursor thats why half height
+const menuWidth = 288; // full width because it only opens to the right
+⋮----
+export const useNotes = () =>
+</file>
+
+<file path="src/sandbox/types/gridProps.ts">
+export interface GridElement {
+  id: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  color?: string;
+};
+</file>
+
+<file path="src/sandbox/types/react-jsx-runtime.d.ts">
+type ElementType = React.JSX.ElementType;
+interface Element extends React.JSX.Element {}
+interface ElementClass extends React.JSX.ElementClass {}
+interface ElementAttributesProperty extends React.JSX.ElementAttributesProperty {}
+interface ElementChildrenAttribute extends React.JSX.ElementChildrenAttribute {}
+type LibraryManagedAttributes<C, P> = React.JSX.LibraryManagedAttributes<C, P>;
+interface IntrinsicAttributes extends React.JSX.IntrinsicAttributes {}
+interface IntrinsicClassAttributes<T> extends React.JSX.IntrinsicClassAttributes<T> {}
+interface IntrinsicElements extends React.JSX.IntrinsicElements {}
+⋮----
+/**
+ * Create a React element.
+ *
+ * You should not use this function directly. Use JSX and a transpiler instead.
+ */
+export function jsx(
+    type: React.ElementType,
+    props: unknown,
+    key?: React.Key,
+): React.ReactElement;
+⋮----
+/**
+ * Create a React element.
+ *
+ * You should not use this function directly. Use JSX and a transpiler instead.
+ */
+export function jsxs(
+    type: React.ElementType,
+    props: unknown,
+    key?: React.Key,
+): React.ReactElement;
+</file>
+
+<file path="src/scrollbar-dark.css">
+/* Global scrollbar styling */
+⋮----
+/* For modern browsers (WebKit-based like Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+⋮----
+::-webkit-scrollbar-track {
+⋮----
+::-webkit-scrollbar-thumb {
+⋮----
+background-color: #a3a3a3; /* Medium dark gray */
+⋮----
+::-webkit-scrollbar-thumb:hover {
+⋮----
+background-color: #6b6b6b; /* Lighter gray on hover */
+⋮----
+::-webkit-scrollbar-button {
+</file>
+
+<file path="src/scrollbar-white.css">
+/* For modern browsers (WebKit-based like Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+⋮----
+width: 8px; /* Customize width */
+height: 8px; /* Customize height for horizontal scrollbars */
+⋮----
+::-webkit-scrollbar-track {
+⋮----
+background: transparent; /* Remove the white background behind the scrollbar */
+⋮----
+::-webkit-scrollbar-thumb {
+⋮----
+background-color: #ffffff; /* Customize thumb color */
+border-radius: 4px; /* Optional: make scrollbar thumb rounded */
+transition: all 0.3s; /* Optional: add hover effect */
+padding: 20px; /* Optional: just make scrollbar thinner */
+⋮----
+::-webkit-scrollbar-thumb:hover {
+⋮----
+background-color: #ffffff; /* Customize thumb color on hover */
+⋮----
+::-webkit-scrollbar-button {
+⋮----
+display: none; /* Remove arrows */
+</file>
+
+<file path="src/settings/_api/updateUser.ts">
+import { PrismaClient } from '@prisma/client';
+import { AuthProps, SessionLayout } from 'config';
+import path from 'path';
+import { GameDataProps } from 'server/functions/game';
+import sharp from "sharp";
+⋮----
+interface Functions {
+  prisma: PrismaClient;
+
+  saveSession: (sessionId: string, data: any) => Promise<boolean>;
+  getSession: (sessionId: string) => Promise<any | null>;
+  deleteSession: (sessionId: string) => Promise<boolean>;
+
+  saveGameData: (gameCode: string, data: GameDataProps) => Promise<boolean>;
+  getGameData: (gameCode: string) => Promise<GameDataProps | null>;
+  deleteGameData: (gameCode: string) => Promise<boolean>;
+  gameExists: (gameCode: string) => Promise<boolean>;
+
+  tryCatch: <T, P>(func: (values: P) => Promise<T> | T, params?: P) => Promise<[any, T | null]>;
+
+  [key: string]: any; // allows for other functions that are not defined as a type but do exist in the functions folder
+};
+⋮----
+[key: string]: any; // allows for other functions that are not defined as a type but do exist in the functions folder
+⋮----
+interface ApiParams {
+  data: Record<string, any>;
+  functions: Functions;
+  user: SessionLayout;
+};
+⋮----
+login: true, //? checks if the session data has an id.
+⋮----
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+const main = async (
+⋮----
+// save as WebP under user's ID
+⋮----
+.webp({ quality: 80 }) // adjust quality if you want
+⋮----
+//? here we can assume the avatar was uploaded successfully if avatar !=  null
+</file>
+
+<file path="src/test/_sync/updateCounter_client.ts">
+import { ClientSyncProps } from "config";
+⋮----
+const main = (
+⋮----
+//? here you can do certain checks for each user and determine if they should get the event or not
+//? e.g. user.admin == true or user.location.pathName == '/test'
+</file>
+
+<file path="src/test/_sync/updateCounter_server.ts">
+import { AuthProps, ServerSyncProps } from "config";
+⋮----
+const main = async (
+⋮----
+// here you can maybe update a counter in your server memory with redis or update your database cause this file only runs once
+</file>
+
+<file path="src/types/react-hooks.d.ts">
+
+</file>
+
+<file path="src/types/react-jsx-runtime.d.ts">
+type ElementType = React.JSX.ElementType;
+interface Element extends React.JSX.Element {}
+interface ElementClass extends React.JSX.ElementClass {}
+interface ElementAttributesProperty extends React.JSX.ElementAttributesProperty {}
+interface ElementChildrenAttribute extends React.JSX.ElementChildrenAttribute {}
+type LibraryManagedAttributes<C, P> = React.JSX.LibraryManagedAttributes<C, P>;
+interface IntrinsicAttributes extends React.JSX.IntrinsicAttributes {}
+interface IntrinsicClassAttributes<T> extends React.JSX.IntrinsicClassAttributes<T> {}
+interface IntrinsicElements extends React.JSX.IntrinsicElements {}
+⋮----
+/**
+ * Create a React element.
+ *
+ * You should not use this function directly. Use JSX and a transpiler instead.
+ */
+export function jsx(
+    type: React.ElementType,
+    props: unknown,
+    key?: React.Key,
+): React.ReactElement;
+⋮----
+/**
+ * Create a React element.
+ *
+ * You should not use this function directly. Use JSX and a transpiler instead.
+ */
+export function jsxs(
+    type: React.ElementType,
+    props: unknown,
+    key?: React.Key,
+): React.ReactElement;
+</file>
+
+<file path="src/vite-env.d.ts">
+/// <reference types="vite/client" />
+</file>
+
+<file path="tsconfig.app.json">
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    "allowJs": true,
+    "checkJs": false,
+    
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "baseUrl": "./",
+    "paths": {
+      "src/*": ["src/*"]
+    },
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
+  },
+  "include": ["src"],
+  "exclude": [ // this excludes files from being build
+    "src/**/api",                    // exclude any api folder
+    "src/**/sync/*_server.ts",       // only exclude server_*.ts files inside sync folders
+    "src/**/sync/*_server.tsx",      // (optional) if you use TSX files too
+    "src/**/sync/*_server.js",       // (optional) in case you have JS mixed in
+    "src/**/sync/*_server.jsx",       // (optional) same for JSX
+  ]
+
+}
+</file>
+
+<file path="tsconfig.json">
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
+}
+</file>
+
+<file path="tsconfig.node.json">
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    "target": "ES2022",
+    "lib": ["ES2023"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    "allowJs": true,
+    "checkJs": false,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
+  },
+  "include": ["vite.config.ts"]
+}
+</file>
+
+<file path="tsconfig.server.json">
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "node",
+    "lib": ["ES2022"],
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "rewriteRelativeImportExtensions": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "outDir": "dist/server",
+    "resolveJsonModule": true,
+    "types": ["node"],
+    "sourceMap": true
+  },
+  "include": ["server/**/*"]
+}
+</file>
+
+<file path="prisma/schema.prisma">
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id        String   @id @map("_id") @default(uuid())
+  email     String
+  name      String
+  password  String?
+  admin     Boolean @default(false)
+  avatar    String @default("")
+  language  String @default("en")
+  theme     THEME @default(dark)
+  provider  PROVIDERS
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+enum THEME {
+  dark
+  light
+}
+
+enum PROVIDERS {
+  credentials
+  google
+  github
+  x
+  facebook
+  linkedIn
+  apple
+  discord
+  instagram
+}
+
+// Command:               Purpose
+/*
+npx prisma format:	      Auto-format your schema.prisma file (fixes spacing, indentation, style)
+npx prisma validate:	    Validate that your schema.prisma is correct (syntax & relational rules)
+npx prisma generate:	    Generate the Prisma Client (after changing schema or installing Prisma)
+npx prisma db pull:	      Pull the current database structure into your Prisma schema (reverse-engineer an existing database)
+npx prisma db push:	      Push your Prisma schema to the database — creates tables based on schema (development only, no migrations)
+npx prisma migrate dev:	  Create a new migration based on schema changes and apply it to the database
+npx prisma migrate reset:	Reset the database: drops all tables, re-applies migrations, and runs seed scripts if any
+npx prisma studio:      	Open Prisma Studio (a GUI to view and edit database records easily)
+*/
+</file>
+
+<file path="server/utils/serveAvatars.ts">
+import path from "path";
+import { access } from 'fs/promises';
+import fs from "fs";
+import { ServerResponse } from "http";
+⋮----
+export const serveAvatar = async ({ 
+  routePath,
+  res,
+}: {
+  routePath: string;
+  res: ServerResponse;
+}) =>
+⋮----
+// Always append .webp since that's the stored format
+const fileId = path.basename(routePath, path.extname(routePath)); // remove any extension if present
+⋮----
+// console.log('File not found:', err, 'red');
+</file>
+
+<file path="src/_components/LocationProvider.tsx">
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useSession } from 'src/_providers/SessionProvider';
+import { updateLocationRequest } from 'src/_sockets/socketInitializer';
+⋮----
+export default function LocationProvider(
+⋮----
+//? when the user changes the url, update the location in the users session data on the server, also update navbar from default tempalte
+⋮----
+//? Outlet is all the child components in the browser router
+</file>
+
+<file path="src/_components/LoginForm.tsx">
+import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import config, { providers, SessionLayout } from "config";
+import tryCatch from "src/_functions/tryCatch";
+import notify from "../_functions/notify";
+⋮----
+const handleKeyDown = (e: React.KeyboardEvent) =>
+⋮----
+const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>, provider: string) =>
+⋮----
+const getValue = (name: string)
+⋮----
+const fetchUser = async () =>
+⋮----
+// notify.error("Unexpected error occurred.");
+⋮----
+// window.location.href = config.loginPageUrl;
+</file>
+
+<file path="src/_components/Router.tsx">
+import { useLocation, useNavigate } from "react-router-dom";
+import middlewareHandler from "src/_functions/middlewareHandler";
+import { useSession } from "../_providers/SessionProvider";
+⋮----
+const getParams = (locationSearch: string) =>
+⋮----
+export default function useRouter()
+⋮----
+// const session = await apiRequest({ name: 'session' }) as SessionLayout;
+</file>
+
+<file path="src/_functions/middlewareHandler.ts">
+//? here you can add your own route
+//? return an object with the success key set to true if the user is allowed to access the route
+//? return an object with the redirect key set to the path you want to redirect the user to if you want to redirect the user to a different page
+//? return nothing if the user is not allowed to access the route and it will be send back to its previous page
+//? if you dont add your page in here it will allow the user to access the page
+import { SessionLayout } from "config";
+import notify from "src/_functions/notify";
+⋮----
+// @ts-ignore // we use ts-ignore because we dont use the searcParams in the example and this will cause a bundle error
+export default function middlewareHandler(
+</file>
+
+<file path="src/home/page.tsx">
+import useRouter from "src/_components/Router"
+⋮----
+export default function HomePage()
+</file>
+
+<file path="src/sandbox/_components/editor/BuilderMenu.tsx">
+export default function BuilderMenu()
+</file>
+
+<file path="src/sandbox/_components/editor/CodeMirrorEditor.tsx">
+import { useEffect, useRef, useMemo } from 'react'
+import { EditorState, Compartment } from '@codemirror/state'
+import { EditorView, keymap } from '@codemirror/view'
+import { defaultKeymap, indentWithTab } from '@codemirror/commands'
+import { javascript } from '@codemirror/lang-javascript'
+import { html } from '@codemirror/lang-html'
+import { css } from '@codemirror/lang-css'
+import { json } from '@codemirror/lang-json'
+import { python } from '@codemirror/lang-python'
+import { syntaxHighlighting, HighlightStyle } from '@codemirror/language'
+import { tags } from '@lezer/highlight'
+import { handleCaretPositionChange } from '../../_functions/notes/handleCaretPosition'
+⋮----
+interface CodeMirrorEditorProps {
+  value: string
+  onChange?: (value: string) => void
+  language?: string
+  onEscape?: () => void
+  onFocus?: () => void
+  onBlur?: () => void
+  enableCaretTracking?: boolean
+  onMount?: (view: any) => void
+  preventInitialFocus?: boolean
+}
+⋮----
+// Create a compartment for the editable facet so we can reconfigure it
+⋮----
+// Get language extension
+const getLanguageExtension = () =>
+⋮----
+// Custom theme matching the dark design with syntax colors
+⋮----
+color: '#d4d4d4', // Default text color
+⋮----
+// Syntax highlighting colors matching VS Code/Monaco
+'.tok-keyword': { color: '#569cd6' }, // Blue for keywords
+'.tok-string': { color: '#ce9178' }, // Orange for strings
+'.tok-comment': { color: '#6a9955', fontStyle: 'italic' }, // Green for comments
+'.tok-number': { color: '#b5cea8' }, // Light green for numbers
+'.tok-variableName': { color: '#9cdcfe' }, // Light blue for variables
+'.tok-typeName': { color: '#4ec9b0' }, // Teal for types
+'.tok-function': { color: '#dcdcaa' }, // Yellow for function names
+'.tok-operator': { color: '#d4d4d4' }, // White for operators
+'.tok-propertyName': { color: '#9cdcfe' }, // Light blue for properties
+'.tok-punctuation': { color: '#d4d4d4' }, // White for punctuation
+'.tok-tagName': { color: '#569cd6' }, // Blue for HTML tags
+'.tok-attributeName': { color: '#9cdcfe' }, // Light blue for attributes
+'.tok-className': { color: '#4ec9b0' }, // Teal for classes
+'.tok-definition': { color: '#dcdcaa' }, // Yellow for definitions
+'.tok-meta': { color: '#569cd6' }, // Blue for meta
+⋮----
+// Escape key handler
+⋮----
+// Custom syntax highlighting style (VS Code colors)
+⋮----
+{ tag: tags.keyword, color: '#569cd6' }, // Blue
+{ tag: tags.name, color: '#9cdcfe' }, // Light blue
+⋮----
+{ tag: tags.comment, color: '#6a9955', fontStyle: 'italic' }, // Green
+{ tag: tags.string, color: '#ce9178' }, // Orange
+{ tag: tags.number, color: '#b5cea8' }, // Light green
+⋮----
+{ tag: tags.variableName, color: '#9cdcfe' }, // Light blue
+{ tag: tags.function(tags.variableName), color: '#dcdcaa' }, // Yellow for functions
+⋮----
+{ tag: tags.className, color: '#4ec9b0' }, // Teal
+⋮----
+{ tag: tags.bracket, color: '#ffd700' }, // Gold for brackets
+⋮----
+// Create editor state
+⋮----
+// Handle focus/blur
+⋮----
+// Track cursor position for grid auto-scroll
+⋮----
+// Make editor non-interactive until explicitly focused
+⋮----
+// Create view
+⋮----
+// Prevent focus on mousedown to let TipTap handle block selection first
+dispatch(tr)
+⋮----
+// Store editableCompartment on view for external access
+⋮----
+// Call onMount callback with view instance
+⋮----
+// Make editor editable when it gains focus (if preventInitialFocus is enabled)
+⋮----
+// Make editable
+⋮----
+// Re-enable pointer events
+⋮----
+}, [language]) // Recreate when language changes
+⋮----
+// Update content when value changes externally
+</file>
+
+<file path="src/sandbox/_functions/codeEditor/tailwindcss/inlineColorIcon.ts">
+export default function InitInlineColorIcon(
+  editorInstance: monaco.editor.IStandaloneCodeEditor,
+  extractColorValue: (cls: string) => string | null = () => null
+)
+⋮----
+const updateColorIcons = () =>
+⋮----
+function findTailwindColors(
+  model: monaco.editor.ITextModel,
+  extractColorValue: (cls: string) => string | null = () => null,
+)
+⋮----
+//? add icon color to style tag in head
+⋮----
+inlineClassNameAffectsLetterSpacing: true, // ensures spacing works without a fake char
+</file>
+
+<file path="src/sandbox/_functions/codeEditor/themes/textmate/wireTmGrammars.ts">
+import { loadWASM, OnigScanner, OnigString } from 'vscode-oniguruma';
+⋮----
+// import wasmURL from 'vscode-oniguruma/release/onig.wasm?url';
+import { IColorTheme, TMToMonacoToken } from './tm-to-monaco-token';
+⋮----
+const wasmPromise = fetch("public/onig.wasm") // put in /public folder
+⋮----
+// const scopeUrlMap: Record<string, string> = {
+//   'source.ts':
+//     'https://raw.githubusercontent.com/microsoft/vscode/main/extensions/typescript-basics/syntaxes/TypeScript.tmLanguage.json',
+// };
+⋮----
+'source.tsx': '/TypeScriptReact.tmLanguage.json', // or a raw URL if you prefer
+⋮----
+loadGrammar(scopeName)
+⋮----
+function fetchGrammar(path: string)
+⋮----
+async function createTokensProvider(
+  scopeName: string,
+  editor?:
+    | (monaco.editor.IStandaloneCodeEditor & { _themeService?: any })
+    | undefined,
+  colorTheme?: IColorTheme
+): Promise<monaco.languages.TokensProvider>
+⋮----
+tokenize(line, state: vsctm.StateStack)
+⋮----
+class TokensProviderCache {
+⋮----
+constructor(
+⋮----
+async getTokensProvider(
+    scopeName: string
+): Promise<monaco.languages.TokensProvider>
+</file>
+
+<file path="src/sandbox/_functions/codeEditor/traverseClickedComponent.ts">
+export default function traverseClickedComponent({
+  editor,
+  userComponents
+}: {
+  editor: monaco.editor.IStandaloneCodeEditor,
+  userComponents: { name: string; code: string }[]
+})
+</file>
+
+<file path="src/sandbox/_functions/drawing/eraseStroke.ts">
+import { DrawingPoint, StrokeData } from "src/sandbox/_providers/DrawingContextProvider";
+import { isPointInPolygon } from "./sharedUtils";
+⋮----
+const notInRange = (stroke: StrokeData, x: number, y: number, radius: number) =>
+⋮----
+export const eraseStokePoint = (
+  x: number,
+  y: number,
+  brushSize: number,
+  prevStrokes: StrokeData[]
+): StrokeData[] | null =>
+⋮----
+// optimization: check bounding box first
+⋮----
+// Creates a new stroke, copy lineStyle but not fill
+// We intentionally remove fill when modifying/erasing part of a stroke (partial erase)
+⋮----
+// if stroke was not modified at all, keep original id and properties
+⋮----
+// if original stroke was tiny and not touched
+⋮----
+export const eraseStroke = (
+  x: number,
+  y: number,
+  brushSize: number,
+  prevStrokes: StrokeData[]
+) =>
+⋮----
+//? Quick reject: mouse nowhere near bounding box
+⋮----
+//? Accuracy check: is any actual point near the eraser?
+⋮----
+const dist = Math.hypot(p.x - x, p.y - y); // cleaner distance
+⋮----
+//? Check if inside fill (for filled shapes)
+⋮----
+//? Stroke wasn't actually touched, keep it
+⋮----
+//? Otherwise: do NOT push → stroke is erased
+</file>
+
+<file path="src/sandbox/_functions/drawing/RenderDrawingPath.tsx">
+import { getStroke } from 'perfect-freehand'
+import { getSvgPathFromStroke } from './getSvgPathFromStroke'
+import { DrawingPoint, LineStyle } from 'src/sandbox/_providers/DrawingContextProvider'
+⋮----
+// If it's a text stroke, we don't render it here (handled in DrawingLayer)
+⋮----
+// For dashed/dotted, render as a stroke-based line instead of filled path
+⋮----
+// Create a simple polyline path from center points
+⋮----
+// Use the brush size directly for stroke width
+⋮----
+// Make dash array proportional to stroke width for visibility
+⋮----
+? `${strokeWidth * 4} ${strokeWidth * 2}`   // Long dashes with medium gaps
+: `${strokeWidth * 0.1} ${strokeWidth * 2}`; // Tiny dots with large gaps
+⋮----
+// Solid style - use perfect-freehand for smooth filled paths
+⋮----
+// Create fill path from center points
+</file>
+
+<file path="src/sandbox/_functions/grid/onMouseMove.ts">
+import { useEffect } from "react";
+import { useGrid } from "../../_providers/GridContextProvider";
+import { useDrawing } from "../../_providers/DrawingContextProvider";
+import { useBuilderPanel } from "../../_providers/BuilderPanelContextProvider";
+⋮----
+export default function useOnMouseMove()
+⋮----
+const handleMouseMove = (e: MouseEvent) =>
+</file>
+
+<file path="src/sandbox/_functions/notes/getCaretPosition.ts">
+import { Editor } from '@tiptap/react';
+⋮----
+export interface CaretPosition {
+  absoluteY: number;
+  viewportPercentage: number;
+  absoluteX: number;
+  viewportPercentageX: number;
+  isInViewport: boolean;
+  offset: number;
+  offsetNode: Node;
+  getClientRect: () => DOMRect;
+}
+⋮----
+export function getCaretPosition(editor: Editor | null): CaretPosition | null
+</file>
+
+<file path="src/sandbox/_functions/notes/handleCaretPosition.ts">
+import { useGrid } from "src/sandbox/_providers/GridContextProvider";
+import { CaretPosition } from "./getCaretPosition";
+⋮----
+export const handleCaretPositionChange = () =>
+</file>
+
+<file path="src/sandbox/_functions/notes/PlaceholderPerLine.ts">
+import { Extension } from '@tiptap/core'
+import { Plugin, PluginKey } from '@tiptap/pm/state'
+import { Decoration, DecorationSet } from '@tiptap/pm/view'
+⋮----
+addProseMirrorPlugins()
+</file>
+
+<file path="src/sandbox/_providers/CodeContextProvider.tsx">
+import { createContext, useContext, useState, ReactNode, SetStateAction, Dispatch, useEffect } from 'react';
+import { codeContext } from '../types/blueprints';
+⋮----
+type CodeContextType = {
+  codeWindows: codeContext[];
+  setCodeWindows: Dispatch<SetStateAction<codeContext[]>>;
+
+  activeCodeWindow: string | null;
+  setActiveCodeWindow: Dispatch<SetStateAction<string | null>>;
+
+  codeWindowSize: number;
+  setCodeWindowSize: Dispatch<SetStateAction<number>>;
+
+  currentMonacoInstance: typeof monaco | null;
+  setCurrentMonacoInstance: Dispatch<SetStateAction<typeof monaco | null>>;
+
+  currentEditorInstance: monaco.editor.IStandaloneCodeEditor | null;
+  setCurrentEditorInstance: Dispatch<SetStateAction<monaco.editor.IStandaloneCodeEditor | null>>;
+};
+</file>
+
+<file path="src/sandbox/_providers/MenusContextProvider.tsx">
+import { createContext, useContext, useState, ReactNode, SetStateAction, Dispatch, useEffect, useRef } from 'react';
+import { CreateComponentMenuVisibleState } from '../types/createComponentMenuTypes';
+⋮----
+type MenusContextType = {
+  createComponentMenuOpen: CreateComponentMenuVisibleState;
+  setCreateComponentMenuOpen: Dispatch<SetStateAction<CreateComponentMenuVisibleState>>;
+
+  createComponentMenuPosition: { x: number; y: number } | null;
+  setCreateComponentMenuPosition: Dispatch<SetStateAction<{ x: number; y: number } | null>>;
+};
+⋮----
+export const MenusProvider = (
+⋮----
+const minHeight = 280; // value has no relation to menu height, just a comfortable min height
+const minWidth = 20; // value has no relation to menu width, just a comfortable min width
+⋮----
+const menuHeight = 312 / 2; // menu opens half up and half down from the cursor thats why half height
+const menuWidth = 288; // full width because it only opens to the right
+⋮----
+export const useMenus = () =>
+</file>
+
+<file path="src/sandbox/types/NotesOptionsTypes.ts">
+import { faCode, faDivide, faHeading, faInfo, faListCheck, faListDots, faListNumeric, faParagraph } from "@fortawesome/free-solid-svg-icons";
+⋮----
+export enum NoteOptions {
+  PARAGRAPH = "Paragraph",
+  HEADING1 = "Heading 1",
+  HEADING2 = "Heading 2",
+  HEADING3 = "Heading 3",
+  UNORDERED_LIST = "Unordered List",
+  ORDERED_LIST = "Ordered List",
+  TASK_LIST = "Task List",
+  DIVIDER = "Divider",
+  HINT = "Hint",
+  CODE_BLOCK = "Code Block",
+}
+⋮----
+export enum NoteOptionsVisibleState {
+  OPEN = "OPEN",
+  CLOSED = "CLOSED",
+}
+⋮----
+// Assuming 'Hint' maps to Blockquote, or a custom node if you have one
+⋮----
+// Insert the code block
+⋮----
+// Poll for Monaco editor to be registered and ready
+⋮----
+const maxAttempts = 20; // 2 seconds max
+⋮----
+const pollForMonaco = () =>
+⋮----
+// The newly inserted code block is automatically selected by TipTap
+</file>
+
+<file path="src/test/_api/testApi.ts">
+import { PrismaClient } from '@prisma/client';
+import { AuthProps, SessionLayout } from 'config';
+⋮----
+interface Functions {
+  prisma: PrismaClient;
+
+  saveSession: (sessionId: string, data: any) => Promise<boolean>;
+  getSession: (sessionId: string) => Promise<any | null>;
+  deleteSession: (sessionId: string) => Promise<boolean>;
+
+  tryCatch: <T, P>(func: (values: P) => Promise<T> | T, params?: P) => Promise<[any, T | null]>;
+
+  [key: string]: any; // allows for other functions that are not defined as a type but do exist in the functions folder
+};
+⋮----
+[key: string]: any; // allows for other functions that are not defined as a type but do exist in the functions folder
+⋮----
+interface ApiParams {
+  data: Record<string, any>;
+  functions: Functions;
+  user: SessionLayout;
+};
+⋮----
+login: true, //? checks if the session data has an id.
+⋮----
+// { key: 'groupId', mustBeFalsy: false }, //? checks if the groupId is truethy, so if groupId is an empty string or 0 it will not pass
+// { key: 'admin', value: true }, //? checks if admin = true
+// { key: 'email', type: 'string' }, //? checks if the email is a string
+// { key: 'updatedAt', nullish: false } //? checks if the updatedAt is not null or undefined
+//? you can perform certain checks with more than 1 condition but in the end they all have there own use case.
+⋮----
+const main = async (
+</file>
+
+<file path="src/test/page.tsx">
+import { joinRoom } from "src/_sockets/socketInitializer";
+import { useEffect } from 'react';
+import notify from "src/_functions/notify";
+import { setMenuHandlerRef } from "src/_functions/menuHandler";
+import { syncRequest, useSyncEvents } from "src/_sockets/syncRequest";
+import { apiRequest } from "src/_sockets/apiRequest";
+import { useSession } from "src/_providers/SessionProvider";
+import { useMenuHandler } from "src/_components/MenuHandler";
+import { confirmDialog } from "src/_components/ConfirmMenu";
+⋮----
+export default function Home()
+⋮----
+onClick=
+</file>
+
+<file path="tailwind.config.js">
+// tailwind.config.js
+</file>
+
+<file path="vite.config.ts">
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react-swc'
+import path from 'path';
+// import tsconfigPaths from 'vite-tsconfig-paths'
+⋮----
+// https://vite.dev/config/
+⋮----
+// tsconfigPaths()
+⋮----
+external: (id) => { // this is just for the server side to tell these files will be available at runtime, to ignore files in build process go to tsconfig.app.json
+⋮----
+// Match if path includes /api/
+⋮----
+// Ignore files in a sync folder ending with _server.ts
+⋮----
+target: 'esnext', // This makes sure the server redirects all 404s to index.html
+</file>
+
+<file path="src/_providers/SessionProvider.tsx">
+import { dev, SessionLayout } from 'config';
+import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { apiRequest } from 'src/_sockets/apiRequest';
+import { socket, useSocket } from 'src/_sockets/socketInitializer';
+⋮----
+type UserContextType = {
+  session: SessionLayout | null;
+  // setSession: Dispatch<SetStateAction<SessionLayout | null>>;
+  sessionLoaded: boolean;
+};
+⋮----
+// setSession: Dispatch<SetStateAction<SessionLayout | null>>;
+⋮----
+export const SessionProvider = (
+⋮----
+useSocket(session); //? starts the socket connection
+⋮----
+const handler = (data: string) =>
+⋮----
+// }, [socket])
+⋮----
+// 5. Create a custom hook for easier usage
+export const useSession = () =>
+⋮----
+export const getCurrentSession = ()
+</file>
+
+<file path="src/_sockets/socketInitializer.ts">
+import { toast } from "sonner";
+import { io, Socket } from 'socket.io-client';
+import config, { dev, backendUrl, SessionLayout } from "config";
+import { useSocketStatus } from "../_providers/socketStatusProvider";
+import { RefObject, useEffect, useRef } from "react";
+import { initSyncRequest, useSyncEventTrigger } from "./syncRequest";
+⋮----
+export const incrementResponseIndex = () =>
+⋮----
+export function useSocket(session: SessionLayout | null)
+⋮----
+const handleVisibility = async () =>
+⋮----
+//? user switched tab or navigated away
+⋮----
+//? user switched back to the tab
+⋮----
+export const waitForSocket = async () =>
+⋮----
+} //? we give it 500 * 10 so 5000ms or 5s to load the socket connection
+⋮----
+export const joinRoom = async (group: string) =>
+⋮----
+export const updateLocationRequest = async (
+</file>
+
+<file path="src/sandbox/_components/drawing/DrawingTopMenu.tsx">
+import { ErasingMode, useDrawing } from "src/sandbox/_providers/DrawingContextProvider";
+import { useEffect, useState, useRef } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEraser, faPencilAlt, faAlignCenter, faSquare, faCircle, faDiamond, faMousePointer, faSlash, faRulerCombined, faArrowRight, faFillDrip, faDownload, faObjectGroup, faFont } from "@fortawesome/free-solid-svg-icons";
+import { clipStrokesToRect } from "src/sandbox/_functions/drawing/clipUtils";
+import Tooltip from "src/_components/Tooltip";
+⋮----
+const handleClickOutside = (event: MouseEvent) =>
+⋮----
+e.stopPropagation();
+e.preventDefault();
+⋮----
+onDragStart=
+⋮----
+{/* Selection Mode */}
+⋮----
+{/* Area Select (Marquee) */}
+⋮----
+{/* Draw mode */}
+⋮----
+{/* Fill Tool */}
+⋮----
+{/* Eraser with options */}
+⋮----
+onClick=
+⋮----
+// if (lastErasingMode) {
+//   setErasing(lastErasingMode);
+//   setActiveShape(null);
+//   setSelectionMode(false);
+//   setFillMode(false);
+//   setMarqueeMode(false);
+//   setSelectedStrokeIds([]);
+//   setTextMode(false);
+// }
+⋮----
+{/* Shapes */}
+⋮----
+{/* Draw Line */}
+⋮----
+// className={`flex p-2 rounded transition-colors ${activeShape === 'line' ? 'bg-primary text-white' : 'hover:bg-primary-hover text-text-secondary border-transparent'}`}
+⋮----
+{/* Draw Square */}
+⋮----
+// className={`flex p-2 rounded transition-colors ${activeShape === 'square' ? 'bg-primary text-white' : 'hover:bg-primary-hover text-text-secondary border-transparent'}`}
+⋮----
+{/* Draw Circle */}
+⋮----
+// className={`flex p-2 rounded transition-colors ${activeShape === 'circle' ? 'bg-primary text-white' : 'hover:bg-primary-hover text-text-secondary border-transparent'}`}
+⋮----
+{/* Draw Diamond */}
+⋮----
+// className={`flex p-2 rounded transition-colors ${activeShape === 'diamond' ? 'bg-primary text-white' : 'hover:bg-primary-hover text-text-secondary'}`}
+⋮----
+{/* Toggle Measurements */}
+⋮----
+// className={`flex p-2 rounded transition-colors ${showMeasurements ? 'bg-primary text-white' : 'hover:bg-primary-hover text-text-secondary'}`}
+⋮----
+{/* Export Menu */}
+⋮----
+condition={!exportMenuOpen} // Hide tooltip when menu is open
+⋮----
+// className={`flex p-2 rounded transition-colors ${exportMenuOpen ? 'bg-primary text-white' : 'hover:bg-primary-hover text-text-secondary'}`}
+⋮----
+// Close other menus if needed
+⋮----
+// If marquee box exists, CLIP strokes to the box.
+// Otherwise respect selection.
+</file>
+
+<file path="src/sandbox/_components/notes/Note.tsx">
+import { note } from "src/sandbox/types/blueprints";
+import { useBlueprints } from "src/sandbox/_providers/BlueprintsContextProvider";
+import NoteEditor from "./NoteEditor";
+import { useNotes } from "src/sandbox/_providers/NotesContextProvider";
+import { NoteOptionsVisibleState } from "src/sandbox/types/NotesOptionsTypes";
+import { useMenus } from "src/sandbox/_providers/MenusContextProvider";
+import { CreateComponentMenuVisibleState } from "src/sandbox/types/createComponentMenuTypes";
+⋮----
+export default function Note(
+⋮----
+const handleUpdate = (newContent: object) =>
+⋮----
+// Middle click
+⋮----
+// Track that we're now active in a note
+⋮----
+onMouseUp=
+onClick=
+</file>
+
+<file path="src/sandbox/_functions/codeEditor/autocompletions/reactHooks.ts">
+export function ReactHooksImporter(monaco: typeof import("monaco-editor"))
+⋮----
+range, // Monaco will replace the current word
+⋮----
+arguments: [hook, model] // pass hook name and model
+⋮----
+// Check if a React import already exists
+⋮----
+// Add hook to existing import
+⋮----
+// Insert new import at top
+</file>
+
+<file path="src/sandbox/_functions/files/fileUtils.ts">
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import {
+  faFile,
+  faFileCode,
+  faFileImage,
+  faFilePdf,
+  faFileZipper,
+  faFileLines,
+  faFileVideo,
+  faFileAudio,
+} from "@fortawesome/free-solid-svg-icons";
+⋮----
+export function getFileExtension(fileName: string): string
+⋮----
+export function getMimeTypeCategory(mimeType: string): 'text' | 'image' | 'pdf' | 'video' | 'audio' | 'binary'
+⋮----
+export function getMonacoLanguage(extension: string): string
+⋮----
+export function readFileAsText(file: File): Promise<string>
+⋮----
+export function readFileAsBase64(file: File): Promise<string>
+⋮----
+// Remove the data:*/*;base64, prefix
+⋮----
+export function validateFileSize(file: File, maxSizeBytes: number): boolean
+⋮----
+export function getFileIcon(extension: string, mimeType: string): IconDefinition
+⋮----
+export function formatFileSize(bytes: number): string
+⋮----
+//? some beatiful AI slop
+</file>
+
+<file path="src/sandbox/_functions/grid/onFileDrop.ts">
+import { useGrid } from "../../_providers/GridContextProvider";
+import { useBlueprints } from "../../_providers/BlueprintsContextProvider";
+import { useDrawing } from "../../_providers/DrawingContextProvider";
+import { getFileExtension, getMimeTypeCategory, readFileAsBase64, readFileAsText, validateFileSize } from "../files/fileUtils";
+⋮----
+export default function useOnFileDrop()
+⋮----
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+⋮----
+const handleDragOver = (e: DragEvent) =>
+⋮----
+// Don't allow drag-and-drop when drawing is enabled
+⋮----
+// Check if dragging files
+⋮----
+const handleDrop = async (e: DragEvent) =>
+⋮----
+// Don't allow drag-and-drop when drawing is enabled
+⋮----
+// Process each file
+⋮----
+// Validate file size
+⋮----
+let fileContent: string = ''; // Initialize to empty string
+⋮----
+// Read file based on type
+⋮----
+// Binary files (PDF, ZIP, etc.)
+⋮----
+// Convert screen coordinates to world coordinates
+⋮----
+// Create new file blueprint
+⋮----
+name: file.name, // Full filename with extension
+code: fileContent, // File content (text or base64)
+size: file.size, // Original file size in bytes
+⋮----
+// Add to blueprints
+</file>
+
+<file path="src/sandbox/_functions/grid/onMouseDown.ts">
+import { useGrid } from "../../_providers/GridContextProvider";
+import { useDrawing } from "../../_providers/DrawingContextProvider";
+import { CreateComponentMenuVisibleState } from "../../types/createComponentMenuTypes";
+import { useBuilderPanel } from "../../_providers/BuilderPanelContextProvider";
+import { useMenus } from "../../_providers/MenusContextProvider";
+⋮----
+export default function useOnMouseDown()
+⋮----
+const handleMouseDown = (e: MouseEvent) =>
+⋮----
+// e.preventDefault();
+⋮----
+// if (e.buttons == 1) { return; } //? left button
+// if (e.buttons == 2) { return; } //? right button
+⋮----
+e.buttons == 1 //? left button
+|| e.buttons == 2 //? right button
+⋮----
+const handleWindowDivider = (e: MouseEvent) =>
+</file>
+
+<file path="src/sandbox/_functions/grid/onMouseUp.ts">
+import { useEffect } from "react";
+import { useGrid } from "../../_providers/GridContextProvider";
+import { useCode } from "../../_providers/CodeContextProvider";
+import { CreateComponentMenuVisibleState } from "../../types/createComponentMenuTypes";
+import { BuilderMenuMode, useBuilderPanel } from "../../_providers/BuilderPanelContextProvider";
+import { useMenus } from "../../_providers/MenusContextProvider";
+import { useNotes } from "src/sandbox/_providers/NotesContextProvider";
+import { NoteOptionsVisibleState } from "src/sandbox/types/NotesOptionsTypes";
+⋮----
+export default function useOnMouseUp()
+⋮----
+const handleOnMouseUp = (e: MouseEvent, leaveEvent: boolean) =>
+⋮----
+// Don't open menu if user was recently active in a note
+⋮----
+const onMouseUp = (e: MouseEvent) =>
+⋮----
+const handleMouseUp = (e: MouseEvent)
+const handleMouseLeave = (e: MouseEvent)
+</file>
+
+<file path="src/sandbox/_functions/grid/onMouseWheel.ts">
+import { useEffect, useCallback } from "react";
+import { useGrid } from "../../_providers/GridContextProvider";
+import { toast } from "sonner";
+⋮----
+// const zoomLevels = [0.1, 0.2, 0.3, 0.4, 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4, 5];
+⋮----
+export default function useOnMouseWheel()
+⋮----
+// Check if the event target or any parent has overflow-y-auto or overflow-auto
+⋮----
+// Let the browser handle natural scrolling
+⋮----
+// Prevent default scroll behavior to avoid overscroll bounce
+⋮----
+const currentZoom = zoomRef.current; // Always get the latest zoom value
+⋮----
+//? here we handle zooming logic with the mouse wheel
+⋮----
+// const currentIndex = zoomLevels.findIndex(level => level >= currentZoom);
+⋮----
+//? here we handle both the zooming and padding (offset) logic with the trackpad
+⋮----
+if (e.deltaY < 0) { //? negative value so user is zooming in
+⋮----
+} else { //? positive value so user is zooming out
+⋮----
+// Panning with touchpad (no ctrl key)
+⋮----
+// Always apply both X and Y deltas to prevent axis locking
+// even if one axis has very small values
+⋮----
+// Only pan if there's meaningful movement
+⋮----
+// Register wheel event as non-passive to ensure preventDefault works
+⋮----
+// We need to add the event listener with { passive: false } to allow preventDefault
+</file>
+
+<file path="src/sandbox/_providers/BlueprintsContextProvider.tsx">
+import { createContext, useContext, useState, ReactNode, SetStateAction, Dispatch } from 'react';
+import { blueprints } from '../types/blueprints';
+⋮----
+type BlueprintsContextType = {
+  blueprints: blueprints;
+  setBlueprints: Dispatch<SetStateAction<blueprints>>;
+
+  instances: blueprints[];
+  setInstances: Dispatch<SetStateAction<blueprints[]>>;
+
+  highlightInstances: boolean;
+  setHighlightInstances: Dispatch<SetStateAction<boolean>>;
+};
+⋮----
+export const BlueprintsProvider = (
+⋮----
+}); //? blueprint is a unique item
+⋮----
+const [instances, setInstances] = useState<blueprints[]>([]); //? instance can contain any blueprint infinite times
+⋮----
+const [highlightInstances, setHighlightInstances] = useState(true); //? the border around a instance that can be toggled in the bottom menu
+⋮----
+export const useBlueprints = () =>
+</file>
+
+<file path="src/sandbox/types/createComponentMenuTypes.ts">
+export enum CreateComponentMenuState {
+  DEFAULT = "DEFAULT",
+  COMPONENTS = "COMPONENTS",
+  NOTES = "NOTES",
+  FLOWCHARTS = "FLOWCHARTS",
+  FILES = "FILES",
+}
+⋮----
+export enum CreateComponentMenuVisibleState {
+  OPEN = "OPEN",
+  FORCECLOSE = "FORCECLOSE",
+  CLOSED = "CLOSED",
+}
+</file>
+
+<file path="src/settings/page.tsx">
+import { useCallback, useEffect, useState } from "react";
+import notify from "src/_functions/notify";
+import ThemeToggler from "src/_components/ThemeToggler";
+import { backendUrl } from "config";
+import { useUpdateLanguage } from "src/_components/TranslationProvider";
+import Avatar from "src/_components/Avatar";
+import { useTranslator } from "src/_functions/translator";
+import { apiRequest, apiRequestReponse } from "src/_sockets/apiRequest";
+import { useSession } from "src/_providers/SessionProvider";
+⋮----
+const incrementAvatarVersion = (url: string) =>
+⋮----
+url.search = ""; // remove query params
+⋮----
+const normalizeAvatar = (url: string)
+⋮----
+//? we trigger saveUser when the newAvatar changes so that the avatar is saved immidiatly, we dont call the saveUser in the onchange callback cause than it causes a race codition between the function calling and newAvatar having the new value
+⋮----
+const maxSize = 4 * 1024 * 1024; // 4 MB
+⋮----
+{/* <button 
+              className="w-full py-1 bg-wrong/50 border-wrong border-2 rounded-md text-title font-semibold text-lg"
+              onClick={() => {
+                ref.open(
+                  <ConfirmMenu
+                    title={(translate({ key: 'settings.changeAvatar' }))}
+                    content={'asd'}
+                    resolve={(success) => {
+                      console.log(success)
+                    }}
+                  />
+                )
+              }}
+            >
+              {translate({ key: 'settings.deleteAvatar' })}
+            </button> */}
+⋮----
+{/* JPG, GIV or PNG. 1MB max. */}
+⋮----
+{/* Language */}
+⋮----
+setNewLanguage('nl');
+setLanguage('nl');
+⋮----
+{/* EN */}
+⋮----
+{/* DE */}
+⋮----
+{/* FR */}
+⋮----
+{/* Theme */}
+⋮----
+setNewTheme('light');
+updateTheme('light');
+⋮----
+{/* Dark mode */}
+⋮----
+{/* Save data */}
+</file>
+
+<file path="src/_components/Tooltip.tsx">
+// Tooltip.tsx
+import { useState, useRef, ReactNode } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+⋮----
+interface TooltipProps {
+  content: ReactNode;
+  children: ReactNode;
+  delay?: number;
+  vertical?: "top" | "bottom"; // top or bottom
+  horizontal?: "left" | "right"; // left, right
+  offsetX?: number | string; // horizontal offset
+  offsetY?: number | string; // vertical offset
+  className?: string;
+  condition?: boolean;
+}
+⋮----
+vertical?: "top" | "bottom"; // top or bottom
+horizontal?: "left" | "right"; // left, right
+offsetX?: number | string; // horizontal offset
+offsetY?: number | string; // vertical offset
+⋮----
+const showTooltip = () =>
+⋮----
+const hideTooltip = () =>
+⋮----
+// calculate absolute positioning
+⋮----
+// style.top = `${offsetY}px`;
+⋮----
+// simple animation based on vertical
+// const initial = { opacity: 0, y: vertical === "top" ? -5 : 5 };
+⋮----
+// const exit = { opacity: 0, y: vertical === "top" ? -5 : 5 };
+</file>
+
+<file path="src/NoteEditor.css">
+/* Basic table styles for TipTap */
+.ProseMirror table {
+⋮----
+.ProseMirror td,
+⋮----
+/* border-zinc-700 */
+⋮----
+.ProseMirror th {
+⋮----
+/* bg-zinc-800 */
+⋮----
+.ProseMirror .selectedCell:after {
+⋮----
+/* Disable the blue selection highlight */
+⋮----
+.ProseMirror .column-resize-handle {
+⋮----
+/* zinc-400 */
+⋮----
+.ProseMirror p {
+⋮----
+/* Headings */
+.ProseMirror h1 {
+⋮----
+.ProseMirror h2 {
+⋮----
+.ProseMirror h3 {
+⋮----
+/* Lists */
+.ProseMirror ul,
+⋮----
+.ProseMirror ul {
+⋮----
+.ProseMirror ol {
+⋮----
+.ProseMirror li {
+⋮----
+.ProseMirror li>p {
+⋮----
+/* Blockquote (Hint) */
+.ProseMirror blockquote {
+⋮----
+.ProseMirror blockquote p {
+⋮----
+.ProseMirror blockquote p:first-child {
+⋮----
+.ProseMirror blockquote p:last-child {
+⋮----
+/* Placeholder text styling - shows on empty lines with cursor */
+.ProseMirror .is-empty-with-placeholder::before {
+⋮----
+/* text-zinc-500 for gray placeholder */
+⋮----
+/* Task list styles */
+.ProseMirror ul[data-type="taskList"] {
+⋮----
+.ProseMirror ul[data-type="taskList"] li {
+⋮----
+.ProseMirror ul[data-type="taskList"] li>label {
+⋮----
+.ProseMirror ul[data-type="taskList"] li>div {
+⋮----
+.ProseMirror ul[data-type="taskList"] input[type="checkbox"] {
+⋮----
+.ProseMirror ul[data-type="taskList"] input[type="checkbox"]:hover {
+⋮----
+.ProseMirror ul[data-type="taskList"] input[type="checkbox"]:checked {
+⋮----
+.ProseMirror ul[data-type="taskList"] input[type="checkbox"]:checked::after {
+⋮----
+/* Code block selection highlight */
+.code-block.selected {
+</file>
+
+<file path="src/sandbox/_components/drawing/DrawingSideMenu.tsx">
+import { useDrawing } from "src/sandbox/_providers/DrawingContextProvider";
+import { HexColorPicker } from "react-colorful";
+import { useEffect, useState, useRef } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPalette, faRedo, faUndo } from "@fortawesome/free-solid-svg-icons";
+import { useKeyboardShortcuts } from "src/sandbox/_functions/drawing/useKeyboardShortcuts";
+⋮----
+// Helper to update line style (also updates selected strokes)
+const updateLineStyle = (style: 'solid' | 'dashed' | 'dotted') =>
+⋮----
+const handleClickOutside = (event: MouseEvent) =>
+⋮----
+// if (!drawingEnabled) { return null }
+⋮----
+"#ef4444", // Red
+"#ffba00", // Amber
+"#05df72", // Green
+"#22d3ee", // Cyan
+"#a855f7", // Purple
+"#ec4899", // Pink
+⋮----
+e.stopPropagation();
+e.preventDefault();
+⋮----
+onDragStart=
+⋮----
+{/* <span>{brushSize}px</span> */}
+⋮----
+onClick=
+⋮----
+{/* Line Style */}
+⋮----
+{/* Colors */}
+⋮----
+updateBrushColor(color);
+⋮----
+{/* Custom Color Picker */}
+⋮----
+{/* Undo / Redo */}
+⋮----
+disabled={strokeHistory.length === 0} // Simple check, logic might need refinement based on index
+</file>
+
+<file path="src/sandbox/_components/editor/BaseCodeEditor.tsx">
+import { useEffect, useState } from "react";
+import Editor, { useMonaco } from "@monaco-editor/react";
+⋮----
+import setCompilerOptions from "../../_functions/codeEditor/compilerOptions";
+import loadAutoCompletions from "../../_functions/codeEditor/autocompletions/autocompletionHandler";
+import traverseClickedComponent from "../../_functions/codeEditor/traverseClickedComponent";
+import HoverTooltip from "src/sandbox/_functions/codeEditor/hoverTooltip";
+import InitTailwindcss from "src/sandbox/_functions/codeEditor/tailwindcss/tailwindcss";
+import generateThemes from "src/sandbox/_functions/codeEditor/themes/themes";
+⋮----
+type BaseCodeEditorProps = {
+  value: string;
+  onChange: (value: string | undefined) => void;
+  language?: string;
+  theme?: string;
+  options?: monacoEditor.editor.IStandaloneEditorConstructionOptions;
+  path?: string;
+  onMount?: (editor: monacoEditor.editor.IStandaloneCodeEditor, monaco: typeof monacoEditor) => void;
+  onHeightUpdateStart?: () => void;
+  onHeightUpdateEnd?: () => void;
+}
+⋮----
+export default function BaseCodeEditor({
+  value,
+  onChange,
+  language = "typescript",
+  theme = "vs-dark",
+  options,
+  path = "file:///App.tsx",
+  onMount
+}: BaseCodeEditorProps)
+⋮----
+// Determine if we should use the custom theme (only for TS/JS)
+⋮----
+const MAX_HEIGHT = 700; // Match the maxHeight in CodeBlockComponent
+⋮----
+const updateHeight = () =>
+⋮----
+// Cap at max height to prevent updates beyond CSS maxHeight
+⋮----
+updateHeight(); // Initial size
+</file>
+
+<file path="src/sandbox/_components/files/File.tsx">
+import { useState } from 'react';
+import { useBlueprints } from '../../_providers/BlueprintsContextProvider';
+import { file } from '../../types/blueprints';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { getFileIcon, getMimeTypeCategory, formatFileSize, getMonacoLanguage, getFileExtension } from '../../_functions/files/fileUtils';
+import { useBuilderPanel, BuilderMenuMode } from '../../_providers/BuilderPanelContextProvider';
+import { useCode } from '../../_providers/CodeContextProvider';
+import { isBabelCompatible } from '../../_functions/files/babelUtils';
+import { faCode, faDownload, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+⋮----
+type FileProps = {
+  fileBlueprint: file;
+}
+⋮----
+// Derive file properties from name and code
+⋮----
+// Properly determine MIME type from extension
+const getMimeTypeFromExtension = (ext: string): string =>
+⋮----
+// Images
+⋮----
+// Text
+⋮----
+// Other
+⋮----
+// Use stored size if available, otherwise calculate from code
+⋮----
+const handleNameSave = () =>
+⋮----
+const handleDelete = () =>
+⋮----
+// Remove from blueprints
+⋮----
+// Remove from code windows if open
+⋮----
+// If this file was the active window, switch to another window
+⋮----
+const handleViewContent = () =>
+⋮----
+// Detect language from file extension
+⋮----
+// Open editor panel
+⋮----
+// Add file to code windows
+⋮----
+// Set as active window
+⋮----
+const handleDownload = () =>
+⋮----
+const handleToggleViewMode = () =>
+⋮----
+// Check if file is Babel-compatible
+⋮----
+console.log(e.button)
+⋮----
+{/* Header with icon and name */}
+⋮----
+{/* {isEditingName ? ( */}
+⋮----
+// autoFocus
+⋮----
+{/* ) : (
+              <h3
+                className="font-semibold text-text flex items-center truncate cursor-pointer hover:text-primary h-11"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsEditingName(true);
+                }}
+              >
+                {fileBlueprint.name}
+              </h3>
+            )} */}
+⋮----
+{/* Preview area */}
+⋮----
+console.error('Image failed to load:', fileBlueprint.name);
+⋮----
+e.stopPropagation();
+handleToggleViewMode();
+⋮----
+handleViewContent();
+⋮----
+handleDownload();
+</file>
+
+<file path="src/sandbox/_components/menus/BottomLeftMenu.tsx">
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Tooltip from "src/_components/Tooltip";
+import { faEyeSlash, faPen, faBorderAll, faEye, faBorderNone } from "@fortawesome/free-solid-svg-icons";
+import { useDrawing } from "src/sandbox/_providers/DrawingContextProvider";
+import { useBlueprints } from "src/sandbox/_providers/BlueprintsContextProvider";
+⋮----
+export default function BottomLeftMenu()
+⋮----
+{/* draw icon */}
+⋮----
+onClick=
+⋮----
+{/* Hide drawings */}
+⋮----
+{/* Toggle Outlines */}
+⋮----
+{/* Toggle Selector mode */}
+{/* <Tooltip
+        content={highlightInstances ? "Hide outlines" : "Show outlines"}
+        offsetY={"-200% - 12px"}
+        offsetX={"50%"}
+        className={`bg-container2 p-2 text-nowrap border border-container2-border rounded`}
+      >
+        <div
+          className={`
+            MENU
+            p-2 rounded-full bg-container2 outline
+            ${highlightInstances ? "outline-primary" : "outline-none"}
+          `}
+          onClick={() => setHighlightInstances(prev => !prev)}
+        >
+          <FontAwesomeIcon
+            className="pointer-events-none"
+            icon={faBorderAll}
+          />
+        </div>
+      </Tooltip> */}
+⋮----
+{/* //? disabled for now cause editor rerenders every time we time so the zoomsize gets reset, also it dont work with the scroll option */}
+{/* <Tooltip
+        content={"Change zoom level"}
+        offsetY={"-200% - 12px"}
+        offsetX={"20px"}
+        className={`bg-container2 p-2 text-nowrap border border-container2-border rounded`}
+      >
+        <div className={`
+          MENU
+          p-2 rounded-full bg-container2 flex gap-1 items-center
+        `}>
+          <div 
+            className="hover:bg-background h-6 w-6 rounded-full flex items-center justify-center"
+            onClick={() => { setCodeWindowSize(prev => prev - 2) }}
+          >
+            <FontAwesomeIcon
+              icon={faMinus}
+            />
+          </div>
+          <div>{Math.round(codeWindowSize/16 * 100)}%</div>
+          <div 
+            className="hover:bg-background h-6 w-6 rounded-full flex items-center justify-center"
+            onClick={() => { setCodeWindowSize(prev => prev + 2) }}
+          >
+            <FontAwesomeIcon
+              icon={faPlus}
+            />
+          </div>
+        </div>  
+      </Tooltip> */}
+</file>
+
+<file path="src/sandbox/types/blueprints.ts">
+import { Viewports } from "./viewportMapping";
+⋮----
+export type note = {
+  id: string;
+  position: { x: number; y: number; };
+  content: string; // JSON content from TipTap
+  width: number;
+  height: number;
+}
+⋮----
+content: string; // JSON content from TipTap
+⋮----
+export type drawing = {
+  id: string;
+  position: { x: number; y: number; };
+}
+⋮----
+export type codeContext = {
+  id: string;
+  name: string;
+  code: string;
+  language?: string; // Optional language for Monaco editor
+}
+⋮----
+language?: string; // Optional language for Monaco editor
+⋮----
+/**
+ * Unified file type - replaces component, screen, and previous file type
+ * Babel compatibility is determined dynamically from filename extension
+ */
+export type file = {
+  id: string;
+  position: { x: number; y: number };
+  name: string; // Full filename with extension (e.g., "MyComponent.tsx")
+  code: string; // Source code content
+
+  // Optional viewport settings for rendered files
+  viewport?: Viewports;
+  rendered?: boolean;
+  // viewport?: {
+  //   width: number;
+  //   height: number;
+  //   enabled: boolean;
+  // };
+
+  // View mode: 'card' shows file card UI, 'rendered' shows Babel-compiled output
+  viewMode?: 'card' | 'rendered';
+
+  // Metadata
+  size?: number; // Original file size in bytes
+  lastModified?: number;
+}
+⋮----
+name: string; // Full filename with extension (e.g., "MyComponent.tsx")
+code: string; // Source code content
+⋮----
+// Optional viewport settings for rendered files
+⋮----
+// viewport?: {
+//   width: number;
+//   height: number;
+//   enabled: boolean;
+// };
+⋮----
+// View mode: 'card' shows file card UI, 'rendered' shows Babel-compiled output
+⋮----
+// Metadata
+size?: number; // Original file size in bytes
+⋮----
+export type blueprints = {
+  files: file[];
+  notes: note[];
+  drawings: drawing[];
+}
+</file>
+
+<file path="src/sandbox/_components/notes/NoteEditor.tsx">
+import { useEditor, EditorContent } from '@tiptap/react'
+import { useEffect } from 'react'
+import StarterKit from '@tiptap/starter-kit'
+import TaskList from '@tiptap/extension-task-list'
+import TaskItem from '@tiptap/extension-task-item'
+import { NodeSelection } from '@tiptap/pm/state'
+import { getCaretPosition, CaretPosition } from '../../_functions/notes/getCaretPosition'
+import { PlaceholderPerLine } from '../../_functions/notes/PlaceholderPerLine'
+⋮----
+// Styling
+⋮----
+import { handleCaretPositionChange } from 'src/sandbox/_functions/notes/handleCaretPosition'
+import { CustomCodeBlock } from './CodeBlockComponent'
+import { useNotes } from 'src/sandbox/_providers/NotesContextProvider'
+import { NoteOptionsVisibleState } from 'src/sandbox/types/NotesOptionsTypes'
+⋮----
+type NoteEditorProps = {
+  initialContent?: string | object;
+  onUpdate: (content: object) => void;
+  isEditable?: boolean;
+  onCaretPositionChange?: (position: CaretPosition | null) => void;
+}
+⋮----
+export default function NoteEditor(
+⋮----
+codeBlock: false, // implementation is replaced by CustomCodeBlock
+⋮----
+// Only adjust viewport position for navigation keys, not while typing
+⋮----
+// Save editor and cursor position before opening menu
+⋮----
+return true; // Prevent default Enter behavior
+⋮----
+{/* Toolbar */}
+</file>
+
+<file path="src/sandbox/_functions/codeEditor/compilerOptions.ts">
+import reactIndex from "../../../types/react/index.d.ts?raw";
+import reactGlobal from "../../../types/react/global.d.ts?raw";
+import reactDom from "../../../types/react-dom.d.ts?raw";
+import reactJsxRuntime from "../../../types/react-jsx-runtime.d.ts?raw";
+import { typescript } from "monaco-editor";
+// import reactHooksGlobals from "../../../types/react-hooks.d.ts?raw";
+⋮----
+export default function setCompilerOptions(monaco: typeof import("monaco-editor"))
+⋮----
+//? monaco.languages.typescript is deprecated, but using monaco.typescript or just the typescript export from monaco which is recommended it crashes the editor
+⋮----
+// const ts = monaco.typescript;
+// const ts = typescript;
+⋮----
+// const model = monaco.editor.getModels()[0];
+// if (model) {
+//   monaco.editor.setModelLanguage(model, "typescript");
+// }
+⋮----
+// Inject all React-related types
+⋮----
+// ts.typescriptDefaults.addExtraLib(
+//   reactHooksGlobals,
+//   "file:///react-hooks-globals.d.ts"
+// );
+⋮----
+// this line in the code editor
+// import { MyButton } from "components/ComponentTest";
+⋮----
+// ts.typescriptDefaults.addExtraLib(
+//   `
+//   declare module "components/ComponentTest" {
+//     import React from "react";
+//     export function MyButton(props: { label: string }) {
+//       return <button>{props.label}</button>;
+//     };
+//   }
+//   `,
+//   `file:///components/ComponentTest.d.ts`
+// );
+</file>
+
+<file path="src/sandbox/_providers/DrawingContextProvider.tsx">
+import { createContext, useContext, useState, ReactNode, SetStateAction, Dispatch, useEffect } from 'react';
+⋮----
+export type DrawingPoint = {
+  x: number;
+  y: number;
+  color: string;
+  size: number;
+}
+⋮----
+export type LineStyle = 'solid' | 'dashed' | 'dotted';
+⋮----
+export type StrokeData = {
+  id: string;
+  points: DrawingPoint[];
+  fill?: string;
+  text?: string;
+  width?: number; // For text bounds
+  height?: number; // For text bounds
+  lineStyle?: LineStyle; // Line style: solid, dashed, or dotted
+}
+⋮----
+width?: number; // For text bounds
+height?: number; // For text bounds
+lineStyle?: LineStyle; // Line style: solid, dashed, or dotted
+⋮----
+export enum ErasingMode {
+  DISABLED,
+  PARTIAL,
+  FULL
+}
+⋮----
+export type ShapeType = 'square' | 'circle' | 'diamond' | 'line' | 'arrow';
+⋮----
+type DrawingContextType = {
+  strokes: StrokeData[];
+  setStrokes: Dispatch<SetStateAction<StrokeData[]>>;
+
+  currentPoints: DrawingPoint[];
+  setCurrentPoints: Dispatch<SetStateAction<DrawingPoint[]>>;
+
+  brushSize: number;
+  setBrushSize: Dispatch<SetStateAction<number>>;
+
+  brushColor: string;
+  setBrushColor: Dispatch<SetStateAction<string>>;
+
+  drawingEnabled: boolean;
+  setDrawingEnabled: Dispatch<SetStateAction<boolean>>;
+
+  showDrawings: boolean;
+  setShowDrawings: Dispatch<SetStateAction<boolean>>;
+
+  erasing: ErasingMode;
+  setErasing: Dispatch<SetStateAction<ErasingMode>>;
+
+  activeShape: ShapeType | null;
+  setActiveShape: Dispatch<SetStateAction<ShapeType | null>>;
+
+  selectionMode: boolean;
+  setSelectionMode: Dispatch<SetStateAction<boolean>>;
+
+  selectedStrokeIds: string[];
+  setSelectedStrokeIds: Dispatch<SetStateAction<string[]>>;
+
+  // Feature Toggles
+  showMeasurements: boolean;
+  setShowMeasurements: Dispatch<SetStateAction<boolean>>;
+
+  snappingEnabled: boolean;
+  setSnappingEnabled: Dispatch<SetStateAction<boolean>>;
+
+  marqueeMode: boolean;
+  setMarqueeMode: Dispatch<SetStateAction<boolean>>;
+  marqueeBox: { x: number, y: number, width: number, height: number } | null;
+  setMarqueeBox: Dispatch<SetStateAction<{ x: number, y: number, width: number, height: number } | null>>;
+
+  fillMode: boolean;
+  setFillMode: Dispatch<SetStateAction<boolean>>;
+
+  textMode: boolean;
+  setTextMode: Dispatch<SetStateAction<boolean>>;
+
+  strokeHistory: StrokeData[][]
+  setStrokeHistory: Dispatch<SetStateAction<StrokeData[][]>>
+  historyIndex: number
+  setHistoryIndex: Dispatch<SetStateAction<number>>
+
+  lineStyle: LineStyle;
+  setLineStyle: Dispatch<SetStateAction<LineStyle>>;
+
+  updateBrushColor: (color: string) => void;
+  updateBrushSize: (size: number) => void;
+};
+⋮----
+// Feature Toggles
+⋮----
+//? tools in the drawing menu when drawing is enabled
+⋮----
+const [snappingEnabled, setSnappingEnabled] = useState<boolean>(true); // Default to true as per request "fix when moving around objects like figma"
+⋮----
+// Sync strokes to history when historyIndex changes (for undo/redo)
+⋮----
+// Clamp historyIndex to valid range
+⋮----
+// Clear selection when switching away from marquee mode
+⋮----
+// Helper to update color (handling selection logic)
+⋮----
+setBrushColor(color);
+⋮----
+// If the shape has a fill, update it to match the new color
+⋮----
+// If in selection mode but nothing selected, switch to drawing (disable selection mode)
+⋮----
+setBrushSize(size);
+⋮----
+export const useDrawing = () =>
+</file>
+
+<file path="src/sandbox/_providers/GridContextProvider.tsx">
+import { createContext, useContext, useState, ReactNode, RefObject, SetStateAction, Dispatch, useRef } from 'react';
+⋮----
+type GridContextType = {
+  containerRef: RefObject<HTMLDivElement | null>;
+  draggingRef: RefObject<boolean>;
+  lastPos: RefObject<{ x: number; y: number }>;
+  posMouseDown: RefObject<{ x: number; y: number }>;
+  zoomRef: RefObject<number>;
+
+  dragging: boolean;
+  setDragging: Dispatch<SetStateAction<boolean>>;
+
+  zoom: number;
+  setZoom: Dispatch<SetStateAction<number>>;
+
+  offset: { x: number; y: number };
+  setOffset: Dispatch<SetStateAction<{ x: number; y: number }>>;
+};
+⋮----
+export const GridProvider = (
+⋮----
+// Keep zoomRef in sync with zoom state
+⋮----
+export const useGrid = () =>
+</file>
+
+<file path="src/sandbox/_components/drawing/DrawingLayer.tsx">
+import { useRef, useState, useEffect } from 'react'
+import { useGrid } from '../../_providers/GridContextProvider'
+import { useDrawing } from 'src/sandbox/_providers/DrawingContextProvider'
+import { RenderDrawingPath } from '../../_functions/drawing/RenderDrawingPath'
+import useDrawingEvents from 'src/sandbox/_functions/drawing/useDrawingEvents'
+import notify from 'src/_functions/notify'
+import { getStrokesBoundingBox } from '../../_functions/drawing/selectionUtils'
+import { measureTextDimensions } from '../../_functions/drawing/sharedUtils'
+⋮----
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
+⋮----
+export default function DrawingLayer()
+⋮----
+const { marqueeBox } = useDrawing(); // Get persistent marquee box
+⋮----
+// setCurrentPoints([])
+// setStrokes([])
+⋮----
+// Calculate selection bounding box
+// We need to account for dragOffset for the selected strokes
+const getSelectionBounds = () =>
+⋮----
+// Create temporary stroke objects with applied drag if needed
+⋮----
+onDragStart=
+onMouseDown=
+onPointerDown=
+onPointerMove=
+⋮----
+onPointerLeave=
+⋮----
+// Calculate dimensions dynamically from content
+⋮----
+ref=
+⋮----
+// Update text
+⋮----
+// Measure width using canvas context
+const canvas = document.createElement('canvas');
+const context = canvas.getContext('2d');
+⋮----
+if (context)
+⋮----
+measuredWidth = Math.max(50, maxWidth + 20); // Add padding
+⋮----
+// Update height
+⋮----
+{/* Selection Bounding Box */}
+⋮----
+strokeWidth=
+⋮----
+e.stopPropagation();
+const newStrokes = strokes.filter(s
+setStrokes(newStrokes);
+setStrokeHistory(prev
+setHistoryIndex(prev
+setSelectedStrokeIds([]);
+</file>
+
+<file path="src/sandbox/_components/menus/CreateComponentMenu.tsx">
+import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
+import { CreateComponentMenuState, CreateComponentMenuVisibleState } from "src/sandbox/types/createComponentMenuTypes";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChartDiagram, faChartPie, faCode, faFile, faFileText, faNotesMedical, faNoteSticky, faPlus, faTextHeight } from "@fortawesome/free-solid-svg-icons";
+import { useMenus } from "src/sandbox/_providers/MenusContextProvider";
+import { useBlueprints } from "src/sandbox/_providers/BlueprintsContextProvider";
+import { useGrid } from "src/sandbox/_providers/GridContextProvider";
+import { getFileExtension, getMimeTypeCategory, readFileAsBase64, readFileAsText, validateFileSize } from "src/sandbox/_functions/files/fileUtils";
+⋮----
+interface SelectionViewProps {
+  items: { id: string; name: string }[];
+  onCreate: () => void;
+  searchPlaceholder: string;
+  createLabel: string;
+}
+⋮----
+onChange=
+⋮----
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+⋮----
+const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) =>
+⋮----
+// Validate file size
+⋮----
+// Read file based on type
+⋮----
+// Binary files (PDF, ZIP, etc.)
+⋮----
+// Convert screen coordinates to world coordinates
+⋮----
+// Create new file blueprint
+⋮----
+name: file.name, // Changed from fileName
+code: fileContent, // Changed from fileContent
+size: file.size, // Added size property
+⋮----
+// Add to blueprints
+⋮----
+// Close menu
+⋮----
+// Reset input
+⋮----
+onClick=
+</file>
+
+<file path="src/sandbox/_components/notes/CodeBlockComponent.tsx">
+import { NodeViewWrapper, ReactNodeViewRenderer } from '@tiptap/react'
+import { useCallback, useState } from 'react'
+import CodeMirrorEditor from '../editor/CodeMirrorEditor'
+import { EditorView } from '@codemirror/view'
+import { Node, mergeAttributes } from '@tiptap/core'
+⋮----
+addAttributes()
+⋮----
+parseHTML()
+⋮----
+renderHTML(
+⋮----
+addNodeView()
+⋮----
+addCommands()
+⋮----
+// Ensure we have a stable unique ID for this code block instance
+⋮----
+// Track whether CodeMirror is focused to hide outline while typing
+⋮----
+{/* <div className="text-xs text-muted-foreground">Monaco Editor</div> */}
+⋮----
+onClick=
+⋮----
+// Activate editing on click
+⋮----
+onMount=
+⋮----
+// Add enableEditing method to view for external focus
+⋮----
+// Store globally for keyboard navigation (like Monaco did)
+⋮----
+onBlur=
+</file>
+
+<file path="src/sandbox/_components/editor/Editor.tsx">
+import { faClose, faCode, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useCode } from "src/sandbox/_providers/CodeContextProvider";
+import BuilderMenu from "./BuilderMenu";
+import CodeEditor from "./CodeEditor";
+import { memo, useEffect } from "react";
+import { BuilderMenuMode, useBuilderPanel } from "src/sandbox/_providers/BuilderPanelContextProvider";
+⋮----
+const Editor = () =>
+⋮----
+{/* BUILDER MENU CONTENT HERE PLEASE */}
+⋮----
+onClick=
+⋮----
+{/* <h1>Code</h1> */}
+⋮----
+{/* <h1>Builder</h1> */}
+⋮----
+// <div className="flex">
+//   <div
+//     className={`group py-2 px-4 flex gap-2 items-center border-b-2 transition-border duration-200
+//       ${builderMenuMode === BuilderMenuMode.CODE ? "border-title" : "hover:border-muted border-transparent cursor-pointer"}
+//     `}
+//     onClick={() => { setBuilderMenuMode(BuilderMenuMode.CODE) }}
+//   >
+//     <div
+//       className="flex gap-2 items-center"
+//     >
+//       <FontAwesomeIcon
+//         icon={faCode}
+//       ></FontAwesomeIcon>
+//       <h1>Code</h1>
+//     </div>
+//     <FontAwesomeIcon
+//       className={`text-muted cursor-pointer hover:text-title ${builderMenuMode == BuilderMenuMode.CODE ? "" : "opacity-0"} group-hover:opacity-100`}
+//       onClick={(e) => {
+//         e.stopPropagation();
+//         setBuilderMenuMode(BuilderMenuMode.CLOSED);
+//         setActiveCodeWindow(null);
+//       }}
+//       icon={faClose}
+//     ></FontAwesomeIcon>
+//   </div>
+//   <div
+//     className={`group py-2 px-4 flex gap-2 items-center border-b-2 transition-border duration-200
+//       ${builderMenuMode === BuilderMenuMode.BUILDER ? "border-title" : "hover:border-muted border-transparent cursor-pointer"}
+//     `}
+//     onClick={() => { setBuilderMenuMode(BuilderMenuMode.BUILDER) }}
+//   >
+//     <div
+//       className="flex gap-2 items-center"
+//     >
+//       <FontAwesomeIcon
+//         icon={faPenToSquare}
+//       ></FontAwesomeIcon>
+//       <h1>Builder</h1>
+//     </div>
+//     <FontAwesomeIcon
+//       className={`text-muted cursor-pointer hover:text-title ${builderMenuMode == BuilderMenuMode.BUILDER ? "" : "opacity-0"} group-hover:opacity-100`}
+//       onClick={(e) => {
+//         e.stopPropagation();
+//         setBuilderMenuMode(BuilderMenuMode.CLOSED);
+//         setActiveCodeWindow(null);
+//       }}
+//       icon={faClose}
+//     ></FontAwesomeIcon>
+//   </div>
+// </div>
+</file>
+
+<file path="src/sandbox/_components/editor/CodeEditor.tsx">
+import { useMemo } from "react";
+import { useCode } from "../../_providers/CodeContextProvider";
+import { useBlueprints } from "../../_providers/BlueprintsContextProvider";
+import BaseCodeEditor from "./BaseCodeEditor";
+⋮----
+export default function CodeEditor()
+⋮----
+// First, get the language from the code window (where we stored it)
+⋮----
+// Find file in blueprints
+⋮----
+// Determine language - prioritize code window language, then default to typescript
+⋮----
+onChange={(val) => val && setCode(val)}
+      path={`file:///App.${language === 'typescript' ? 'tsx' : language}`}
+      language={language}
+onMount=
+⋮----
+path={`file:///App.${language === 'typescript' ? 'tsx' : language}`}
+</file>
+
+<file path="src/sandbox/page.tsx">
+import Grid from "./_components/grid/Grid";
+import Editor from "./_components/editor/Editor";
+import useOnMouseDown from "./_functions/grid/onMouseDown";
+import { BuilderMenuMode, useBuilderPanel } from "./_providers/BuilderPanelContextProvider";
+⋮----
+export default function Home()
+⋮----
+{/* <div className="flex h-[calc(100%-40px)]"> */}
+⋮----
+onMouseDown=
+</file>
+
+<file path="src/_components/TemplateProvider.tsx">
+import { useEffect, useState } from 'react';
+import Middleware from 'src/_components/Middleware';
+import useRouter from './Router';
+import { useLocation } from 'react-router-dom';
+import Avatar from './Avatar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faGear, faHome } from '@fortawesome/free-solid-svg-icons';
+import { useSession } from '../_providers/SessionProvider';
+import ThemeToggler from './ThemeToggler';
+import { useSocketStatus } from 'src/_providers/socketStatusProvider';
+import { apiRequest } from 'src/_sockets/apiRequest';
+import config from "config";
+import { GridProvider } from 'src/sandbox/_providers/GridContextProvider';
+import Tooltip from './Tooltip';
+import { CodeProvider } from 'src/sandbox/_providers/CodeContextProvider';
+import { BlueprintsProvider } from 'src/sandbox/_providers/BlueprintsContextProvider';
+import { DrawingProvider } from 'src/sandbox/_providers/DrawingContextProvider';
+import { MenusProvider } from 'src/sandbox/_providers/MenusContextProvider';
+import { BuilderPanelProvider } from 'src/sandbox/_providers/BuilderPanelContextProvider';
+import { NotesProvider } from 'src/sandbox/_providers/NotesContextProvider';
+⋮----
+export type Template = 'plain' | 'main' | 'sandbox';
+⋮----
+function MainTemplate(
+⋮----
+{/* {session?.location?.previousLocation && session?.location?.previousLocation !== session?.location?.pathName && (
+          <Tooltip
+            content="Go back to previous page"
+            delay={300}
+            offsetY={"5px"}
+            offsetX={"5px"}
+          >
+            <button 
+              className='p-2 bg-container2 border border-container2-border rounded-md cursor-pointer text-sm'
+              onClick={() => {
+                router(session.location?.previousLocation || config.loginRedirectUrl)
+              }}
+            >
+              <FontAwesomeIcon icon={faArrowLeft} size='lg' />
+            </button>
+          </Tooltip>
+        )} */}
+{/* 
+        <Tooltip
+          content={location.pathname == '/home' ? "Go to settings" : "Go to home page"}
+          delay={300}
+          offsetY={"5px"}
+          offsetX={"5px"}
+          className={`bg-container2 p-2 text-nowrap border border-container-border rounded`}
+        >
+          <button 
+            className='p-2 bg-container2 border border-container2-border rounded-md cursor-pointer text-sm'
+            onClick={() => {
+              router(location.pathname == '/home' ? '/settings' : '/home')
+            }}
+          >
+            <FontAwesomeIcon icon={location.pathname == '/home' ? faGear : faHome} size='lg' />
+          </button>
+        </Tooltip> */}
+⋮----
+{/* <button 
+          className='bg-container2 border border-container2-border rounded-md py-2 px-6 cursor-pointer font-semibold'
+          onClick={() => apiRequest({ name: 'logout' })}
+        >
+          Uitloggen
+        </button> */}
+⋮----
+function PlainTemplate(
+⋮----
+function SandboxTemplate(
+⋮----
+export default function TemplateProvider({
+  children,
+  initialTemplate,
+}: {
+  children: React.ReactNode;
+  initialTemplate: Template;
+})
+</file>
+
+<file path="src/index.css">
+@theme {
+⋮----
+--color-background: #EFF6FF; /* blue-50 */
+⋮----
+--color-container: #FFFFFF; /* white */
+--color-container-border: #E5E7EB; /* gray-200 */
+--color-container-hover: #F3F4F6; /* gray-100 light hover */
+⋮----
+--color-container2: #F8FAFC; /* slate-50 */
+--color-container2-border: #E2E8F0; /* slate-200 */
+--color-container2-hover: #F1F5F9; /* light hover */
+⋮----
+--color-container3: #E5E7EB; /* gray-200 */
+--color-container3-border: #CBD5E1; /* gray-300 */
+--color-container3-hover: #D1D5DB; /* slightly darker */
+⋮----
+--color-container4: #F1F5F9; /* slate-100 */
+--color-container4-border: #E2E8F0; /* gray-200 */
+--color-container4-hover: #E2E8F0; /* slightly darker */
+⋮----
+--color-title: #000000; /* black */
+--color-common: #1E293B; /* slate-800 */
+--color-muted: #64748B; /* slate-500 */
+⋮----
+/* Correct / wrong */
+--color-correct: oklch(72.3% 0.219 149.579); /* green-500 */
+--color-correct-hover: oklch(62.7% 0.194 149.214); /* green-600 */
+⋮----
+--color-warning: oklch(79.5% 0.184 86.047); /* yellow-400 */
+--color-warning-hover: oklch(68.1% 0.162 75.834); /* yellow-500 */
+⋮----
+--color-wrong: oklch(63.7% 0.237 25.331); /* red-500 */
+--color-wrong-hover: oklch(57.7% 0.245 27.325); /* red-600 */
+⋮----
+--background-grid-color: #ffffff; /* fallback base background */
+⋮----
+.dark {
+⋮----
+--color-background-hover: #1E2230; /* 1C2130 */
+--color-background2-hover: #2A3042; /* 242B3A */
+⋮----
+.dark2 {
+⋮----
+--color-background: #10131B;          /* gray-900 */
+⋮----
+--color-container: #171B26; /* gray-800 */
+--color-container-border: #374151; /* gray-700 */
+--color-container-hover: #3F4B63; /* slightly lighter dark hover */
+⋮----
+--color-container2: #202636; /* gray-700 */
+--color-container2-border: #4B5563; /* gray-600 */
+⋮----
+--color-container3: #4B5563; /* gray-600 */
+--color-container3-border: #6B7280; /* gray-500 */
+⋮----
+--color-container4: #1F2937; /* gray-800 */
+--color-container4-border: #374151; /* gray-700 */
+⋮----
+--color-title: #FFFFFF;               /* white */
+--color-common: oklch(92.8% 0.006 264.531);              /* gray-200 */
+--color-muted: oklch(70.7% 0.022 261.325);               /* gray-400 */
+⋮----
+--color-primary: oklch(62.3% 0.214 259.815); /* blue-500 */
+⋮----
+--background-grid-color: #191d24cc; /* base background for dark mode */
+⋮----
+:root {
+⋮----
+html, body {
+⋮----
+/* Prevent overscroll bounce and improve touchpad panning */
+⋮----
+@layer utilities {
+⋮----
+.h-safe {
+⋮----
+.bg-grid {
+⋮----
+background-size: 20px 20px; /* adjust grid spacing */
+⋮----
+/* ? tiny inline color box */
+[class^="tw-color-"]::before {
+⋮----
+.inlineColorIcon {
+⋮----
+.inlineColorIconGap {
+</file>
+
+<file path="src/sandbox/_components/grid/Grid.tsx">
+import { useEffect, useState } from "react";
+import { useGrid } from "../../_providers/GridContextProvider";
+import CreateComponentMenu from "../menus/CreateComponentMenu";
+import { blueprints, file } from "../../types/blueprints";
+import { useBlueprints } from "../../_providers/BlueprintsContextProvider";
+import DrawingLayer from "../drawing/DrawingLayer";
+import BottomLeftMenu from "../menus/BottomLeftMenu";
+import DrawingSideMenu from "../drawing/DrawingSideMenu";
+import DrawingTopMenu from "../drawing/DrawingTopMenu";
+import Note from "../notes/Note";
+import File from "../files/File";
+import useOnMouseDown from "src/sandbox/_functions/grid/onMouseDown";
+import useOnMouseUp from "src/sandbox/_functions/grid/onMouseUp";
+import useOnMouseMove from "src/sandbox/_functions/grid/onMouseMove";
+import useOnMouseWheel from "src/sandbox/_functions/grid/onMouseWheel";
+import useOnFileDrop from "src/sandbox/_functions/grid/onFileDrop";
+import { isBabelCompatible } from "src/sandbox/_functions/files/babelUtils";
+import NoteOptionsMenu from "../menus/NoteOptionsMenu";
+import Render from "../files/Render";
+import { Viewports } from "src/sandbox/types/viewportMapping";
+⋮----
+// viewport: { width: 1440, height: 900, enabled: true },
+⋮----
+// Using the new hook approach
+useOnMouseWheel(); // Sets up wheel event listener internally
+⋮----
+// Calculate grid style values
+⋮----
+//* THIS DIV IS THE GRID BACKGROUND
+⋮----
+// Prevent browser overscroll bounce and touch gesture interference
+⋮----
+// Use CSS variables for dynamic values to avoid expensive style recalculations
+// This prevents lag when DevTools Elements tab is open
+⋮----
+onContextMenu={(e) => e.preventDefault()} //? makes it so we cant open the menu on right click
+⋮----
+onMouseUp=
+onMouseLeave=
+onMouseMove=
+⋮----
+onDrop=
+⋮----
+{/* percentage */}
+⋮----
+{/* //* THIS DIV MAKES IT SO THE PANNING AND ZOOMING AFFECTS THE CONTENT */}
+⋮----
+{/* Notes Layer */}
+⋮----
+// Check file type and view mode (with null safety)
+⋮----
+setBlueprints(prev => (
+⋮----
+// Render as file card
+⋮----
+// instance is type drawing
+return null; // render nothing
+⋮----
+{/* Drag-and-drop visual indicator */}
+</file>
+
+<file path="package.json">
+{
+  "name": "lucky-stack-v2",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "client": "tsx scripts/clearServerRequests.ts && vite --host",
+    "server": "npx tsx server/server.ts",
+    "liveServer": "npx tsx --watch server/server.ts",
+    "lint": "eslint src/**/*.tsx",
+    "buildClient": "tsc -b && vite build",
+    "buildServer": "tsx scripts/generateServerRequests.ts && tsx scripts/bundleServer.ts",
+    "build": "tsx scripts/generateServerRequests.ts && npm run buildClient && tsx scripts/bundleServer.ts",
+    "prod": "node dist/server.js",
+    "production": "node dist/server.js"
+  },
+  "dependencies": {
+    "@babel/standalone": "^7.28.5",
+    "@codemirror/commands": "^6.10.1",
+    "@codemirror/lang-css": "^6.3.1",
+    "@codemirror/lang-html": "^6.4.11",
+    "@codemirror/lang-javascript": "^6.2.4",
+    "@codemirror/lang-json": "^6.0.2",
+    "@codemirror/lang-python": "^6.2.1",
+    "@codemirror/language": "^6.12.1",
+    "@codemirror/language-data": "^6.5.2",
+    "@codemirror/state": "^6.5.3",
+    "@codemirror/view": "^6.39.7",
+    "@fortawesome/fontawesome-svg-core": "^7.0.1",
+    "@fortawesome/free-brands-svg-icons": "^7.0.1",
+    "@fortawesome/free-regular-svg-icons": "^7.0.1",
+    "@fortawesome/free-solid-svg-icons": "^7.0.1",
+    "@fortawesome/react-fontawesome": "^3.0.2",
+    "@lezer/highlight": "^1.2.3",
+    "@monaco-editor/react": "^4.7.0",
+    "@prisma/client": "^6.5.0",
+    "@tailwindcss/container-queries": "^0.1.1",
+    "@tailwindcss/language-server": "^0.14.29",
+    "@tailwindcss/postcss": "^4.0.17",
+    "@tailwindcss/typography": "^0.5.19",
+    "@tensorflow/tfjs": "^4.22.0",
+    "@tiptap/extension-placeholder": "^3.14.0",
+    "@tiptap/extension-task-item": "^3.14.0",
+    "@tiptap/extension-task-list": "^3.14.0",
+    "@tiptap/react": "^3.14.0",
+    "@tiptap/starter-kit": "^3.14.0",
+    "@tldraw/tldraw": "^4.2.0",
+    "@uiw/react-codemirror": "^4.25.2",
+    "bcrypt": "^5.1.1",
+    "chokidar": "^4.0.3",
+    "cors": "^2.8.5",
+    "culori": "^4.0.2",
+    "dotenv": "^16.4.7",
+    "framer-motion": "^12.23.24",
+    "fs": "^0.0.1-security",
+    "ioredis": "^5.6.0",
+    "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.540.0",
+    "monaco-editor": "^0.55.1",
+    "monaco-editor-textmate": "^4.0.0",
+    "monaco-languageclient": "^10.2.0",
+    "monaco-tailwindcss": "^0.6.1",
+    "monaco-textmate": "github:NeekSandhu/monaco-textmate",
+    "normalize-url": "^8.1.0",
+    "path": "^0.12.7",
+    "perfect-freehand": "^1.2.2",
+    "react": "^19.0.0",
+    "react-colorful": "^5.6.1",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.4.0",
+    "repl": "^0.1.3",
+    "sharp": "^0.34.3",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
+    "sonner": "^2.0.2",
+    "tldraw": "^4.2.0",
+    "url": "^0.11.4",
+    "uuid": "^11.1.0",
+    "validator": "^13.15.0",
+    "vconsole": "^3.15.1",
+    "vite-typescript-starter": "github:caleb1248/monaco-vscode-textmate#main",
+    "vscode-oniguruma": "^2.0.1",
+    "vscode-textmate": "^9.2.1",
+    "vscode-ws-jsonrpc": "^3.5.0",
+    "ws": "^8.18.3",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.21.0",
+    "@rollup/plugin-alias": "^5.1.1",
+    "@types/bcrypt": "^5.0.2",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@types/validator": "^13.15.1",
+    "@vitejs/plugin-react-swc": "^3.8.0",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.21.0",
+    "eslint-plugin-react-dom": "^1.48.4",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "eslint-plugin-react-x": "^1.48.4",
+    "globals": "^15.15.0",
+    "postcss": "^8.5.6",
+    "prisma": "^6.5.0",
+    "tailwindcss": "^4.1.11",
+    "tsx": "^4.19.3",
+    "typescript": "~5.7.2",
+    "typescript-eslint": "^8.24.1",
+    "vite": "^6.2.0",
+    "vite-tsconfig-paths": "^5.1.4"
+  }
+}
+</file>
+
+</files>

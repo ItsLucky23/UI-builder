@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useGrid } from "../../_providers/GridContextProvider";
 import CreateComponentMenu from "../menus/CreateComponentMenu";
-import { blueprints } from "../../types/blueprints";
+import { blueprints, file } from "../../types/blueprints";
 import { useBlueprints } from "../../_providers/BlueprintsContextProvider";
 import DrawingLayer from "../drawing/DrawingLayer";
 import BottomLeftMenu from "../menus/BottomLeftMenu";
@@ -17,6 +17,7 @@ import useOnFileDrop from "src/sandbox/_functions/grid/onFileDrop";
 import { isBabelCompatible } from "src/sandbox/_functions/files/babelUtils";
 import NoteOptionsMenu from "../menus/NoteOptionsMenu";
 import Render from "../files/Render";
+import { Viewports } from "src/sandbox/types/viewportMapping";
 
 const dummyData = {
   files: [
@@ -24,7 +25,7 @@ const dummyData = {
       id: "view1",
       name: "View1.tsx",
       position: { x: 100, y: 100 },
-      viewport: { width: 1440, height: 900, enabled: true },
+      viewport: Viewports.LAPTOP,
       code:
         `import React, { useState, useEffect } from "react";
 export default function View1() {
@@ -52,7 +53,8 @@ export default function View1() {
       id: "view2",
       name: "View2.tsx",
       position: { x: 1300, y: 1300 },
-      viewport: { width: 1440, height: 900, enabled: true },
+      // viewport: { width: 1440, height: 900, enabled: true },
+      viewport: Viewports.TABLET,
       code: `
 import React from "react";
 export default function View2() {
@@ -81,7 +83,7 @@ export default function Component1() {
   notes: [
     {
       id: "note1",
-      position: { x: 1500, y: 100 },
+      position: { x: 1900, y: 600 },
       width: 400,
       height: 300,
       content: JSON.stringify({
@@ -228,13 +230,26 @@ export default function Grid() {
           // Check file type and view mode (with null safety)
           const isBabelFile = file.name ? isBabelCompatible(file.name) : false;
           
-          const shouldRenderAsScreen = (file.viewport?.enabled) || 
-                                      (isBabelFile && file.viewMode === 'rendered');
+          const shouldRenderAsScreen = isBabelFile && file.viewMode === 'rendered';
 
           if (shouldRenderAsScreen && isBabelFile) {
             return <Render 
               key={file.id}
               file={file}
+              setFile={(update: Partial<file>) => {
+                setBlueprints(prev => ({
+                  ...prev,
+                  files: prev.files.map(f =>
+                    f.id === file.id
+                      ? { 
+                          ...f,
+                          ...update
+                        }
+                      : f
+                  )
+                }))
+              }
+              }
             />;
           } else {
             // Render as file card

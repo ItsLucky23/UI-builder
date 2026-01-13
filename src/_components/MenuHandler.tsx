@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode, ReactElement, useEffect, useLayoutEffect } from 'react';
+import { createContext, useContext, useState, ReactNode, ReactElement, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -35,37 +35,25 @@ interface SlideInWrapperProps {
 }
 
 const SlideInWrapper = ({ children, options, isTop, isClosing, soonIsTop }: SlideInWrapperProps) => {
-  const [location, setLocation] = useState<'left' | 'center' | 'right'>('right');
-
-  useLayoutEffect(() => {
-    // Start with off-screen to the right
-    setLocation('right');
-
-    const timer = requestAnimationFrame(() => {
-      setLocation('center'); // trigger the transition
-    });
-
-    return () => cancelAnimationFrame(timer);
-  }, []);
+  const [location, setLocation] = useState<'left' | 'center' | 'right'>('center');
 
   useEffect(() => {
-
-    // console.log("isClosing: ", isClosing, 'location: ', location, "top: ", isTop)
+    // Only slide when stacking multiple menus
     if (!isTop && location === 'center') {
-      setLocation('left'); // trigger the transition    
+      setLocation('left');
     } else if (isClosing && location === 'center') {
-      setLocation('right'); // trigger the transition
+      setLocation('right');
     } else if (location === 'left' && soonIsTop) {
-      setLocation('center'); // trigger the transition
+      setLocation('center');
     }
   }, [isTop, isClosing, soonIsTop]);
 
   const translate =
-  location === 'center'
+    location === 'center'
       ? '0 0'
       : location === 'left'
-      ? '-100% 0'
-      : '100% 0'; // initial
+        ? '-100% 0'
+        : '100% 0';
 
   return (
     <div
@@ -90,11 +78,19 @@ export const useMenuHandler = () => {
 
 export const MenuHandlerProvider = ({ children }: { children: ReactNode }) => {
   const [stack, setStack] = useState<MenuEntry[]>([]);
+  const [isAnimatingIn, setIsAnimatingIn] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
 
   const open = (element: ReactElement, options: MenuOptions = {}) => {
     return new Promise((resolve) => {
       const id = uuidv4();
       setStack((prev) => [...prev, { id, element, options, resolver: resolve }]);
+      setIsAnimatingIn(true);
+      // Reset animation state after initial render
+      requestAnimationFrame(() => {
+        setIsAnimatingIn(false);
+      });
     });
   };
 
@@ -117,10 +113,10 @@ export const MenuHandlerProvider = ({ children }: { children: ReactNode }) => {
       const newStack = [...prev];
       const top = newStack[newStack.length - 1];
       const second = newStack[newStack.length - 2];
-  
+
       // Prevent double-close
       if ((top as any).isClosing) return prev;
-  
+
       // Mark top as closing
       if (!lastitem) {
         newStack[newStack.length - 1] = { ...top, isClosing: true };
@@ -128,10 +124,10 @@ export const MenuHandlerProvider = ({ children }: { children: ReactNode }) => {
           newStack[newStack.length - 2] = { ...second, soonIsTop: true };
         }
       } else {
-        top.resolver?.(null); // Resolve the promise with nul
+        top.resolver?.(null);
         return [];
       }
-  
+
       // Delay removal for animation
       if (!lastitem) {
         setTimeout(() => {
@@ -141,7 +137,7 @@ export const MenuHandlerProvider = ({ children }: { children: ReactNode }) => {
             if (last?.id === top.id && (last as any).isClosing) {
               if (last.resolver) last.resolver(null);
               if (tempSecond?.id && tempSecond.id == second?.id && (tempSecond as any).soonIsTop) {
-                current[current.length - 2] = {...tempSecond, soonIsTop: false };
+                current[current.length - 2] = { ...tempSecond, soonIsTop: false };
               }
               return current.slice(0, -1);
             }
@@ -152,7 +148,7 @@ export const MenuHandlerProvider = ({ children }: { children: ReactNode }) => {
       return newStack;
     });
   };
-  
+
 
   const closeAll = () => {
     setStack((prev) => {
@@ -165,6 +161,7 @@ export const MenuHandlerProvider = ({ children }: { children: ReactNode }) => {
     console.log('Menu stack:', stack.map(s => s.id));
   };
 
+  // Handle keyboard events
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') close();
@@ -173,46 +170,73 @@ export const MenuHandlerProvider = ({ children }: { children: ReactNode }) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const stackTop = stack[stack.length - 1] || {};
-  // const { size = 'md', background = 'bg-white' } = options;
-
-  const sizeClass = {
-    sm: '384px', // max-w-sm
-    md: '512px', // max-w-md
-    lg: '768px', // max-w-lg
-  }[stackTop?.options?.size || 'sm'];
-  const [lastChildHeight, setLastChildHeight] = useState<number>(0);
+  // Measure container size based on content
   useEffect(() => {
-    const lastChild = document.getElementById('test123')?.lastElementChild;
-    if (lastChild) {
-      setLastChildHeight(lastChild.getBoundingClientRect().height);
-    } else {
-      setLastChildHeight(0);
+    if (!containerRef.current || stack.length === 0) {
+      setContainerSize({ width: 0, height: 0 });
+      return;
     }
+
+    const updateSize = () => {
+      if (!containerRef.current) return;
+
+      const lastChild = containerRef.current.lastElementChild as HTMLElement;
+      if (lastChild) {
+        const rect = lastChild.getBoundingClientRect();
+        setContainerSize({
+          width: rect.width,
+          height: rect.height
+        });
+      }
+    };
+
+    // Initial measurement
+    updateSize();
+
+    // Use ResizeObserver for dynamic content changes
+    const resizeObserver = new ResizeObserver(updateSize);
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+
+    return () => {
+      resizeObserver.disconnect();
+    };
   }, [stack]);
 
+  const stackTop = stack[stack.length - 1] || {};
+
+  const sizeClass = {
+    sm: '384px',
+    md: '512px',
+    lg: '768px',
+  }[stackTop?.options?.size || 'sm'];
+
   let attempToCloseAll = false;
-  
+
   return (
     <MenuHandlerContext.Provider value={{ open, replace, close, closeAll, logStack }}>
       {children}
       {createPortal(
-        <div 
+        <div
           className={`absolute top-0 left-0 w-full h-full flex items-center justify-center z-[1000] overflow-hidden ${stack.length == 0 ? 'pointer-events-none' : ''}`}
-          style={{ backgroundColor: stackTop.options && stackTop.options?.dimBackground != false ? 'rgba(0, 0, 0, 0.7)' : 'transparent'  }}
-          // onClick={closeAll}
+          style={{ backgroundColor: stackTop.options && stackTop.options?.dimBackground != false ? 'rgba(0, 0, 0, 0.7)' : 'transparent' }}
           onMouseDown={() => attempToCloseAll = true}
           onMouseUp={() => {
             if (!attempToCloseAll) { return }
             closeAll();
           }}
         >
-          <div 
-            id="test123"
-            className={`rounded-md overflow-hidden relative h-auto 
-              transition-[opacity,transform,height,width] duration-200 origin-bottom-right 
+          <div
+            ref={containerRef}
+            className={`rounded-md overflow-hidden relative
+              transition-[opacity,transform,height,width] duration-200 origin-center
+              ${isAnimatingIn || stack.length === 0 ? 'opacity-0 scale-90' : 'opacity-100 scale-100'}
             `}
-            style={{ width: sizeClass, height: lastChildHeight+'px' }}
+            style={{
+              width: containerSize.width > 0 ? `${containerSize.width}px` : sizeClass,
+              height: containerSize.height > 0 ? `${containerSize.height}px` : 'auto'
+            }}
             onMouseDown={(e) => e.stopPropagation()}
             onMouseUp={(e) => e.stopPropagation()}
           >
@@ -222,7 +246,6 @@ export const MenuHandlerProvider = ({ children }: { children: ReactNode }) => {
                 isTop={index === stack.length - 1}
                 isClosing={entry.isClosing}
                 soonIsTop={entry.soonIsTop}
-                // onBackgroundClick={closeAll}
                 options={entry.options}
               >
                 {entry.element}
