@@ -14,6 +14,7 @@ import useOnMouseUp from "src/sandbox/_functions/grid/onMouseUp";
 import useOnMouseMove from "src/sandbox/_functions/grid/onMouseMove";
 import useOnMouseWheel from "src/sandbox/_functions/grid/onMouseWheel";
 import useOnFileDrop from "src/sandbox/_functions/grid/onFileDrop";
+import { useGridKeyboardShortcuts } from "src/sandbox/_functions/grid/useGridKeyboardShortcuts";
 import { isBabelCompatible } from "src/sandbox/_functions/files/babelUtils";
 import NoteOptionsMenu from "../menus/NoteOptionsMenu";
 import Render from "../files/Render";
@@ -67,7 +68,7 @@ export default function View2() {
     },
     {
       id: "comp1",
-      name: "Component1.tsx", 
+      name: "Component1.tsx",
       position: { x: 2000, y: 100 },
       code: `
 import React from "react";
@@ -84,6 +85,7 @@ export default function Component1() {
     {
       id: "note1",
       position: { x: 1900, y: 600 },
+      title: "Project Notes",
       width: 400,
       height: 300,
       content: JSON.stringify({
@@ -131,6 +133,7 @@ export default function Grid() {
 
   // Using the new hook approach
   useOnMouseWheel(); // Sets up wheel event listener internally
+  useGridKeyboardShortcuts(); // Grid-level Ctrl+Z/Y for undo/redo
   const { handleMouseMove } = useOnMouseMove();
   const { handleOnMouseUp } = useOnMouseUp();
   const { handleMouseDown } = useOnMouseDown();
@@ -155,7 +158,7 @@ export default function Grid() {
         overflow: "hidden",
         position: "relative",
         cursor: dragging ? "grabbing" : "",
-        
+
         // Prevent browser overscroll bounce and touch gesture interference
         overscrollBehavior: "none",
         touchAction: "none",
@@ -229,11 +232,11 @@ export default function Grid() {
         {blueprints.files?.map((file) => {
           // Check file type and view mode (with null safety)
           const isBabelFile = file.name ? isBabelCompatible(file.name) : false;
-          
+
           const shouldRenderAsScreen = isBabelFile && file.viewMode === 'rendered';
 
           if (shouldRenderAsScreen && isBabelFile) {
-            return <Render 
+            return <Render
               key={file.id}
               file={file}
               setFile={(update: Partial<file>) => {
@@ -241,10 +244,10 @@ export default function Grid() {
                   ...prev,
                   files: prev.files.map(f =>
                     f.id === file.id
-                      ? { 
-                          ...f,
-                          ...update
-                        }
+                      ? {
+                        ...f,
+                        ...update
+                      }
                       : f
                   )
                 }))
@@ -265,7 +268,7 @@ export default function Grid() {
 
       {/* Drag-and-drop visual indicator */}
       {dragOver && (
-        <div 
+        <div
           className="absolute inset-0 pointer-events-none border-4 border-dashed border-primary bg-primary/10 z-50"
           style={{
             borderRadius: '8px',

@@ -17,7 +17,7 @@ export default function CreateComponentMenu() {
     setCreateComponentMenuOpen
   } = useMenus();
 
-  const { setBlueprints } = useBlueprints();
+  const { blueprints, pushGridHistory } = useBlueprints();
   const { zoom, offset } = useGrid();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -72,10 +72,11 @@ export default function CreateComponentMenu() {
       size: 0,
     };
 
-    setBlueprints(prev => ({
-      ...prev,
-      files: [...prev.files, newFile]
-    }));
+    const newState = {
+      ...blueprints,
+      files: [...blueprints.files, newFile]
+    };
+    pushGridHistory(newState);
   };
 
   // Handle creating a new note
@@ -110,10 +111,11 @@ export default function CreateComponentMenu() {
       height: 200,
     };
 
-    setBlueprints(prev => ({
-      ...prev,
-      notes: [...prev.notes, newNote]
-    }));
+    const newState = {
+      ...blueprints,
+      notes: [...blueprints.notes, newNote]
+    };
+    pushGridHistory(newState);
   };
 
   // Handle file upload from input
@@ -161,11 +163,12 @@ export default function CreateComponentMenu() {
         size: file.size,
       };
 
-      // Add to blueprints
-      setBlueprints(prev => ({
-        ...prev,
-        files: [...prev.files, newFile]
-      }));
+      // Add to blueprints with history
+      const newState = {
+        ...blueprints,
+        files: [...blueprints.files, newFile]
+      };
+      pushGridHistory(newState);
 
       // Close menu
       setCreateComponentMenuOpen(CreateComponentMenuVisibleState.CLOSED);

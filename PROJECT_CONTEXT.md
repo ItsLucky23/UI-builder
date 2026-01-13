@@ -631,6 +631,22 @@ type blueprints = {
 instances: blueprints[];  // For future component instancing
 ```
 
+**Grid History (Undo/Redo):**
+Separate from drawing history, tracks add/remove/move operations for files and notes.
+
+| State | Type | Purpose |
+|-------|------|---------|
+| `gridHistory` | blueprints[] | Stack of historical grid states |
+| `gridHistoryIndex` | number | Current position in history |
+| `pushGridHistory(state)` | function | Records new state to history |
+
+**Keyboard Shortcuts:**
+- Ctrl+Z: Undo (only when Monaco/TipTap/CodeMirror/Drawing not focused)
+- Ctrl+Y: Redo
+
+**UI:** Undo/Redo buttons in BottomLeftMenu.tsx
+
+
 ### GridContextProvider - Canvas State
 Manages zoom, pan, and interaction refs.
 

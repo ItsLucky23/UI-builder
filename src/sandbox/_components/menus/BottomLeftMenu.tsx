@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Tooltip from "src/_components/Tooltip";
-import { faEyeSlash, faPen, faBorderAll, faEye, faBorderNone } from "@fortawesome/free-solid-svg-icons";
+import { faEyeSlash, faPen, faBorderAll, faEye, faBorderNone, faUndo, faRedo } from "@fortawesome/free-solid-svg-icons";
 import { useDrawing } from "src/sandbox/_providers/DrawingContextProvider";
 import { useBlueprints } from "src/sandbox/_providers/BlueprintsContextProvider";
 
@@ -13,10 +13,17 @@ export default function BottomLeftMenu() {
     setShowDrawings,
   } = useDrawing();
 
-  const { 
-    highlightInstances, 
-    setHighlightInstances 
+  const {
+    highlightInstances,
+    setHighlightInstances,
+    gridHistory,
+    gridHistoryIndex,
+    undoGridHistory,
+    redoGridHistory
   } = useBlueprints();
+
+  const canUndo = gridHistoryIndex > 0;
+  const canRedo = gridHistoryIndex < gridHistory.length - 1;
 
   return (
     <div className={`
@@ -86,6 +93,50 @@ export default function BottomLeftMenu() {
           <FontAwesomeIcon
             className="pointer-events-none"
             icon={highlightInstances ? faBorderAll : faBorderNone}
+          />
+        </div>
+      </Tooltip>
+
+      {/* Undo */}
+      <Tooltip
+        content={"Undo (Ctrl+Z)"}
+        offsetY={"-200% - 12px"}
+        offsetX={"50%"}
+        className={`bg-background2 p-2 text-nowrap border border-border2 rounded`}
+      >
+        <div
+          className={`
+            MENU
+            p-2 rounded-full bg-background2 outline outline-none
+            ${canUndo ? "cursor-pointer hover:outline-border2" : "opacity-50 cursor-not-allowed"}
+          `}
+          onClick={() => canUndo && undoGridHistory()}
+        >
+          <FontAwesomeIcon
+            className="pointer-events-none"
+            icon={faUndo}
+          />
+        </div>
+      </Tooltip>
+
+      {/* Redo */}
+      <Tooltip
+        content={"Redo (Ctrl+Y)"}
+        offsetY={"-200% - 12px"}
+        offsetX={"50%"}
+        className={`bg-background2 p-2 text-nowrap border border-border2 rounded`}
+      >
+        <div
+          className={`
+            MENU
+            p-2 rounded-full bg-background2 outline outline-none
+            ${canRedo ? "cursor-pointer hover:outline-border2" : "opacity-50 cursor-not-allowed"}
+          `}
+          onClick={() => canRedo && redoGridHistory()}
+        >
+          <FontAwesomeIcon
+            className="pointer-events-none"
+            icon={faRedo}
           />
         </div>
       </Tooltip>
