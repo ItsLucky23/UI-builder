@@ -1,8 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Tooltip from "src/_components/Tooltip";
-import { faEyeSlash, faPen, faBorderAll, faEye, faBorderNone, faUndo, faRedo } from "@fortawesome/free-solid-svg-icons";
+import { faEyeSlash, faPen, faBorderAll, faEye, faBorderNone, faUndo, faRedo, faCrosshairs, faArrowsAlt, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useDrawing } from "src/sandbox/_providers/DrawingContextProvider";
 import { useBlueprints } from "src/sandbox/_providers/BlueprintsContextProvider";
+import { useGrid } from "src/sandbox/_providers/GridContextProvider";
 
 export default function BottomLeftMenu() {
 
@@ -21,6 +22,12 @@ export default function BottomLeftMenu() {
     undoChange,
     redoChange
   } = useBlueprints();
+
+  const {
+    scrollMode,
+    setScrollMode,
+    resetToCenter
+  } = useGrid();
 
   return (
     <div className={`
@@ -134,6 +141,49 @@ export default function BottomLeftMenu() {
           <FontAwesomeIcon
             className="pointer-events-none"
             icon={faRedo}
+          />
+        </div>
+      </Tooltip>
+
+      {/* Scroll Mode Toggle */}
+      <Tooltip
+        content={scrollMode === 'zoom' ? "Switch to pan mode (scroll=pan)" : "Switch to zoom mode (scroll=zoom)"}
+        offsetY={"-200% - 12px"}
+        offsetX={"50%"}
+        className={`bg-background2 p-2 text-nowrap border border-border2 rounded`}
+      >
+        <div
+          className={`
+            MENU
+            p-2 rounded-full bg-background2 outline cursor-pointer hover:outline-border2
+            ${scrollMode === 'pan' ? "outline-border2" : "outline-none"}
+          `}
+          onClick={() => setScrollMode(prev => prev === 'zoom' ? 'pan' : 'zoom')}
+        >
+          <FontAwesomeIcon
+            className="pointer-events-none"
+            icon={scrollMode === 'zoom' ? faSearch : faArrowsAlt}
+          />
+        </div>
+      </Tooltip>
+
+      {/* Go to Center */}
+      <Tooltip
+        content={"Go to center"}
+        offsetY={"-200% - 12px"}
+        offsetX={"50%"}
+        className={`bg-background2 p-2 text-nowrap border border-border2 rounded`}
+      >
+        <div
+          className={`
+            MENU
+            p-2 rounded-full bg-background2 outline outline-none cursor-pointer hover:outline-border2
+          `}
+          onClick={resetToCenter}
+        >
+          <FontAwesomeIcon
+            className="pointer-events-none"
+            icon={faCrosshairs}
           />
         </div>
       </Tooltip>

@@ -265,6 +265,9 @@ Located in `src/sandbox/_providers/`:
 - Zoom with mousewheel (shows percentage indicator)
 - Drag-and-drop file uploads
 - Right-click context menu disabled
+- **Scroll Mode Toggle:** Switch between zoom mode (scroll=zoom) and pan mode (scroll=up/down, shift+scroll=left/right, ctrl+scroll=zoom)
+- **Center Button:** Smooth animated return to origin (0,0) at 100% zoom
+- **Minimap:** Bottom-right overlay showing bird's-eye view with draggable viewport rectangle
 
 ### `ScreenRenderer.tsx`
 - Renders Babel-compiled React components in viewports
@@ -705,6 +708,9 @@ Manages zoom, pan, and interaction refs.
 | `dragging` | boolean | Is user panning the grid |
 | `containerRef` | Ref | Reference to grid container |
 | `zoomRef` | Ref | Synced for event handlers |
+| `scrollMode` | 'zoom' \| 'pan' | Mouse wheel behavior mode |
+| `isTransitioning` | boolean | Controls smooth animation for center button |
+| `resetToCenter()` | function | Animates view back to origin |
 
 ### DrawingContextProvider - Drawing State
 Extensive state for the drawing system.

@@ -19,6 +19,7 @@ import { isBabelCompatible } from "src/sandbox/_functions/files/babelUtils";
 import NoteOptionsMenu from "../menus/NoteOptionsMenu";
 import Render from "../files/Render";
 import { Viewports } from "src/sandbox/types/viewportMapping";
+import Minimap from "./Minimap";
 
 const dummyData = {
   files: [
@@ -106,7 +107,8 @@ export default function Grid() {
     containerRef,
     dragging,
     zoom,
-    offset
+    offset,
+    isTransitioning
   } = useGrid();
 
 
@@ -181,6 +183,8 @@ export default function Grid() {
         backgroundImage: isLineGrid
           ? `linear-gradient(rgba(255,255,255,var(--grid-opacity)) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,var(--grid-opacity)) 1px, transparent 1px)`
           : `radial-gradient(circle, rgba(255,255,255,var(--grid-opacity)) var(--dot-size), transparent var(--dot-size))`,
+        // Animate background when transitioning to center
+        transition: isTransitioning ? 'background-size 0.5s ease-out, background-position 0.5s ease-out' : 'none',
       }}
       className="bg-grid h-full"
       ref={containerRef}
@@ -215,6 +219,8 @@ export default function Grid() {
         <DrawingSideMenu />
 
         <DrawingTopMenu />
+
+        <Minimap />
       </div>
 
       {/* //* THIS DIV MAKES IT SO THE PANNING AND ZOOMING AFFECTS THE CONTENT */}
@@ -226,6 +232,7 @@ export default function Grid() {
           position: "absolute",
           top: 0,
           left: 0,
+          transition: isTransitioning ? 'transform 0.5s ease-out' : 'none',
         }}
       >
         {/* Notes Layer */}
