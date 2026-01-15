@@ -4,7 +4,7 @@ import { CreateComponentMenuVisibleState } from "src/sandbox/types/createCompone
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileMedical, faNoteSticky, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { useMenus } from "src/sandbox/_providers/MenusContextProvider";
-import { useBlueprints } from "src/sandbox/_providers/BlueprintsContextProvider";
+import { useBlueprints, GridChange } from "src/sandbox/_providers/BlueprintsContextProvider";
 import { useGrid } from "src/sandbox/_providers/GridContextProvider";
 import { getFileExtension, getMimeTypeCategory, getMonacoLanguage, readFileAsBase64, readFileAsText, validateFileSize } from "src/sandbox/_functions/files/fileUtils";
 import { inputDialog } from "src/_components/InputDialog";
@@ -17,7 +17,7 @@ export default function CreateComponentMenu() {
     setCreateComponentMenuOpen
   } = useMenus();
 
-  const { blueprints, pushGridHistory } = useBlueprints();
+  const { applyChange } = useBlueprints();
   const { zoom, offset } = useGrid();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -72,11 +72,12 @@ export default function CreateComponentMenu() {
       size: 0,
     };
 
-    const newState = {
-      ...blueprints,
-      files: [...blueprints.files, newFile]
+    const change: GridChange = {
+      type: 'create',
+      itemType: 'file',
+      item: newFile
     };
-    pushGridHistory(newState);
+    applyChange(change);
   };
 
   // Handle creating a new note
@@ -111,11 +112,12 @@ export default function CreateComponentMenu() {
       height: 200,
     };
 
-    const newState = {
-      ...blueprints,
-      notes: [...blueprints.notes, newNote]
+    const change: GridChange = {
+      type: 'create',
+      itemType: 'note',
+      item: newNote
     };
-    pushGridHistory(newState);
+    applyChange(change);
   };
 
   // Handle file upload from input
@@ -164,11 +166,12 @@ export default function CreateComponentMenu() {
       };
 
       // Add to blueprints with history
-      const newState = {
-        ...blueprints,
-        files: [...blueprints.files, newFile]
+      const change: GridChange = {
+        type: 'create',
+        itemType: 'file',
+        item: newFile
       };
-      pushGridHistory(newState);
+      applyChange(change);
 
       // Close menu
       setCreateComponentMenuOpen(CreateComponentMenuVisibleState.CLOSED);

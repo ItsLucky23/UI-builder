@@ -631,14 +631,62 @@ type blueprints = {
 instances: blueprints[];  // For future component instancing
 ```
 
-**Grid History (Undo/Redo):**
-Separate from drawing history, tracks add/remove/move operations for files and notes.
+**Change-Based History (Undo/Redo):**
+Uses operation-based history (not snapshots) to support future multiplayer sync.
 
 | State | Type | Purpose |
 |-------|------|---------|
-| `gridHistory` | blueprints[] | Stack of historical grid states |
-| `gridHistoryIndex` | number | Current position in history |
-| `pushGridHistory(state)` | function | Records new state to history |
+| `localChanges` | GridChange[] | Stack of user's own operations |
+| `changeIndex` | number | Current position in history (-1 = no changes) |
+| `localBlueprints` | blueprints | Items created by this user |
+| `remoteBlueprints` | blueprints | Items from other coop users (future) |
+| `blueprints` | blueprints | Merged view (local + remote) for rendering |
+
+**GridChange Type:**
+```typescript
+type GridChange = 
+  | { type: 'create'; itemType: 'file' | 'note'; item: file | note }
+  | { type: 'delete'; itemType: 'file' | 'note'; item: file | note };
+// Future: | { type: 'move'; id: string; from: Position; to: Position }
+```
+
+**Actions:**
+- `applyChange(change)`: Apply a create/delete operation (adds to history)
+- `undoChange()`: Undo last change (async - may trigger ownership transfer)
+- `redoChange()`: Redo next change
+- `canUndo` / `canRedo`: Boolean helpers for UI
+
+**Sync Event Hooks (for future coop):**
+```typescript
+setSyncCallbacks({
+  // Called before undo-delete - return false to block and transfer ownership
+  onBeforeDelete: (change) => {
+    const isBeingEdited = checkIfOtherUserEditing(change.item.id);
+    if (isBeingEdited) {
+      // Move item to remoteBlueprints, notify other user they now own it
+      return false; // Block the delete
+    }
+    return true;
+  },
+  
+  // Called after any change - emit to sockets
+  onChangeApplied: (change, direction) => {
+    socket.emit('gridChange', { change, direction, userId: myId });
+  },
+  
+  // Called when ownership transfers to another user
+  onOwnershipTransfer: (itemId, newOwnerId) => {
+    socket.emit('ownershipTransfer', { itemId, newOwnerId });
+  }
+});
+```
+
+**Ownership Transfer Pattern:**
+When user A deletes a file but user B is editing it:
+1. `onBeforeDelete` returns `false`
+2. Item moves from `localBlueprints` to `remoteBlueprints`
+3. Item removed from user A's history
+4. Notification sent to user B who now owns it
 
 **Keyboard Shortcuts:**
 - Ctrl+Z: Undo (only when Monaco/TipTap/CodeMirror/Drawing not focused)

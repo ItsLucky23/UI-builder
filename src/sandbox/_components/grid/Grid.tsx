@@ -113,10 +113,15 @@ export default function Grid() {
   const {
     blueprints,
     setBlueprints,
+    setLocalBlueprints,
   } = useBlueprints();
 
+  // Load initial data (dummy for now, from DB in future)
+  // Use setLocalBlueprints so it's not overwritten by the merge effect
   useEffect(() => {
-    setBlueprints(dummyData as blueprints);
+    // For initial load, set local blueprints (this is YOUR data)
+    // In future: this will come from DB via socket sync
+    setLocalBlueprints(dummyData as blueprints);
   }, [])
 
   const [showZoom, setShowZoom] = useState(false);

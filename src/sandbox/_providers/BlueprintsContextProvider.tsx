@@ -1,15 +1,44 @@
 import { createContext, useContext, useState, ReactNode, SetStateAction, Dispatch, useEffect, useCallback, useRef } from 'react';
 import { blueprints, file, note } from '../types/blueprints';
 
-// History entry only stores which item IDs exist (not content)
-type GridHistoryEntry = {
-  fileIds: string[];
-  noteIds: string[];
+// =============================================================================
+// CHANGE TYPES - Operations that can be undone/redone
+// =============================================================================
+export type GridChange =
+  | { type: 'create'; itemType: 'file'; item: file }
+  | { type: 'create'; itemType: 'note'; item: note }
+  | { type: 'delete'; itemType: 'file'; item: file }
+  | { type: 'delete'; itemType: 'note'; item: note };
+// Future: | { type: 'move'; itemType: 'file' | 'note'; id: string; from: Position; to: Position }
+
+// =============================================================================
+// SYNC EVENT CALLBACKS - Hooks for future coop integration
+// =============================================================================
+export type SyncEventCallbacks = {
+  // Called when local user deletes an item via undo
+  // Return false to cancel the delete (e.g., if another user is editing)
+  onBeforeDelete?: (change: GridChange) => boolean | Promise<boolean>;
+
+  // Called after a change is applied locally (for socket emission)
+  onChangeApplied?: (change: GridChange, direction: 'do' | 'undo' | 'redo') => void;
+
+  // Called when ownership transfer is needed
+  // e.g., client1 deletes but client2 is editing -> client2 keeps it
+  onOwnershipTransfer?: (itemId: string, newOwnerId: string) => void;
 };
 
 type BlueprintsContextType = {
+  // Current state (merged: local + remote in future)
   blueprints: blueprints;
   setBlueprints: Dispatch<SetStateAction<blueprints>>;
+
+  // Local state (for initial data and user's own items)
+  localBlueprints: blueprints;
+  setLocalBlueprints: Dispatch<SetStateAction<blueprints>>;
+
+  // Remote state from other coop users (for future sync)
+  remoteBlueprints: blueprints;
+  setRemoteBlueprints: Dispatch<SetStateAction<blueprints>>;
 
   instances: blueprints[];
   setInstances: Dispatch<SetStateAction<blueprints[]>>;
@@ -17,122 +46,200 @@ type BlueprintsContextType = {
   highlightInstances: boolean;
   setHighlightInstances: Dispatch<SetStateAction<boolean>>;
 
-  // Grid history for undo/redo (only tracks which items exist, not content)
-  gridHistory: GridHistoryEntry[];
-  gridHistoryIndex: number;
-  pushGridHistory: (newBlueprints: blueprints) => void;
-  undoGridHistory: () => void;
-  redoGridHistory: () => void;
+  // Change-based history
+  localChanges: GridChange[];
+  changeIndex: number;
 
-  // For backward compatibility
-  setGridHistory: Dispatch<SetStateAction<GridHistoryEntry[]>>;
-  setGridHistoryIndex: Dispatch<SetStateAction<number>>;
+  // Actions
+  applyChange: (change: GridChange) => void;
+  undoChange: () => Promise<void>;
+  redoChange: () => void;
+
+  // Sync callbacks registration
+  setSyncCallbacks: (callbacks: SyncEventCallbacks) => void;
+
+  // Helpers
+  canUndo: boolean;
+  canRedo: boolean;
 };
 
 const BlueprintsContext = createContext<BlueprintsContextType | undefined>(undefined);
 
-export const BlueprintsProvider = ({ children }: { children: ReactNode }) => {
-  // Master store: always contains latest content for all items (even "deleted" ones for redo)
-  const allFilesRef = useRef<Map<string, file>>(new Map());
-  const allNotesRef = useRef<Map<string, note>>(new Map());
+// =============================================================================
+// HELPER: Apply a change to blueprints
+// =============================================================================
+const applyChangeToBlueprints = (bp: blueprints, change: GridChange): blueprints => {
+  if (change.type === 'create') {
+    if (change.itemType === 'file') {
+      return { ...bp, files: [...bp.files, change.item] };
+    } else {
+      return { ...bp, notes: [...bp.notes, change.item as note] };
+    }
+  } else if (change.type === 'delete') {
+    if (change.itemType === 'file') {
+      return { ...bp, files: bp.files.filter(f => f.id !== change.item.id) };
+    } else {
+      return { ...bp, notes: bp.notes.filter(n => n.id !== (change.item as note).id) };
+    }
+  }
+  return bp;
+};
 
+// =============================================================================
+// HELPER: Get inverse of a change (for undo)
+// =============================================================================
+const getInverseChange = (change: GridChange): GridChange => {
+  if (change.type === 'create') {
+    return { ...change, type: 'delete' };
+  } else {
+    return { ...change, type: 'create' };
+  }
+};
+
+// =============================================================================
+// PROVIDER
+// =============================================================================
+export const BlueprintsProvider = ({ children }: { children: ReactNode }) => {
+  // Local blueprints (items created/owned by this user)
+  const [localBlueprints, setLocalBlueprints] = useState<blueprints>({
+    files: [],
+    notes: [],
+    drawings: [],
+  });
+
+  // Remote blueprints from coop users (for future sync)
+  const [remoteBlueprints, setRemoteBlueprints] = useState<blueprints>({
+    files: [],
+    notes: [],
+    drawings: [],
+  });
+
+  // Merged state for rendering
   const [blueprints, setBlueprints] = useState<blueprints>({
     files: [],
     notes: [],
     drawings: [],
   });
 
+  // Merge local + remote whenever either changes
+  useEffect(() => {
+    setBlueprints({
+      files: [...localBlueprints.files, ...remoteBlueprints.files],
+      notes: [...localBlueprints.notes, ...remoteBlueprints.notes],
+      drawings: [...localBlueprints.drawings, ...remoteBlueprints.drawings],
+    });
+  }, [localBlueprints, remoteBlueprints]);
+
   const [instances, setInstances] = useState<blueprints[]>([]);
   const [highlightInstances, setHighlightInstances] = useState(true);
 
-  // History only tracks which IDs are visible (not content)
-  const [gridHistory, setGridHistory] = useState<GridHistoryEntry[]>([{ fileIds: [], noteIds: [] }]);
-  const [gridHistoryIndex, setGridHistoryIndex] = useState<number>(0);
+  // Change-based history (only YOUR changes, not remote)
+  const [localChanges, setLocalChanges] = useState<GridChange[]>([]);
+  const [changeIndex, setChangeIndex] = useState<number>(-1); // -1 = no changes yet
 
-  // Refs for synchronous access
-  const gridHistoryRef = useRef(gridHistory);
-  const gridHistoryIndexRef = useRef(gridHistoryIndex);
-
-  useEffect(() => {
-    gridHistoryRef.current = gridHistory;
-  }, [gridHistory]);
-
-  useEffect(() => {
-    gridHistoryIndexRef.current = gridHistoryIndex;
-  }, [gridHistoryIndex]);
-
-  // Sync master store whenever blueprints change (captures content edits)
-  useEffect(() => {
-    blueprints.files.forEach(f => allFilesRef.current.set(f.id, f));
-    blueprints.notes.forEach(n => allNotesRef.current.set(n.id, n));
-  }, [blueprints]);
-
-  // Push new state to history (only stores IDs)
-  const pushGridHistory = useCallback((newBlueprints: blueprints) => {
-    const currentIndex = gridHistoryIndexRef.current;
-    const newEntry: GridHistoryEntry = {
-      fileIds: newBlueprints.files.map(f => f.id),
-      noteIds: newBlueprints.notes.map(n => n.id),
-    };
-
-    // Update master store with new items
-    newBlueprints.files.forEach(f => allFilesRef.current.set(f.id, f));
-    newBlueprints.notes.forEach(n => allNotesRef.current.set(n.id, n));
-
-    setGridHistory(prev => [...prev.slice(0, currentIndex + 1), newEntry]);
-    setGridHistoryIndex(currentIndex + 1);
-    setBlueprints(newBlueprints);
+  // Sync callbacks (registered by sync system)
+  const syncCallbacksRef = useRef<SyncEventCallbacks>({});
+  const setSyncCallbacks = useCallback((callbacks: SyncEventCallbacks) => {
+    syncCallbacksRef.current = callbacks;
   }, []);
 
-  // Undo: Go back in history
-  const undoGridHistory = useCallback(() => {
-    const currentIndex = gridHistoryIndexRef.current;
-    if (currentIndex <= 0) return;
-    setGridHistoryIndex(currentIndex - 1);
-  }, []);
+  // Apply a new change (create/delete)
+  const applyChange = useCallback((change: GridChange) => {
+    // Truncate any redo history
+    setLocalChanges(prev => [...prev.slice(0, changeIndex + 1), change]);
+    setChangeIndex(prev => prev + 1);
 
-  // Redo: Go forward in history
-  const redoGridHistory = useCallback(() => {
-    const currentIndex = gridHistoryIndexRef.current;
-    const history = gridHistoryRef.current;
-    if (currentIndex < history.length - 1) {
-      setGridHistoryIndex(currentIndex + 1);
+    // Apply to local blueprints
+    setLocalBlueprints(prev => applyChangeToBlueprints(prev, change));
+
+    // Notify sync system
+    syncCallbacksRef.current.onChangeApplied?.(change, 'do');
+  }, [changeIndex]);
+
+  // Undo last change
+  const undoChange = useCallback(async () => {
+    if (changeIndex < 0) return;
+
+    const changeToUndo = localChanges[changeIndex];
+    const inverseChange = getInverseChange(changeToUndo);
+
+    // If this is a delete operation (undoing a create), check with sync system
+    // This is where ownership transfer logic can happen
+    if (inverseChange.type === 'delete') {
+      const shouldProceed = await syncCallbacksRef.current.onBeforeDelete?.(inverseChange);
+      if (shouldProceed === false) {
+        // Sync system blocked the delete (e.g., another user is editing)
+        // The item should be transferred to remote ownership
+        const itemId = inverseChange.item.id;
+
+        // Move item from local to remote
+        if (inverseChange.itemType === 'file') {
+          const item = localBlueprints.files.find(f => f.id === itemId);
+          if (item) {
+            setLocalBlueprints(prev => ({
+              ...prev,
+              files: prev.files.filter(f => f.id !== itemId)
+            }));
+            setRemoteBlueprints(prev => ({
+              ...prev,
+              files: [...prev.files, item]
+            }));
+          }
+        } else {
+          const item = localBlueprints.notes.find(n => n.id === itemId);
+          if (item) {
+            setLocalBlueprints(prev => ({
+              ...prev,
+              notes: prev.notes.filter(n => n.id !== itemId)
+            }));
+            setRemoteBlueprints(prev => ({
+              ...prev,
+              notes: [...prev.notes, item]
+            }));
+          }
+        }
+
+        // Remove this change from history (it's now owned by remote)
+        setLocalChanges(prev => prev.filter((_, i) => i !== changeIndex));
+        setChangeIndex(prev => prev - 1);
+        return;
+      }
     }
-  }, []);
 
-  // Rebuild blueprints from history entry using master store (always latest content)
-  useEffect(() => {
-    if (gridHistory.length > 0 && gridHistoryIndex >= 0 && gridHistoryIndex < gridHistory.length) {
-      const entry = gridHistory[gridHistoryIndex];
+    // Apply inverse change
+    setLocalBlueprints(prev => applyChangeToBlueprints(prev, inverseChange));
+    setChangeIndex(prev => prev - 1);
 
-      // Rebuild blueprints using IDs from history, content from master store
-      const files = entry.fileIds
-        .map(id => allFilesRef.current.get(id))
-        .filter((f): f is file => f !== undefined);
+    // Notify sync system
+    syncCallbacksRef.current.onChangeApplied?.(inverseChange, 'undo');
+  }, [changeIndex, localChanges, localBlueprints]);
 
-      const notes = entry.noteIds
-        .map(id => allNotesRef.current.get(id))
-        .filter((n): n is note => n !== undefined);
+  // Redo change
+  const redoChange = useCallback(() => {
+    if (changeIndex >= localChanges.length - 1) return;
 
-      setBlueprints({
-        files,
-        notes,
-        drawings: [], // Drawings handled separately
-      });
-    }
-  }, [gridHistoryIndex, gridHistory]);
+    const changeToRedo = localChanges[changeIndex + 1];
 
-  // Clamp historyIndex if it exceeds history length
-  useEffect(() => {
-    if (gridHistoryIndex >= gridHistory.length && gridHistory.length > 0) {
-      setGridHistoryIndex(gridHistory.length - 1);
-    }
-  }, [gridHistoryIndex, gridHistory.length]);
+    setLocalBlueprints(prev => applyChangeToBlueprints(prev, changeToRedo));
+    setChangeIndex(prev => prev + 1);
+
+    // Notify sync system
+    syncCallbacksRef.current.onChangeApplied?.(changeToRedo, 'redo');
+  }, [changeIndex, localChanges]);
+
+  const canUndo = changeIndex >= 0;
+  const canRedo = changeIndex < localChanges.length - 1;
 
   return (
     <BlueprintsContext.Provider value={{
       blueprints,
       setBlueprints,
+
+      localBlueprints,
+      setLocalBlueprints,
+
+      remoteBlueprints,
+      setRemoteBlueprints,
 
       instances,
       setInstances,
@@ -140,13 +247,17 @@ export const BlueprintsProvider = ({ children }: { children: ReactNode }) => {
       highlightInstances,
       setHighlightInstances,
 
-      gridHistory,
-      setGridHistory,
-      gridHistoryIndex,
-      setGridHistoryIndex,
-      pushGridHistory,
-      undoGridHistory,
-      redoGridHistory,
+      localChanges,
+      changeIndex,
+
+      applyChange,
+      undoChange,
+      redoChange,
+
+      setSyncCallbacks,
+
+      canUndo,
+      canRedo,
     }}>
       {children}
     </BlueprintsContext.Provider>

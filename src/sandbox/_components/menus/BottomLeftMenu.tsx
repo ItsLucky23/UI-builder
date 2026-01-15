@@ -16,14 +16,11 @@ export default function BottomLeftMenu() {
   const {
     highlightInstances,
     setHighlightInstances,
-    gridHistory,
-    gridHistoryIndex,
-    undoGridHistory,
-    redoGridHistory
+    canUndo,
+    canRedo,
+    undoChange,
+    redoChange
   } = useBlueprints();
-
-  const canUndo = gridHistoryIndex > 0;
-  const canRedo = gridHistoryIndex < gridHistory.length - 1;
 
   return (
     <div className={`
@@ -110,7 +107,7 @@ export default function BottomLeftMenu() {
             p-2 rounded-full bg-background2 outline outline-none
             ${canUndo ? "cursor-pointer hover:outline-border2" : "opacity-50 cursor-not-allowed"}
           `}
-          onClick={() => canUndo && undoGridHistory()}
+          onClick={() => canUndo && undoChange()}
         >
           <FontAwesomeIcon
             className="pointer-events-none"
@@ -132,7 +129,7 @@ export default function BottomLeftMenu() {
             p-2 rounded-full bg-background2 outline outline-none
             ${canRedo ? "cursor-pointer hover:outline-border2" : "opacity-50 cursor-not-allowed"}
           `}
-          onClick={() => canRedo && redoGridHistory()}
+          onClick={() => canRedo && redoChange()}
         >
           <FontAwesomeIcon
             className="pointer-events-none"

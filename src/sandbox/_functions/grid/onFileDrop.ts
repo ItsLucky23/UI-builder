@@ -1,12 +1,12 @@
 import { useGrid } from "../../_providers/GridContextProvider";
-import { useBlueprints } from "../../_providers/BlueprintsContextProvider";
+import { useBlueprints, GridChange } from "../../_providers/BlueprintsContextProvider";
 import { useDrawing } from "../../_providers/DrawingContextProvider";
 import { getFileExtension, getMimeTypeCategory, getMonacoLanguage, readFileAsBase64, readFileAsText, validateFileSize } from "../files/fileUtils";
 import { file } from "../../types/blueprints";
 
 export default function useOnFileDrop() {
   const { zoom, offset } = useGrid();
-  const { blueprints, pushGridHistory } = useBlueprints();
+  const { applyChange } = useBlueprints();
   const { drawingEnabled } = useDrawing();
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -33,9 +33,6 @@ export default function useOnFileDrop() {
 
     const files = e.dataTransfer?.files;
     if (!files || files.length === 0) return;
-
-    // Collect all new files to add them in a single history entry
-    const newFiles: file[] = [];
 
     // Process each file
     for (let i = 0; i < files.length; i++) {
@@ -81,20 +78,17 @@ export default function useOnFileDrop() {
           size: droppedFile.size,
         };
 
-        newFiles.push(newFile);
+        // Apply change for this file
+        const change: GridChange = {
+          type: 'create',
+          itemType: 'file',
+          item: newFile
+        };
+        applyChange(change);
       } catch (error) {
         console.error('Error reading file:', error);
         alert(`Failed to read file "${droppedFile.name}". Please try again.`);
       }
-    }
-
-    // Add all files to blueprints in a single history entry
-    if (newFiles.length > 0) {
-      const newState = {
-        ...blueprints,
-        files: [...blueprints.files, ...newFiles]
-      };
-      pushGridHistory(newState);
     }
   };
 
