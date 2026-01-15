@@ -2,10 +2,17 @@
 //@ts-expect-error
 import * as Babel from "@babel/standalone";
 import React from "react";
+import { transformBreakpointsToContainer } from "./transformBreakpoints";
 
 export function compileTSX(code: string) {
   try {
-    const compiled = Babel.transform(code, {
+    // Transform viewport breakpoints (sm:, md:, lg:) to container query variants (@sm:, @md:, @lg:)
+    // This makes responsive classes respond to the blueprint's viewport width, not browser window
+    const transformedCode = transformBreakpointsToContainer(code);
+
+    console.log('Original code:', code);
+    console.log('Transformed code:', transformedCode);
+    const compiled = Babel.transform(transformedCode, {
       presets: [
         ["env", { modules: "commonjs" }],
         "react",

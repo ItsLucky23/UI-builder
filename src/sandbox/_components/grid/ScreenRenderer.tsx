@@ -30,7 +30,7 @@ export const ScreenRenderer = ({ code, id, className, style, onClick }: ScreenRe
   return (
     <div
       style={style}
-      className={className}
+      className={`@container ${className ?? ''}`}
       onClick={onClick}
     >
       <ErrorBoundary resetKey={debouncedCode}>

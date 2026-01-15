@@ -809,10 +809,21 @@ type StrokeData = {
 
 ### Babel Compilation Flow
 1. User edits `.tsx/.jsx` file in Monaco
-2. Code is compiled with `@babel/standalone`
-3. React component is extracted
-4. Rendered in viewport iframe with selected dimensions
-5. Errors are caught and displayed in error boundary
+2. **Breakpoint transformation**: `sm:`, `md:`, `lg:` classes are converted to container query variants (`@sm:`, `@md:`, `@lg:`) via `transformBreakpoints.ts`
+3. Code is compiled with `@babel/standalone`
+4. React component is extracted
+5. Rendered in viewport with `@container` wrapper - responsive classes respond to viewport width, not browser window
+6. Errors are caught and displayed in error boundary
+
+**Per-Blueprint Responsive Breakpoints:**
+Users can write standard Tailwind breakpoints (`md:bg-blue-500`) and they automatically work based on the blueprint's viewport size. The transformation converts viewport breakpoints to CSS container query variants before compilation.
+
+| Breakpoint | Container Width | Example Use Case |
+|------------|----------------|------------------|
+| `sm:` → `@sm:` | ≥320px | Phone and up |
+| `md:` → `@md:` | ≥448px | Tablet and up |
+| `lg:` → `@lg:` | ≥512px | Laptop and up |
+| `xl:` → `@xl:` | ≥576px | Desktop and up |
 
 ### Viewport Sizes
 ```tsx

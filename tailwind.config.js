@@ -4,6 +4,7 @@ module.exports = {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
+    "./container-safelist.txt", // Container query variants for dynamically compiled blueprints
   ],
   theme: {
     extend: {
@@ -11,7 +12,7 @@ module.exports = {
     },
   },
   plugins: [
-    require("@tailwindcss/container-queries"),
+    // @tailwindcss/container-queries not needed in v4 - built-in
     require("@tailwindcss/typography"),
   ],
 };
