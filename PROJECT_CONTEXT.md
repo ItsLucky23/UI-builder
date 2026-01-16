@@ -825,6 +825,11 @@ Users can write standard Tailwind breakpoints (`md:bg-blue-500`) and they automa
 | `lg:` → `@lg:` | ≥512px | Laptop and up |
 | `xl:` → `@xl:` | ≥576px | Desktop and up |
 
+**Container Query Safelist:**
+- `container-safelist.txt` contains all `@sm:`, `@md:`, `@lg:` variants (42k+ classes)
+- Generated from `classes.js` by running: `node scripts/generateContainerSafelist.js`
+- Regenerate this file if you add new classes to `classes.js`
+
 ### Viewport Sizes
 ```tsx
 Viewports = {

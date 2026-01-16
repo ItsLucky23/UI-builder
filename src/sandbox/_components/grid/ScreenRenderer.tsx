@@ -11,7 +11,7 @@ interface ScreenRendererProps {
   onClick?: () => void;
 }
 
-export const ScreenRenderer = ({ code, id, className, style, onClick }: ScreenRendererProps) => {
+export const ScreenRenderer = ({ code, className, style, onClick }: ScreenRendererProps) => {
   const [debouncedCode, setDebouncedCode] = useState(code);
 
   useEffect(() => {

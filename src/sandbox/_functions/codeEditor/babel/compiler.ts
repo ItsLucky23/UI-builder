@@ -6,12 +6,8 @@ import { transformBreakpointsToContainer } from "./transformBreakpoints";
 
 export function compileTSX(code: string) {
   try {
-    // Transform viewport breakpoints (sm:, md:, lg:) to container query variants (@sm:, @md:, @lg:)
-    // This makes responsive classes respond to the blueprint's viewport width, not browser window
     const transformedCode = transformBreakpointsToContainer(code);
 
-    console.log('Original code:', code);
-    console.log('Transformed code:', transformedCode);
     const compiled = Babel.transform(transformedCode, {
       presets: [
         ["env", { modules: "commonjs" }],
@@ -28,19 +24,6 @@ export function compileTSX(code: string) {
   }
 }
 
-// export function loadModule(jsCode: string) {
-//   const module = { exports: {} };
-//   // const fn = new Function("module", "exports", "React", jsCode);
-//   const fn = new Function("React", `return ${jsCode}`);
-//   return fn(React);
-//   // fn(module, module.exports, React);
-
-//   // if ('default' in module.exports) {
-//   //   return module.exports.default
-//   // } else {
-//   //   return module.exports;
-//   // }
-// }
 export function loadModule(code: string) {
   if (!code) return () => React.createElement("div", { style: { color: "red" } }, "Compilation Failed");
 
